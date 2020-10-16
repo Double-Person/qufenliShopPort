@@ -1,0 +1,123 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+		    "path" : "pages/login/login",
+		    "style" : {}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}
+        ,{
+            "path" : "components/common-header/common-header",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/todayProfit/todayProfit",
+            "style" : {}
+        }
+        ,{
+            "path" : "components/common-tabbar/common-tabbar",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/cumulativeProfit/cumulativeProfit",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/todayOrder/todayOrder",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/cumulativeOrder/cumulativeOrder",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/bindAlipay/bindAlipay",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/bindWeixin/bindWeixin",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/bindBankCard/bindBankCard",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/addBankCard/addBankCard",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/myCard/myCard",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/orderManage/orderManage",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/shopManage/shopManage",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/loginPassword/loginPassword",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/transactionPassword/transactionPassword",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/codeReceivables/codeReceivables",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/goodsManage/goodsManage",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/addGoods/addGoods",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/evaluateManage/evaluateManage",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/setMoney/setMoney",
+            "style" : {}
+        },
+		{
+			"path":"pages/userAgreement/userAgreement",
+			"style":{}
+		},
+		{
+			"path":"pages/forgetPwd/forgetPwd",
+			"style":{}
+		}
+        ,{
+            "path" : "pages/evaluationDetails/evaluationDetails",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/passwordback/passwordback",
+            "style" : {}
+        }
+     
+        
+        ,{
+            "path" : "pages/orderDetail/orderDetail",
+            "style" : {}
+        }
+    ],	
+	"globalStyle": {
+		"navigationStyle":"custom",
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
