@@ -27,7 +27,7 @@
 				<view class="addGoods-content-describe">
 					<view class="title">产品描述</view>
 					<view class="text">
-						<textarea v-model="params.details" placeholder-style="fontSize:24rpx;color:#999;" placeholder="质量如何，服务是否周到，交通是否便利？（写够15字，才是好同志~）" />
+						<textarea :maxlength="-1" v-model="params.details" placeholder-style="fontSize:24rpx;color:#999;" placeholder="质量如何，服务是否周到，交通是否便利？（写够15字，才是好同志~）" />
 						<!-- <text>加油，还差15个字即可发布！</text> -->
 					</view>
 				</view>

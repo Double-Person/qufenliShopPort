@@ -9,11 +9,11 @@
 		<view class="login-content">
 			<view class="login-content-item">
 				<text>+86</text>
-				<input type="text" :value="phone" @input="inputPhone" :maxlength="11" placeholder="请输入手机号" placeholder-style="color:#999" />
+				<input type="text" v-model="phone" @input="inputPhone" :maxlength="11" placeholder="请输入手机号" placeholder-style="color:#999" />
 			</view>
 			<view class="login-content-item password">
 				<text>密码</text>
-				<input type="password" :value="pwd" @input="inputPwd" maxlength="6" placeholder="请输入6位数密码" placeholder-style="color:#999" />
+				<input type="password" v-model="pwd" @input="inputPwd" maxlength="6" placeholder="请输入6位数密码" placeholder-style="color:#999" />
 			</view>
 			<view class="tips">
 				<text @tap="forgetPwd">忘记密码</text>
@@ -60,8 +60,33 @@
 				phoneState: false,
 				pwdState: false,
 				rememberPwdHide: true,
-				saveObj: '',
+				saveObj: {},
 			}
+		},
+		onLoad() {
+			// 获取本地存储登录信息
+			uni.getStorage({
+				key: 'name',
+				success: (data) => {
+					var res = JSON.parse(data.data);
+					this.phone = res.phone;
+					this.pwd = res.password;
+					console.log(this.phone, this.pwd)
+					console.log(this.phone, this.pwd)
+					this.phoneState = true;
+					this.pwdState = true;
+					this.loginState();
+					this.goIndex();
+				}
+			})
+			uni.getStorage({
+				key: 'outLogin',
+				success: (res) => {
+					if (res.data) {
+						this.rememberPwdHide = true;
+					}
+				}
+			})
 		},
 		methods: {
 			// 获取输入手机号
@@ -92,7 +117,6 @@
 					this.btnState = true;
 				}
 			},
-
 			// 前往首页
 			goIndex() {
 				console.log(this.phone)
@@ -101,8 +125,8 @@
 					phone: this.phone,
 					password: this.pwd
 				}
+				console.log(this.saveObj)
 				login(this.saveObj).then(res => {
-					console.log(res.returnMsg)
 					if (res.msgType == 0) {
 						uni.setStorage({
 							key: 'shopId',
@@ -204,29 +228,8 @@
 				})
 			},
 		},
-		onLoad() {
-			// 获取本地存储登录信息
-			uni.getStorage({
-				key: 'name',
-				success: (data) => {
-					var data = JSON.parse(data.data);
-					this.phone = data.phone;
-					this.pwd = data.pwd;
-					this.phoneState = true;
-					this.pwdState = true;
-					this.loginState();
-					this.goIndex();
-				}
-			})
-			uni.getStorage({
-				key: 'outLogin',
-				success: (res) => {
-					if (res.data) {
-						this.rememberPwdHide = true;
-					}
-				}
-			})
-		}
+		
+		
 	}
 </script>
 
