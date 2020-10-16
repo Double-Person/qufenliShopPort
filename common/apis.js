@@ -2,6 +2,8 @@
 // import request from './request.js';
 import request from './ajax.js';
 
+export const baseUrl = 'https://yflh.hkzhtech.com/qufl'
+
 
 // 1.商家登录 ok
 export const login = params => request.get('/api/merchant/merchantLogin', {params});

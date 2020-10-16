@@ -109,7 +109,10 @@
      
         
         ,{
-            "path" : "pages/orderDetail/orderDetail",
+            "path" : "pages/withdrawal/withdrawal",
+            "style" : {}
+        },{
+            "path" : "pages/withdrawalRecord/withdrawalRecord",
             "style" : {}
         }
     ],	

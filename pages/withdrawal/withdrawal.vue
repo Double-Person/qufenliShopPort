@@ -5,14 +5,17 @@
 
 		<view class="content">
 			<view class="fl-center-between user-info">
-				<image class="user-ava" :src="userInfo.FACEICON" mode=""></image>
+				
+				<view class="user-ava">
+					<image :src="shopInfo.BGIMG" mode=""></image>
+				</view>
 				<view class="fl-center-between info-icon">
 					<view class="user">
 						<view class="name">
-							{{userInfo.USERNAME}}
+							{{shopInfo.SHOP_NAME}}
 						</view>
 						<view class="phone">
-							{{computedPhone(userInfo.PHONE)}}
+							{{computedPhone(shopInfo.PHONE)}}
 						</view>
 					</view>
 					<view class="icon" @click="userInfolick">
@@ -24,7 +27,7 @@
 			<view class="money">
 				<image class="img" src="../../static/images/money.png" mode=""></image>
 				<view class="mask top-mask">
-					￥ {{userInfo.BALANCE}}
+					￥ {{shopInfo.BALANCE}}
 					<!-- {{item.zbalance}} -->
 				</view>
 				<view class="mask bottom-mask">
@@ -80,17 +83,14 @@
 <script>
 	// header
 	import commonHeader from "@/components/common-header/common-header";
-	import {
-		withdrawal,
-		backCardInfo
-	} from "@/common/apis.js";
+	// import { withdrawal, backCardInfo } from "@/common/apis.js";
 	export default {
 		components: {
 			commonHeader,
 		},
 		data() {
 			return {
-				userInfo: {},
+				shopInfo: {},
 				isShowChangeCard: false,
 				list: [],
 				money: null,
@@ -100,14 +100,14 @@
 		},
 		onLoad() {
 			this.getBackCardInfo()
-			this.userInfo = uni.getStorageSync('userInfo');
+			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.kbalance = uni.getStorageSync('kbalance');
 
-			console.log(this.userInfo)
+			console.log(this.shopInfo)
 		},
 		methods: {
 			//  转银行卡账号 和手机号
-			computedPhone(phone) {
+			computedPhone(phone = '') {
 				let phoneStr = phone.toString();
 				if (phoneStr.length < 11) {
 					return phone
@@ -134,15 +134,15 @@
 			//  获取银行卡信息
 			getBackCardInfo() {
 				let userinfo_id = uni.getStorageSync('USERINFO_ID');
-				backCardInfo({
-					userinfo_id
-				}).then(res => {
-					console.log('获取银行卡信息', res.returnMsg)
-					this.list = res.returnMsg
-					if (res.returnMsg.length > 0) {
-						this.cardNum == res.returnMsg[0].card
-					}
-				})
+				// backCardInfo({
+				// 	userinfo_id
+				// }).then(res => {
+				// 	console.log('获取银行卡信息', res.returnMsg)
+				// 	this.list = res.returnMsg
+				// 	if (res.returnMsg.length > 0) {
+				// 		this.cardNum == res.returnMsg[0].card
+				// 	}
+				// })
 			},
 			// 提现
 			getWithdrawal() {
@@ -170,18 +170,18 @@
 					cardNum: this.cardNum // cardNum卡号  this.cardNum == 
 				}
 				console.log(obj)
-				withdrawal(obj).then(res => {
-					console.log(res)
-					uni.showToast({
-						title: res.errMsg,
-						icon: 'none'
-					})
-					setTimeout(() => {
-						uni.navigateTo({
-							url: '/pages/personal/personal'
-						})
-					})
-				})
+				// withdrawal(obj).then(res => {
+				// 	console.log(res)
+				// 	uni.showToast({
+				// 		title: res.errMsg,
+				// 		icon: 'none'
+				// 	})
+				// 	setTimeout(() => {
+				// 		uni.navigateTo({
+				// 			url: '/pages/personal/personal'
+				// 		})
+				// 	})
+				// })
 			}
 
 		}
@@ -225,11 +225,17 @@
 		padding: 30rpx;
 
 		.user-ava {
-			width: 120rpx;
+			width: 100rpx;
 			height: 100rpx;
-			padding-right: 20rpx;
+			margin-right: 20rpx;
 			border-radius: 50%;
 			border: none;
+			overflow: hidden;
+			image{
+				width: 100rpx;
+				height: 100rpx;
+				object-fit: cover;
+			}
 		}
 
 		.info-icon {

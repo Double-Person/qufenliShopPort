@@ -8,16 +8,16 @@
 					<text class="iconfont icon-jiantou-xia"></text>
 				</pickerAddress>
 				<view class="index-header-title">
-					{{shopTitle}}
+					{{shopInfoObj.SHOP_NAME}}
 				</view>
 				<image src="../../static/images/shoukuan.png" mode="" @tap="goCodeReceivables"></image>
 			</view>
 			<view class="index-header-content">
-				<image src="../../static/images/cartLOGO.png" mode="" @tap="goMycard"></image>
+				<image :src="shopInfoObj.BGIMG ? shopInfoObj.BGIMG : '../../static/images/cartLOGO.png'" mode="" @tap="goMycard"></image>
 				<view>
 					账户余额
 				</view>
-				<text @tap="goMycard">{{balance}}</text>
+				<text @tap="goMycard">{{shopInfoObj.BALANCE}}</text>
 			</view>
 		</view>
 		<view class="index-content">
@@ -34,25 +34,25 @@
 				<view>
 					今日收益
 				</view>
-				<text>{{todaySy}}元</text>
+				<text>{{shopInfoObj.todayincome}}元</text>
 			</view>
 			<view class="index-content-item" @tap="goOrderlist(2)">
 				<view>
 					累计收益
 				</view>
-				<text>{{LJSY}}元</text>
+				<text>{{shopInfoObj.income}}元</text>
 			</view>
 			<view class="index-content-item" @tap="goOrderlist(3)">
 				<view>
 					今日订单
 				</view>
-				<text>{{todayDd}}笔</text>
+				<text>{{shopInfoObj.todayorder}}笔</text>
 			</view>
 			<view class="index-content-item" @tap="goOrderlist(4)">
 				<view>
 					累计订单
 				</view>
-				<text>{{LJDD}}笔</text>
+				<text>{{shopInfoObj.order}}笔</text>
 			</view>
 			<!-- 商家收款 -->
 			<view class="submit-btn" @tap="goCodeReceivables">
@@ -81,13 +81,9 @@
 	export default {
 		data() {
 			return {
+				shopInfoObj: {},
 				newCity: '',
 				todaySy: 100,
-				LJSY: 10000,
-				todayDd: 3,
-				LJDD: 100,
-				shopTitle: '',
-				balance: ''
 			}
 		},
 		mounted() {
@@ -104,13 +100,10 @@
 					homeInfo({
 						shop_id: res.data
 					}).then(res => {
-						console.log(res)
-						this.LJSY = res.returnMsg.income
-						this.todaySy = res.returnMsg.todayincome
-						this.shopTitle = res.returnMsg.SHOP_NAME
-						this.balance = res.returnMsg.BALANCE
-						this.LJDD = res.returnMsg.order
-						this.todayDd = res.returnMsg.todayorder
+						
+						this.shopInfoObj = res.returnMsg
+						console.log(this.shopInfoObj)
+						uni.setStorageSync('shopInfo', res.returnMsg)
 					})
 				}
 			})
@@ -257,8 +250,11 @@
 			// 进入我的卡包
 			goMycard() {
 				uni.navigateTo({
-					url: "../myCard/myCard"
+					url: "../withdrawal/withdrawal"
 				})
+				// uni.navigateTo({
+				// 	url: "../myCard/myCard"
+				// })
 			},
 			// 前往收款页面
 			goCodeReceivables() {
@@ -380,6 +376,7 @@
 				image {
 					width: 80rpx;
 					height: 80rpx;
+					border-radius: 50%;
 				}
 
 				view {

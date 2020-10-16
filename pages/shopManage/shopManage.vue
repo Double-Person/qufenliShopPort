@@ -88,7 +88,7 @@
 	import commonHeader from "@/components/common-header/common-header";
 	import tabbar from "@/components/common-tabbar/common-tabbar";
 	// import testCode from '@/components/testCode/testCode';
-	import { getShopData , shopEdit, uploadsFile } from '@/common/apis.js'
+	import { getShopData , shopEdit, uploadsFile, baseUrl } from '@/common/apis.js'
 	import { uploadFileUrl } from '@/common/request.js'
 	export default {
 		data() {
@@ -153,15 +153,15 @@
 						
 					const tempFilePaths = res.tempFilePaths;
 					        uni.uploadFile({
-					            url: 'https://yflh.hkzhtech.com/qufl/uploadFile/file', //仅为示例，非真实的接口地址
+					            url: baseUrl + '/uploadFile/file', //仅为示例，非真实的接口地址
 					            filePath: tempFilePaths[0],
 					            name: 'file',
 					            formData: {
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
-									console.log('uploadFileRes',JSON.parse(uploadFileRes.data).data);
-									this.shopInfo.BGIMG = 'https://yflh.hkzhtech.com/qufl' + JSON.parse(uploadFileRes.data).data
+										let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
+									this.shopInfo.BGIMG = baseUrl + url[1]
 					            }
 					        });
 						
