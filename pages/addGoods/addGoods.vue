@@ -101,7 +101,7 @@
 import commonHeader from '@/components/common-header/common-header';
 // 抽屉
 import uniDrawer from '@/components/uni-drawer/uni-drawer';
-import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile} from '@/common/apis.js';
+import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, baseUrl} from '@/common/apis.js';
 export default {
 	name: 'AddGoods',
 	components: { 
@@ -144,6 +144,7 @@ export default {
 		};
 	},
 	onLoad (options) {
+		console.log(options)
 		this.shopId = uni.getStorageSync('shopId')
 		// options.item && (this.data = JSON.parse(options.item))
 		if (options.item) {
@@ -153,6 +154,7 @@ export default {
 			this.params.price = this.data.price
 			this.params.details = this.data.CONTENT
 			this.params.norms = this.data.NORMS
+			this.imgList[0].imgUrl = this.data.ING
 		}
 	},
 	mounted () {
@@ -207,11 +209,12 @@ export default {
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				sourceType: ['album', 'camera'], //从相册选择
 				success: res => {
+					
 					res.tempFilePaths.map((item, index) => {
 						this.imgList[index].imgUrl=item
 						this.imgList[index].imgHide=true
-					
 					});
+				
 				}
 			});
 		},
@@ -224,14 +227,15 @@ export default {
 					console.log(res)
 					const tempFilePaths = res.tempFilePaths;
 					        uni.uploadFile({
-					            url: 'https://yflh.hkzhtech.com/qufl/uploadFile/file', //仅为示例，非真实的接口地址
+					            url: baseUrl + '/uploadFile/file',
 					            filePath: tempFilePaths[0],
 					            name: 'file',
 					            formData: {
 					                file: 'test'
 					            },
-					            success: (res) => {
-									this.imgList[i].imgUrl=JSON.parse(res.data).data
+					            success: (uploadFileRes) => {
+									let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
+									this.imgList[i].imgUrl=baseUrl + url[1]
 									this.imgList[i].imgHide=true
 					            }
 					        });
@@ -291,17 +295,23 @@ export default {
 		// 添加商品
 		addGoods() {
 			this.hideMask=true
-			// 上传商品
+			// 上传商品  images1
+			let img = {}
+			this.imgList.forEach((item, index) => {
+				img['images' + (index + 1)] = item.imgUrl
+			})
 			var obj = {
 				shop_id: uni.getStorageSync('shopId'),
 				category_id: this.params.category_id,
 				name: this.params.name,
-				price: this.params.price,
+				price: this.params.price || 0,
 				norms: this.params.norms,
 				stock: this.params.stock,
 				details:this.params.details,
-				activity:'优惠'
+				activity:'优惠',
+				...img
 			};
+	
 			addGoodsInfo(obj).then(res => {
 				if(res.msgType === 0){
 					uni.navigateTo({

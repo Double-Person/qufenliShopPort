@@ -29,7 +29,7 @@
 							<view class="item" v-for="(item1,index1) in item.list" :key="index1">
 								<view class="item-goods">
 									<!-- item1.IMG -->
-									<image :src="item.IMG ? item.IMG : '../../static/images/goods.jpg'" mode=""></image>
+									<image :src="item1.IMG ? item1.IMG : '../../static/images/goods.jpg'" mode=""></image>
 									<view class="item-goods-text">
 										<text>{{item1.GOODNAME}}</text>
 										<view>
@@ -77,28 +77,7 @@
 		data () {
 			return {
 				scrollHeight: '73%',
-				// mainArray: [{
-				// 	title: "热销榜",
-				// 	icon: "icon-huore-s",
-				// 	color: "#FF5904",
-				// 	list: [{
-				// 			id: 1,
-				// 			imgUrl: "../../static/images/content01.png",
-				// 			title: "黑胡椒意大利面",
-				// 			specs: "份",
-				// 			price: "10",
-				// 			evaluate: "这个意大利面真的是太好吃下次还要再来一份这个意大利面真的是太好吃下次还要再来一份",
-				// 		},
-				// 		{
-				// 			id: 2,
-				// 			imgUrl: "../../static/images/content01.png",
-				// 			title: "黑胡椒意大利面",
-				// 			specs: "份",
-				// 			price: "10",
-				// 			evaluate: "这个意大利面真的是太好吃下次还要再来一份这个意大利面真的是太好吃下次还要再来一份",
-				// 		}
-				// 	]
-				// }],
+				
 				list: [],
 				leftIndex: 0,
 				scrollInto: '',
