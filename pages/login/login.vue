@@ -13,7 +13,7 @@
 			</view>
 			<view class="login-content-item password">
 				<text>密码</text>
-				<input type="password" v-model="pwd" @input="inputPwd" maxlength="6" placeholder="请输入6位数密码" placeholder-style="color:#999" />
+				<input type="password" v-model="pwd" @input="inputPwd" :maxlength="6" placeholder="请输入6位数密码" placeholder-style="color:#999" />
 			</view>
 			<view class="tips">
 				<text @tap="forgetPwd">忘记密码</text>
@@ -54,11 +54,10 @@
 		data() {
 			return {
 				codeText: "获取验证码",
-				btnState: false,
-				phone: "", // 15982315561
+				btnState: true,
+				phone: "15982315561", // 15982315561
 				pwd: "", // 
-				phoneState: false,
-				pwdState: false,
+
 				rememberPwdHide: true,
 				saveObj: {},
 			}
@@ -71,11 +70,6 @@
 					var res = JSON.parse(data.data);
 					this.phone = res.phone;
 					this.pwd = res.password;
-					console.log(this.phone, this.pwd)
-					console.log(this.phone, this.pwd)
-					this.phoneState = true;
-					this.pwdState = true;
-					this.loginState();
 					this.goIndex();
 				}
 			})
@@ -91,41 +85,30 @@
 		methods: {
 			// 获取输入手机号
 			inputPhone(e) {
-				if (e.detail.value.length === 11) {
-					this.phoneState = true;
-					this.phone = e.detail.value;
+				this.phone = e.detail.value;
+				if (e.detail.value.length === 11 && this.pwd.length === 6) {
+					this.btnState = false
 				} else {
-					this.phoneState = false;
+					this.btnState = true
 				}
-				this.loginState()
 			},
 			// 获取登录密码
 			inputPwd(e) {
-				if (e.detail.value.length === 6) {
-					this.pwdState = true;
-					this.pwd = e.detail.value;
+				this.pwd = e.detail.value;
+				if (e.detail.value.length === 6 && this.phone.length === 11) {
+					this.btnState = false
 				} else {
-					this.pwdState = false;
+					this.btnState = true
 				}
-				this.loginState()
+
 			},
-			// 判断登录按钮状态
-			loginState() {
-				if (this.phoneState && this.pwdState) {
-					this.btnState = false;
-				} else {
-					this.btnState = true;
-				}
-			},
+
 			// 前往首页
 			goIndex() {
-				console.log(this.phone)
-				console.log(this.pwd)
 				this.saveObj = {
 					phone: this.phone,
 					password: this.pwd
 				}
-				console.log(this.saveObj)
 				login(this.saveObj).then(res => {
 					if (res.msgType == 0) {
 						uni.setStorage({
@@ -228,8 +211,8 @@
 				})
 			},
 		},
-		
-		
+
+
 	}
 </script>
 
