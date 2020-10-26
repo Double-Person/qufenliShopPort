@@ -161,8 +161,10 @@ export default {
 		}
 	},
 	mounted () {
+		console.log('mounted')
 		this.getItem()
 	},
+
 	methods: {
 		// 输入内容
 		inputValue(e) {
@@ -190,6 +192,7 @@ export default {
 				msgType == 0 && this.getItem()
 				this.hideInput =false;
 				this.categoryName = ''
+				this.num = null
 			// let arr = { id: this.inputVlue.length + 1, text: this.inputVlue };
 			// this.itemList.push(arr);
 		},
@@ -204,11 +207,13 @@ export default {
 			}
 			console.log( obj )
 			categoryUpdate(obj).then(res => {
-				console.log('修改分类', res)
-				// uni.showToast({
-				// 	title: '',
-				// 	icon: 'none'
-				// })
+				if(res.msgType == 0){
+					uni.showToast({
+						title: res.errMsg,
+						icon: 'none'
+					})
+				}
+				
 			})
 		},
 		// 删除分类
@@ -298,6 +303,7 @@ export default {
 		// 关闭抽屉
 		close(){
 			this.showDrawer = false
+			this.getItem()
 		},
 		// 点击添加
 		addChify(){
@@ -310,7 +316,7 @@ export default {
 			this.hideInput = !this.hideInput;
 			this.itemShow=true;
 			this.categoryName=chify.NAME;
-			this.num=chify.num;
+			this.num=chify.NUM;
 			this.categoryId=chify.CATEGORY_ID
 			this.index=index
 		},
