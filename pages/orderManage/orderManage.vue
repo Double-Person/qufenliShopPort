@@ -24,7 +24,7 @@
 						<view class="item-title">
 							<view class="left">
 								<!-- item.head -->
-								<image :src="'../../static/images/goods.jpg'" mode=""></image>
+								<image :src="item.head ? item.head : '../../static/images/goods.jpg'" mode=""></image>
 								<text>{{item.ordersummary_id}}</text>
 							</view>
 						</view>

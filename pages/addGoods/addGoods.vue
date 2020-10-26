@@ -89,6 +89,7 @@
 			<view class="uni-drawer-input" :class="hideInput ? 'hideInput' : ''">
 				<view>
 					<input type="text" v-model="categoryName" placeholder="请输入分类名" />
+					<input type="text" v-model="num" placeholder="请输入排序序号" />
 					<view @tap="addItems" :class="itemShow?'hideInput' : ''">确定</view>
 					<view @tap="amendItems" :class="itemShow?'' :'hideInput'">修改</view>
 				</view>
@@ -101,7 +102,7 @@
 import commonHeader from '@/components/common-header/common-header';
 // 抽屉
 import uniDrawer from '@/components/uni-drawer/uni-drawer';
-import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, baseUrl} from '@/common/apis.js';
+import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, baseUrl} from '@/common/apis.js';
 export default {
 	name: 'AddGoods',
 	components: { 
@@ -110,6 +111,7 @@ export default {
 	},
 	data () {
 		return {
+			num: null,
 			hideMask: true,
 			showDrawer: false,
 			itemList: [
@@ -130,6 +132,7 @@ export default {
 			
 			shopId: '',
 			categoryName: '',
+			categoryId: '',
 			data: null,
 			chifyName:'',
 			index:0,
@@ -170,13 +173,14 @@ export default {
 			const { returnMsg, msgType } = await itemListArr({ shop_id: this.shopId })
 			
 			msgType == 0 && (this.itemList = returnMsg)
-			console.log(this.itemList)
+			console.log('获取分类列表', this.itemList)
 		},
 		// 添加分类
 		async addItems () {
 				const params = {
 					shop_id: this.shopId,
-					name: this.categoryName
+					name: this.categoryName,
+					num: this.num
 				}
 				const { msgType, errMsg } = await addGoodsItem(params)
 				uni.showToast({
@@ -191,7 +195,21 @@ export default {
 		},
 		// 修改分类 等待接口
 		amendItems () {
-			console.log(this.index)
+			
+			let obj = {
+				shop_id: this.shopId,
+				name:this.categoryName,
+				num: this.num,
+				category_id: this.categoryId
+			}
+			console.log( obj )
+			categoryUpdate(obj).then(res => {
+				console.log('修改分类', res)
+				// uni.showToast({
+				// 	title: '',
+				// 	icon: 'none'
+				// })
+			})
 		},
 		// 删除分类
 		async delitem(id) {
@@ -234,8 +252,9 @@ export default {
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
-									let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
-									this.imgList[i].imgUrl=baseUrl + url[1]
+									// let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
+									// this.imgList[i].imgUrl=baseUrl + url[1]
+									this.imgList[i].imgUrl= JSON.parse(uploadFileRes.data).data
 									this.imgList[i].imgHide=true
 					            }
 					        });
@@ -287,9 +306,12 @@ export default {
 		},
 		// 点击修改
 		amend(chify,index){
+			console.log(chify, index)
 			this.hideInput = !this.hideInput;
 			this.itemShow=true;
 			this.categoryName=chify.NAME;
+			this.num=chify.num;
+			this.categoryId=chify.CATEGORY_ID
 			this.index=index
 		},
 		// 添加商品
@@ -596,13 +618,14 @@ export default {
 			> view {
 				width: 80%;
 				margin: 100rpx auto 0;
-				display: flex;
+				// display: flex;
 				font-size: 30rpx;
 				input {
 					height: 80rpx;
 					border-radius: 40rpx;
 					border: 1px solid #e0e0e0;
 					text-indent: 2em;
+					margin-bottom: 30rpx;
 				}
 				view {
 					height: 80rpx;

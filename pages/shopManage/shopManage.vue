@@ -26,7 +26,7 @@
 		<view class="shopManage-backgroungImg">
 			<view class="item" @tap="uploadBackgroundImg">
 				<view class="item-top" :class="imgHide?'':'imgHide'">
-					<image src="../../static/images/uploadImg.png" mode=""></image>
+					<image src="/static/images/uploadImg.png" mode=""></image>
 					<view class="">
 						上传店铺背景图
 					</view>
@@ -160,8 +160,9 @@
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
-										let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
-									this.shopInfo.BGIMG = baseUrl + url[1]
+									// 	let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
+									// this.shopInfo.BGIMG = baseUrl + url[1]
+									this.shopInfo.BGIMG = (JSON.parse(uploadFileRes.data).data)
 					            }
 					        });
 						

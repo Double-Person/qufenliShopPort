@@ -49,6 +49,11 @@ export const goodDelete = params => request.get('/api/merchantgoods/goodDelete',
 export const getShopData = params => request.get('/api/merchant/shopById', {params});
 // 21. 添加分类接口 ok
 export const addGoodsItem = params => request.post('/api/merchantgoods/categoryAdd', params);
+// 修改分类
+export const categoryUpdate = params => request.post('/api/merchantgoods/categoryUpdate', params);
+
+
+
 // 22. 删除分类接口 ok
 export const delGoodsItem = params => request.get('/api/merchantgoods/categoryDelete', {params});
 // 23. 分类列表 ok
