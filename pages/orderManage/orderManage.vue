@@ -56,6 +56,17 @@
 						<view class="item-pay">
 							付款方式：<text>{{getPayType(item.pay)}}</text>
 						</view>
+						<view class="item-pay">
+							用户名：<text>{{ item.username }}</text>
+						</view>
+						<view class="item-pay">
+							电话：<text>{{ item.phone }}</text>
+						</view>
+						<view class="item-pay">
+							地址：<text>{{ item.add }}</text>
+						</view>
+
+
 						<view class="item-beizhu">
 							备注：<text>{{item.remarks}}</text>
 						</view>
@@ -69,8 +80,12 @@
 								<text class="shopMoney">￥{{item.money}}</text>
 							</view>
 						</view>
+						
 
 
+					</view>
+					<view class="item-btn" v-show="classifyIndex == 1">
+						<text>确认发货</text>
 					</view>
 					<view class="item-btn" v-show="hideBox">
 						<text @click="rejectRefund(item.ordersummary_id)">不同意退款</text>
@@ -82,145 +97,7 @@
 				</view>
 			</view>
 			<view v-else style="font-size: 14px; padding: 50px; text-align: center;">暂无数据</view>
-			<!-- 未付款 -->
-			<!-- <view class="commonStyle" :class="active===2?'show':''">
-				<view class="item" v-for="item in orderList" :key="item.id">
-					<view class="item-title">
-						<view class="left">
-							<image :src="item.imgUrl" mode=""></image>
-							<text>{{item.title}}</text>
-						</view>
-						<view class="right">
-						</view>
-					</view>
-					<view class="address">
-						{{item.address}}
-					</view>
-					<view class="item-content">
-						<view class="left">
-							<image :src="item.goodsUrl" mode=""></image>
-							<view>
-								<text class="left-title">
-									{{item.name}}
-								</text>
-								<view class="left-date">
-									下单时间：{{item.date}}
-								</view>
-								<view class="left-price">
-									单价：￥{{item.price}}
-								</view>
-							</view>
-						</view>
-						<view class="right">
-							X{{item.num}}
-						</view>
-					</view>
-					<view url="../oraderDetails/oraderDetails" class="item-content">
-						<view class="left">
-							<image :src="item.goodsUrl" mode=""></image>
-							<view>
-								<text class="left-title">
-									{{item.name}}
-								</text>
-								<view class="left-date">
-									下单时间：{{item.date}}
-								</view>
-								<view class="left-price">
-									单价：￥{{item.price}}
-								</view>
-							</view>
-						</view>
-						<view class="right">
-							X{{item.num}}
-						</view>
-					</view>
-					<view class="item-beizhu">
-						备注：<text>{{item.beizhu}}</text>
-					</view>
-					<view class="item-total">
-						<text></text>
-						<view>
-							共{{item.num}}件商品总金额
-							<text>￥{{item.num*item.price}}</text>
-						</view>
-					</view>
-				</view>
-			</view> -->
-			<!-- 退款售后 -->
-			<!-- <view class="commonStyle" :class="active===3?'show':''">
-				<view class="item" v-for="item in orderList" :key="item.id">
-					<view class="item-title">
-						<view class="left">
-							<image :src="item.imgUrl" mode=""></image>
-							<text>{{item.title}}</text>
-						</view>
-						<view class="right">
-							{{item.phone}}
-						</view>
-					</view>
-					<view class="address">
-						{{item.address}}
-					</view>
-					<view url="../oraderDetails/oraderDetails" class="item-content">
-						<view class="left">
-							<image :src="item.goodsUrl" mode=""></image>
-							<view>
-								<text class="left-title">
-									{{item.name}}
-								</text>
-								<view class="left-date">
-									下单时间：{{item.date}}
-								</view>
-								<view class="left-price">
-									单价：￥{{item.price}}
-								</view>
-							</view>
-						</view>
-						<view class="right">
-							X{{item.num}}
-						</view>
-					</view>
-					<view url="../oraderDetails/oraderDetails" class="item-content">
-						<view class="left">
-							<image :src="item.goodsUrl" mode=""></image>
-							<view>
-								<text class="left-title">
-									{{item.name}}
-								</text>
-								<view class="left-date">
-									下单时间：{{item.date}}
-								</view>
-								<view class="left-price">
-									单价：￥{{item.price}}
-								</view>
-							</view>
-						</view>
-						<view class="right">
-							X{{item.num}}
-						</view>
-					</view>
-					<view class="item-code">
-						订单编号：<text>{{item.orderCode}}</text>
-					</view>
-					<view class="item-pay">
-						付款方式：<text>{{item.pay}}</text>
-					</view>
-					<view class="item-beizhu">
-						退款原因：<text>{{item.beizhu}}</text>
-					</view>
-					<view class="item-total">
-						<text></text>
-						<view>
-							共{{item.num}}件商品总金额
-							<text>￥{{item.num*item.price}}</text>
-						</view>
-					</view>
-					<view class="item-btn" :class="">
-						<text>不同意退款</text>
-						<text>审核通过同意退款</text>
-					</view>
-				</view>
-			</view> -->
+	
 		</view>
 		<!-- tabbar -->
 		<!-- <tabbar active="3"></tabbar> -->
@@ -330,14 +207,16 @@
 				this.getOrder()
 			},
 			rejectRefund(id) {
-				orderRepeal({ORDERSUMMARY_ID: id}).then(res => {
+				orderRepeal({
+					ORDERSUMMARY_ID: id
+				}).then(res => {
 					console.log(res)
 					this.active = 2
 					this.classifyIndex = 2
 					uni.showToast({
-						title:res.errMsg,
-						duration:2000,
-						icon:'none'
+						title: res.errMsg,
+						duration: 2000,
+						icon: 'none'
 					})
 					this.getOrder()
 				})
@@ -393,6 +272,16 @@
 </script>
 
 <style lang="less">
+	.delivery {
+		color: #FF5904;
+		border: 1px solid #FF5904;
+		width: 15%;
+		padding: 5rpx 15rpx;
+		border-radius: 30rpx;
+		text-align: center;
+		margin: 0 0 50rpx 80%;
+	}
+
 	.myOrder {
 		min-height: 100%;
 		background: #f6f7f8;
@@ -522,7 +411,7 @@
 					.item-code,
 					.item-pay,
 					.item-beizhu {
-						padding: 30rpx 0;
+						padding: 20rpx 0 10rpx 0;
 
 						text {
 							color: #666;

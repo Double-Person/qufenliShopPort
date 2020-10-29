@@ -115,6 +115,11 @@
 				const id = uni.getStorageSync('shopId')
 				const { returnMsg, msgType } = await getShopData({ shop_id: id })
 				msgType === 0 && (this.shopInfo = returnMsg)
+				
+				if(this.shopInfo.BGIMG) {
+					this.imgUrl = this.shopInfo.BGIMG
+					this.imgHide = false;
+				}
 				console.log(this.shopInfo)
 			},
 			// 前往设置密码

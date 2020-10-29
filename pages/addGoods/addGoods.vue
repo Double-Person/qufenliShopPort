@@ -154,7 +154,7 @@ export default {
 			this.data = JSON.parse(options.item)
 			this.params.category_id = this.data.CATAGORYNAME
 			this.params.name = this.data.GOODNAME
-			this.params.price = this.data.price
+			this.params.price = this.data.PRICE
 			this.params.details = this.data.CONTENT
 			this.params.norms = this.data.NORMS
 			this.imgList[0].imgUrl = this.data.ING
