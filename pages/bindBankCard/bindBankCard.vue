@@ -9,13 +9,13 @@
 			<view class="bindAlipay-content-card">
 				<view class="addCard">
 					<view class="addCard-add" :class="addCardHide?'addCardHide':''" @tap="goAdd">
-						<image src="../../static/images/addIcon.png" mode=""></image>
+						<image src="/static/images/addIcon.png" mode=""></image>
 						添加银行卡
 					</view>
 					<view class="addCard-card" @longpress="delCard" :class="addCardHide?'':'addCardHide'">
 						<view class="left">
 							<view class="img">
-								<image src="../../static/images/jsLogo.png" mode=""></image>
+								<image src="/static/images/jsLogo.png" mode=""></image>
 							</view>
 							<view class="text">
 								<view>
@@ -86,15 +86,6 @@
 			
 			// 绑定
 			bindsucc() {
-				
-
-				// uni.showToast({
-				// 	title:"绑定成功",
-				// 	success:function(){
-				// 		console.log(11)
-				// 	}
-				// });
-				// uni.hideToast();
 				if (this.addCardHide) {
 					this.phoneMaskShow = true;
 					console.log(111)
@@ -135,7 +126,7 @@
 			
 				this.cardInfo = JSON.parse(info.info)
 				console.log('银行卡',this.cardInfo)
-				this.addCardHide = true
+				this.addCardHide = this.cardInfo && this.cardInfo.length > 0 ? true : false
 			}else{
 				this.addCardHide = false
 			}

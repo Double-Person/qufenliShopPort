@@ -10,7 +10,7 @@
 				<view class="index-header-title">
 					{{shopInfoObj.SHOP_NAME}}
 				</view>
-				<image src="../../static/images/shoukuan.png" mode="" @tap="goCodeReceivables"></image>
+				<image src="/static/images/shoukuan.png" mode="" @tap="goCodeReceivables"></image>
 			</view>
 			<view class="index-header-content">
 				<image :src="shopInfoObj.BGIMG ? shopInfoObj.BGIMG : '../../static/images/cartLOGO.png'" mode="" @tap="goMycard"></image>
@@ -76,7 +76,8 @@
 	import {
 		orderTotal,
 		profitTotal,
-		homeInfo
+		homeInfo,
+		shopBank
 	} from '@/common/apis.js';
 	export default {
 		data() {
@@ -84,6 +85,7 @@
 				shopInfoObj: {},
 				newCity: '',
 				todaySy: 100,
+				bindList: {}, // 商户绑定的银行卡信息
 			}
 		},
 		mounted() {
@@ -104,6 +106,20 @@
 						this.shopInfoObj = res.returnMsg
 						console.log(this.shopInfoObj)
 						uni.setStorageSync('shopInfo', res.returnMsg)
+					})
+					// '015915f9770f40b69e35674663f0d001'
+					// 判断商家是否绑定银行卡信息  
+					shopBank({shop_id: res.data }).then(res => {
+						console.log(res)
+						// this.info = res.returnMsg
+						if(res.msgType == 0) {
+							this.bindList = res.returnMsg
+						}else {
+							uni.showToast({
+								title: res.errMsg,
+								icon: 'none'
+							})
+						}
 					})
 				}
 			})
@@ -168,6 +184,22 @@
 			this.getPoint()
 		},
 		methods: {
+			// 进入我的卡包
+			goMycard() {
+				if(Object.keys(this.bindList).length > 0) {
+					uni.navigateTo({
+						url: "../withdrawal/withdrawal"
+					})
+				}else{
+					uni.navigateTo({
+						url: "../myCard/myCard"
+					})
+				}
+				
+				// uni.navigateTo({
+				// 	url: "../myCard/myCard"
+				// })
+			},
 			//   金纬度转位置
 			conversionPoint(res) {
 				uni.request({
@@ -247,15 +279,7 @@
 				// 存入全局变量
 				getApp().globalData.city = data.data.slice(1);
 			},
-			// 进入我的卡包
-			goMycard() {
-				uni.navigateTo({
-					url: "../withdrawal/withdrawal"
-				})
-				// uni.navigateTo({
-				// 	url: "../myCard/myCard"
-				// })
-			},
+			
 			// 前往收款页面
 			goCodeReceivables() {
 				uni.navigateTo({

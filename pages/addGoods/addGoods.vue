@@ -10,24 +10,24 @@
 				</view>
 				<view class="addGoods-content-item">
 					<view>商品名称</view>
-					<input type="text" v-model="params.name" placeholder="请输入商品名称" placeholder-style="textAlign:right;fontSize:28rpx" />
+					<input type="text" v-model="params.name" placeholder-class="placeholder-class" placeholder="请输入商品名称" />
 				</view>
 				<view class="addGoods-content-item">
 					<view>商品价格</view>
-					<input type="text" v-model.number="params.price" placeholder="请输入商品价格" placeholder-style="textAlign:right;fontSize:28rpx" />
+					<input type="text" v-model.number="params.price" placeholder-class="placeholder-class" placeholder="请输入商品价格" />
 				</view>
 				<view class="addGoods-content-item">
 					<view>规格</view>
-					<input type="text" v-model="params.norms" placeholder="请输入商品规格 例如：10串/份" style="width: 420rpx;" placeholder-style="textAlign:right;fontSize:28rpx" />
+					<input type="text" v-model="params.norms" placeholder-class="placeholder-class" placeholder="请输入商品规格 例如：10串/份" style="width: 420rpx;" />
 				</view>
 				<view class="addGoods-content-item">
 					<view>添加库存</view>
-					<input type="text" v-model="params.stock" placeholder="20/份" placeholder-style="textAlign:right;fontSize:28rpx" />
+					<input type="text" v-model="params.stock" placeholder-class="placeholder-class" placeholder="20/份" />
 				</view>
 				<view class="addGoods-content-describe">
 					<view class="title">产品描述</view>
 					<view class="text">
-						<textarea :maxlength="-1" v-model="params.details" placeholder-style="fontSize:24rpx;color:#999;" placeholder="质量如何，服务是否周到，交通是否便利？（写够15字，才是好同志~）" />
+						<textarea :maxlength="-1" v-model="params.details" class="text-area" placeholder-class="placeholder-class" placeholder="质量如何，服务是否周到，交通是否便利？（写够15字，才是好同志~）" />
 						<!-- <text>加油，还差15个字即可发布！</text> -->
 					</view>
 				</view>
@@ -38,11 +38,13 @@
 					</view>
 					<view class="content">
 						<view class="content-item" v-for="(item,i) in imgList" :key="i" @click="addItem(i)">
-							<view class="item-text" :class="item.imgHide ? 'imgHide' : ''">
+							<!-- :class="item.imgHide ? 'imgHide' : ''" -->
+							<view class="item-text" v-if="!item.imgUrl">
 								<text class="iconfont icon-tubiaolunkuo-"></text>
-								<view>添加图片</view>
+								<view>添加图片-</view>
 							</view>
-							<view class="item-img" :class="item.imgHide ? '' : 'imgHide'" @click="addItem(i)"><image :src="item.imgUrl" mode=""></image></view>
+							<!-- :class="item.imgHide ? '' : 'imgHide'" -->
+							<view class="item-img" v-if="item.imgUrl" @click="addItem(i)"><image :src="item.imgUrl" mode=""></image></view>
 						</view>
 					</view>
 					<view class="btn" v-if="data">
@@ -102,7 +104,7 @@
 import commonHeader from '@/components/common-header/common-header';
 // 抽屉
 import uniDrawer from '@/components/uni-drawer/uni-drawer';
-import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, baseUrl} from '@/common/apis.js';
+import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, findByShopId, baseUrl} from '@/common/apis.js';
 export default {
 	name: 'AddGoods',
 	components: { 
@@ -152,20 +154,39 @@ export default {
 		// options.item && (this.data = JSON.parse(options.item))
 		if (options.item) {
 			this.data = JSON.parse(options.item)
-			this.params.category_id = this.data.CATAGORYNAME
-			this.params.name = this.data.GOODNAME
-			this.params.price = this.data.PRICE
-			this.params.details = this.data.CONTENT
-			this.params.norms = this.data.NORMS
-			this.imgList[0].imgUrl = this.data.ING
+			// console.log()   // 
+			this._findByShopId(this.data.GOODS_ID)
+			// this.params.category_id = this.data.CATAGORYNAME
+			// this.params.name = this.data.GOODNAME
+			// this.params.price = this.data.PRICE
+			// this.params.details = this.data.DETAILS
+			// this.params.norms = this.data.NORMS
+			// this.imgList[0].imgUrl = this.data.ING
 		}
+		// 
 	},
 	mounted () {
-		console.log('mounted')
 		this.getItem()
 	},
 
 	methods: {
+		// 查询单个商品详情
+		_findByShopId(goods_id) {
+			findByShopId({goods_id}).then(res => {
+				let {goodInfo: {CATAGORYNAME,NAME, PRICE, DETAILS, NORMS}, imges } = res.returnMsg
+				this.params.category_id =CATAGORYNAME
+				this.params.name = NAME
+				this.params.price = PRICE
+				this.params.details = DETAILS
+				this.params.norms = NORMS
+				imges.forEach( (item, index) => {
+					this.imgList[index].imgUrl = item.IMG
+				} )
+				
+				
+				
+			})
+		},
 		// 输入内容
 		inputValue(e) {
 			this.inputVlue = e.detail.value;
@@ -354,7 +375,14 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+	.placeholder-class{
+		textAlign:right;fontSize:28rpx;
+		color: #c6c6c6;
+	}
+	.text-area.placeholder-class{
+		fontSize:24rpx;color:#999;
+	}
 .addGoods {
 	min-height: 100%;
 	background: #f7f7f7;

@@ -7,7 +7,7 @@
 			<view>
 				<view class="content">
 					<view class="title">
-						{{info.title || '发布人'}}
+						{{info.NAME || '发布人'}}
 					</view>
 					<view class="date">{{info.CREATETIME}}</view>
 					<view class="text">
@@ -48,40 +48,35 @@
 			return {
 				id: null,
 				goods_id: null,
-				// evaluationList:[
-				// 	{
-				// 		id:"01",
-				// 		title:'猪八戒的丑媳妇',
-				// 		date:'2019-09-01 15: 20',
-				// 		text:"这本书很好，耐心看完，觉得很不错,很有收获，都是第一次做父母，确实很多地方教育还是很合理，这本书很好，耐心看完，觉得很有收获，教育得很到位",
-				// 		img:["../../static/images/content01.png",'../../static/images/content01.png','../../static/images/content01.png'],
-				// 		shopEva:"我们店的东西肯定好吃！谢谢您的只支持"
-				// 	}
-				// ],
+				itemInfo: {},
 				info: {},
 				value:''
 			};
 		},
-		onLoad (options) {
-			this.id = options.id
-			this.goods_id = options.gid
+		onLoad (options) {  // item.EVALUATE_ID, item.GOODS_ID
+			this.itemInfo = JSON.parse(options.info)
 			this.getInitDetail()
 		},
 		methods:{
 			async getInitDetail () {
-				const { returnMsg, msgType } = await getShopEvaluateDetail({ evaluate_id: this.id })
+				const { returnMsg, msgType } = await getShopEvaluateDetail({ evaluate_id: this.itemInfo.EVALUATE_ID })
 				msgType == 0 && (this.info = returnMsg)
 			},
 			// 获取用户输入内容
 			inputTetx(e){
 				this.value = e.detail.value;
-				console.log(e)
 			},
 			// 回复
-			async sendText(id){
-				console.log(id)
+			async sendText(){
 				if(this.value){
-					const { returnMsg, msgType } = await getShopComment({reply: this.value, goods_id: this.goods_id})
+					//    itemInfo 
+					let obj = {
+						shop_id: uni.getStorageSync('shopId'),
+						evaluate_id: this.itemInfo.EVALUATE_ID,
+						reply: this.value,
+						goods_id: this.itemInfo.GOODS_ID
+					}
+					const { returnMsg, msgType } = await getShopComment(obj)
 					if(msgType == 0){
 						this.getInitDetail();
 						this.value = '';

@@ -52,7 +52,7 @@
 					</view>
 				</view>
 				<view class="icon" @click="showCardList">
-					<image class="img" src="../../static/images/more.png" mode=""></image>
+					<image class="img" src="/static/images/more.png" mode=""></image>
 				</view>
 
 			</view>
@@ -89,7 +89,7 @@
 			commonHeader,
 		},
 		data() {
-			return {
+			return {   /// 6214892828150901
 				shopInfo: {},
 				isShowChangeCard: false,
 				list: [],

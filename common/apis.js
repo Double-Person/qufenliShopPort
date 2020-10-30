@@ -92,9 +92,18 @@ export const shopBank = params => request.get('/api/merchant/shopBank', {params}
 export const updeteShopBank = params => request.get('/api/merchant/updeteShopBank', {params});
 
 
+
+
 //   商家确认退款就接口   shop_id   商家id   order_id  订单号id     POST请求
 // 37 商家确认退款就接口
 export const shopOut = params => request.post('/api/merchant/shopOut', params)
+
+//  确认发货   ORDERSUMMARY_ID
+export const take = params => request.post('/api/ordersummary/order/take1', params)
+
+// 查询商品详情
+export const findByShopId = params => request.get('/api/merchantgoods/findByShopId', {params});
+
 
 
 

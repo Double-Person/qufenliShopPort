@@ -39,7 +39,7 @@
 										商品名称：{{goods.NAME}}
 									</view>
 									<view class="left-date">
-										下单时间：{{goods.time}}
+										下单时间：{{item.ordertime}}
 									</view>
 									<view class="left-price">
 										单价：￥{{goods.PRICE}}
@@ -84,7 +84,7 @@
 
 
 					</view>
-					<view class="item-btn" v-show="classifyIndex == 1">
+					<view class="item-btn" v-show="classifyIndex == 1" @click="confirmDelivery(item.ordersummary_id)">
 						<text>确认发货</text>
 					</view>
 					<view class="item-btn" v-show="hideBox">
@@ -111,7 +111,8 @@
 		orderList,
 		getRefund,
 		orderAffirm,
-		orderRepeal
+		orderRepeal,
+		take
 	} from '@/common/apis.js'
 	export default {
 		data() {
@@ -167,6 +168,17 @@
 			this.getOrder()
 		},
 		methods: {
+			// take  ORDERSUMMARY_ID
+			 confirmDelivery(ORDERSUMMARY_ID) {
+				 take({ORDERSUMMARY_ID}).then(async res => {
+					console.log(res)
+					await uni.showToast({
+						title: res.errMsg,
+						icon: 'none'
+					})
+					await this.getOrder()
+				})
+			},
 			getDetail(item) {
 				uni.navigateTo({
 					url: "../orderDetail/orderDetail?shopid=" + item.ordersummary_id + "&topIndex=" + this.topIndex
@@ -178,6 +190,7 @@
 					shop_id: uni.getStorageSync('shopId'),
 					type: this.classify[this.classifyIndex].value
 				}
+				uni.showLoading({ title: '加载中' })
 				const {
 					returnMsg,
 					msgType
@@ -189,6 +202,7 @@
 				} else {
 					this.orderList = []
 				}
+				uni.hideLoading()
 			},
 			// 同意退款
 			refund(pamars) {
