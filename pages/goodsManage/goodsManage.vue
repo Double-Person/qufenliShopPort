@@ -112,6 +112,10 @@
 			});
 			this.getGoods()
 		},
+		mounted() {
+			this.getTopArr();
+		},
+		
 		methods: {
 			close() {
 				this.$refs.popup.close()
@@ -125,6 +129,8 @@
 							title: '删除成功',
 							icon: 'none'
 						})
+						this.close()
+						this.getGoods()
 					} else {
 						uni.showToast({
 							title: '删除失败',
@@ -245,9 +251,7 @@
 			},
 
 		},
-		mounted() {
-			this.getTopArr();
-		}
+		
 	}
 </script>
 

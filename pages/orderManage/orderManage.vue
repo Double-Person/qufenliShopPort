@@ -118,23 +118,7 @@
 		data() {
 			return {
 				active: 1,
-				orderList: [{
-					id: "01",
-					imgUrl: "../../static/images/cartLOGO.png",
-					address: "四川省成都市武侯区",
-					title: "油条豆浆先生",
-					"phone": "13366667777",
-					goodsUrl: "../../static/images/content01.png",
-					name: "意大利黑胡椒面",
-					num: 1,
-					date: "2019-11-12 08:11",
-					address: "四川省成都市武侯区",
-					price: "99.99",
-					orderCode: "88080080880",
-					"pay": "微信支付",
-					"beizhu": "哈哈哈哈哈哈哈哈哈",
-					"orderSata": false
-				}],
+				orderList: [],
 				// 显示隐藏密码框
 				hideBox: false,
 				focusStata: false,

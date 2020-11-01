@@ -60,86 +60,11 @@
 				format: true
 			})
 			return {
-				listData: [{
-						"id": "01",
-						"title": "招商银行储蓄卡-转账",
-						"date": "12月30日 08:11 面对面收款",
-						"price": "34.00"
-					},
-					{
-						"id": "02",
-						"title": "豆浆豆浆",
-						"date": "12月30日 08:11 扫码收款",
-						"price": "34.00"
-					},
-					{
-						"id": "03",
-						"title": "豆浆豆浆",
-						"date": "12月30日 08:11 扫码收款",
-						"price": "34.00"
-					},
-					{
-						"id": "04",
-						"title": "豆浆豆浆",
-						"date": "12月30日 08:11 扫码收款",
-						"price": "34.00"
-					},
-					{
-						"id": "05",
-						"title": "豆浆豆浆",
-						"date": "12月30日 08:11 扫码收款",
-						"price": "34.00"
-					},
-					{
-						"id": "06",
-						"title": "豆浆豆浆",
-						"date": "12月30日 08:11 扫码收款",
-						"price": "34.00"
-					},
-				],
+				listData: [],
 				// 日期选择
 				date: currentDate,
 				// 提示信息
 				tipsState:true
-			}
-		},
-		methods: {
-			// 日期选择
-			bindDateChange: function(e) {
-				var arr = e.detail.value.split('-');
-				this.date = `${arr[0]}-${arr[1]}-${arr[2]}`;
-				this.getList()
-			},
-			getDate(type) {
-				const date = new Date();
-				let year = date.getFullYear();
-				let month = date.getMonth() + 1;
-				let day = date.getDate();
-
-				if (type === 'start') {
-					year = year - 60;
-				} else if (type === 'end') {
-					// year = year + 2;
-				}
-				month = month > 9 ? month : '0' + month;;
-				day = day > 9 ? day : '0' + day;
-				// return `${year}年${month}月${day}日`;
-				return `${year}-${month}-${day}`;
-			},
-			getList() {
-				uni.getStorage({
-				    key:'shopId',
-				    success:(res)=>{
-				        profitTotal({shop_id:res.data, date: this.date}).then(res=>{
-				            this.listData = res.returnMsg[0].todayOrderList
-				        }).catch(err=>{
-				        	uni.showToast({
-				        		title:'网络出错啦!',
-				        		icon:'none'
-				        	})
-				        })
-				    }
-				})
 			}
 		},
 		components: {
@@ -155,8 +80,57 @@
 			}
 		},
 		mounted() {
-           this.getList()
-		}
+		   this.getList(0)
+		},
+		methods: {
+			// 日期选择
+			bindDateChange: function(e) {
+				var arr = e.detail.value.split('-');
+				this.date = `${arr[0]}-${arr[1]}-${arr[2]}`;
+				this.getList(1)
+			},
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					// year = year + 2;
+				}
+				month = month > 9 ? month : '0' + month;;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
+			},
+			getList(start) {
+				uni.getStorage({
+				    key:'shopId',
+				    success:(res)=>{
+				        profitTotal({shop_id:res.data, date: start == 0 ? '': this.date}).then(res=>{
+									const date = new Date();
+									let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
+									month = month > 9 ? month : '0' + month;;
+									day = day > 9 ? day : '0' + day;
+									let now = `${year}-${month}-${day}`;
+									if(this.date == now) {
+										this.listData = res.returnMsg[0].todayOrderList
+									}else{
+										this.listData = res.returnMsg[0].orderList
+									}
+				            
+				        }).catch(err=>{
+				        	uni.showToast({
+				        		title:'网络出错啦!',
+				        		icon:'none'
+				        	})
+				        })
+				    }
+				})
+			}
+		},
+		
 	}
 </script>
 

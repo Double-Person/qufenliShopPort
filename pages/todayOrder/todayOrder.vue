@@ -68,7 +68,7 @@
 			</view>
 		</view>
 		<!-- 提示内容 -->
-		<view class="mybalance-tips" style="color: #666;textAlign: center;" :class="tipsState?'tipsState':''">
+		<view class="mybalance-tips" style="color: #666;textAlign: center;" v-if="orderList.length === 0">
 			暂无信息哟！
 		</view>
 		<!-- tabbar -->

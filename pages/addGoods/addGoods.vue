@@ -173,18 +173,17 @@ export default {
 		// 查询单个商品详情
 		_findByShopId(goods_id) {
 			findByShopId({goods_id}).then(res => {
-				let {goodInfo: {CATAGORYNAME,NAME, PRICE, DETAILS, NORMS}, imges } = res.returnMsg
-				this.params.category_id =CATAGORYNAME
+				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK}, imges } = res.returnMsg
+				this.params.category_id =CATEGORY_ID
 				this.params.name = NAME
 				this.params.price = PRICE
 				this.params.details = DETAILS
 				this.params.norms = NORMS
+				this.params.stock = STOCK
 				imges.forEach( (item, index) => {
 					this.imgList[index].imgUrl = item.IMG
 				} )
-				
-				
-				
+		
 			})
 		},
 		// 输入内容
