@@ -41,6 +41,10 @@ export const sendCode = params => request.post('/api/ordersummary/mobile', param
 export const homeInfo = params => request.get('/api/merchant/homeInfo', {params});
 // 18.添加商品
 export const addGoodsInfo = params => request.get('/api/merchantgoods/addGoodsInfo', {params});
+// 修改商品
+export const editGoodsInfo = params => request.post('/api/merchantgoods/editGoodsInfo', params);
+
+
 // 商品详情
 export const orderDetail = params => request.get('/api/merchant/ordersummarydetail', {params})
 // 19.删除商品 ok

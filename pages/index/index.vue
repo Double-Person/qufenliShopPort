@@ -128,9 +128,9 @@
 
 			// 判断全局是否有值
 			if (getApp().globalData.city.length) {
+				console.log(getApp().globalData)
 				this.newCity = getApp().globalData.city.join('')
 			} else {
-				console.log('进入else')
 				// 定位
 				// #ifdef MP-WEIXIN
 				amapPlugin.getRegeo({
@@ -163,7 +163,9 @@
 								this.newCity = data.data.regeocode.addressComponent.city + data.data.regeocode.addressComponent.district;
 								getApp().globalData.city.push(data.data.regeocode.addressComponent.city, data.data.regeocode.addressComponent
 									.district);
-								// console.log(this.newCity) // 注意就是data.data！！！
+								let {province, city, district} = data.data.regeocode.addressComponent
+								let addressList = [ province, city, district ]
+								uni.setStorageSync('addressList', addressList)
 							},
 							fail(err) {
 								uni.showToast({
@@ -230,45 +232,7 @@
 						this.longitude = res.longitude
 						this.latitude = res.latitude
 						this.conversionPoint(res)
-						uni.request({
-							url: 'https://yflh.hkzhtech.com/qufl/api/ordersummary/push/newvendor',
-							header: {
-								'Content-Type': 'application/x-www-form-urlencoded',
-							},
-							data: {
-								LONGITUDE: this.longitude, // '103.980318', //
-								LATITUDE: this.latitude, // '30.759185', //
-								// kilometers: '300',
-								showCount: 10,
-								currentPage: 1,
-								AREA: this.area, // '金牛区', //
-								NAME: this.itemType // 不填就是综合
-							},
-							method: 'POST',
-							success: (res) => {
-
-								if (res.data.status != '00') {
-									uni.showToast({
-										title: '请手动设置地区!',
-										icon: 'none',
-										duration: 2000
-									});
-								} else {
-
-									res.data.varList.map(item => {
-										item.distance = Math.round(item.distance);
-									});
-									this.menuList = res.data.varList;
-
-								}
-							},
-							fail: () => {
-								uni.showToast({
-									title: '获取数据失败！',
-									icon: 'none'
-								});
-							}
-						})
+						
 					}
 				})
 			},

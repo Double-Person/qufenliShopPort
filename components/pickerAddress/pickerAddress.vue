@@ -13,6 +13,7 @@
 	export default {
 		data() {
 			return{
+				AllAddress: AllAddress,
 				value: [0,0,0],
 				array: [],
 				index: 0
@@ -21,7 +22,32 @@
 		created() {
 			this.initSelect()
 		},
+		mounted() {
+			setTimeout(() => {
+				this.setCheckAddress()
+			}, 1500)
+		
+		},
 		methods:{
+			async setCheckAddress() {
+				try {
+				    const value = uni.getStorageSync('addressList');
+				    if (value) {
+						let index = await this.AllAddress.findIndex( ele => ele.provinceName == value[0] );
+						this.value = await [ index, 0, 0 ];
+						let indey = await this.AllAddress[index].city.findIndex( ele => ele.cityName == value[1] );
+						await this.updateSelectIndex('change1', indey)
+						let indez = await this.AllAddress[index].city[indey].county.findIndex( ele => ele.countyName == value[2] );
+				
+						await this.updateSelectIndex('change2', indez).updateSourceDate().updateAddressDate().$forceUpdate() // 触发双向绑定
+						
+						// this.value = await [ index, indey, indez ];
+				
+				    }
+				} catch (e) {
+				    // error
+				}
+			},
 			// 初始化地址选项
 			initSelect() {
 				this.updateSourceDate() // 更新源数据
@@ -71,6 +97,13 @@
 				}
 				if(column === 1 ) {
 					arr[2] = 0
+				}
+				// 手动更改数据
+				if(column === 'change1') {
+					arr[1] = value
+				}
+				if(column === 'change2') {
+					arr[2] = value
 				}
 				this.value = arr
 				return this

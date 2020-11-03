@@ -1,6 +1,6 @@
 <template>
 	<view class="addGoods">
-		<commonHeader headerTitl="添加商品"></commonHeader>
+		<commonHeader :headerTitl="headeTitle"></commonHeader>
 		<view class="addGoods-content">
 			<view class="addGoods-content-content">
 				<view class="addGoods-content-item" @tap="showDrawer = true">
@@ -104,7 +104,7 @@
 import commonHeader from '@/components/common-header/common-header';
 // 抽屉
 import uniDrawer from '@/components/uni-drawer/uni-drawer';
-import { addGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, findByShopId, baseUrl} from '@/common/apis.js';
+import { addGoodsInfo, editGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, findByShopId, baseUrl} from '@/common/apis.js';
 export default {
 	name: 'AddGoods',
 	components: { 
@@ -113,6 +113,9 @@ export default {
 	},
 	data () {
 		return {
+			headeTitle: '添加商品',
+			GOODS_ID: '',
+			type: '',
 			num: null,
 			hideMask: true,
 			showDrawer: false,
@@ -148,41 +151,103 @@ export default {
 			}
 		};
 	},
-	onLoad (options) {
-		console.log(options)
-		this.shopId = uni.getStorageSync('shopId')
+	async onLoad (options) {
+		this.shopId = await uni.getStorageSync('shopId');
 		// options.item && (this.data = JSON.parse(options.item))
 		if (options.item) {
 			this.data = JSON.parse(options.item)
-			// console.log()   // 
-			this._findByShopId(this.data.GOODS_ID)
-			// this.params.category_id = this.data.CATAGORYNAME
-			// this.params.name = this.data.GOODNAME
-			// this.params.price = this.data.PRICE
-			// this.params.details = this.data.DETAILS
-			// this.params.norms = this.data.NORMS
-			// this.imgList[0].imgUrl = this.data.ING
+			await this._findByShopId(this.data.GOODS_ID)
 		}
+		if(options.type === 'edit') {
+			this.type = 'edit';
+			this.headeTitle = '修改商品'
+		}else {
+			this.type = 'add';
+			this.headeTitle = '添加商品'
+		}
+		await this.getItem()
 		// 
 	},
-	mounted () {
-		this.getItem()
-	},
+
 
 	methods: {
+		// 添加修改商品
+		addGoods() {
+			this.hideMask=true
+			// 上传商品  images1
+			let img = {}
+			this.imgList.forEach((item, index) => {
+				img['images' + (index + 1)] = item.imgUrl
+			})
+			var obj = {
+				shop_id: uni.getStorageSync('shopId'),
+				category_id: this.params.category_id,
+				name: this.params.name,
+				price: this.params.price || 0,
+				norms: this.params.norms,
+				stock: this.params.stock,
+				details:this.params.details,
+				activity:'优惠',
+				...img
+			};
+			
+			if(this.type == 'add') {
+				addGoodsInfo(obj).then(res => {
+					if(res.msgType === 0){
+						uni.showToast({ title: '添加成功', icon: 'none' })
+						setTimeout(() => {
+							uni.navigateTo({ url: "../goodsManage/goodsManage" })
+						}, 1000)	
+					}else{
+					
+					}
+				});
+			}
+			if(this.type == 'edit') {
+				obj.goods_id = this.GOODS_ID
+				uni.request({
+					url: baseUrl + '/api/merchantgoods/editGoodsInfo',
+					data: obj,
+					method:'POST',
+					success(res) {
+						if(res.data.msgType == 0){
+							uni.showToast({ title: '修改成功', icon: 'none' })
+							setTimeout(() => {
+								uni.navigateTo({ url: "../goodsManage/goodsManage" })
+							}, 1000)
+								
+						}else{
+							uni.showToast({
+								title: res.data.errMsg,
+								icon: 'none'
+							})
+						}
+					},
+					fail(err) {
+						uni.showToast({
+							title: '修改失败',
+							icon: 'none'
+						})
+					}
+				})
+			
+			}
+		},
 		// 查询单个商品详情
 		_findByShopId(goods_id) {
 			findByShopId({goods_id}).then(res => {
-				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK}, imges } = res.returnMsg
+				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK, GOODS_ID}, imges } = res.returnMsg;
 				this.params.category_id =CATEGORY_ID
 				this.params.name = NAME
 				this.params.price = PRICE
 				this.params.details = DETAILS
 				this.params.norms = NORMS
 				this.params.stock = STOCK
+				this.GOODS_ID = GOODS_ID
 				imges.forEach( (item, index) => {
 					this.imgList[index].imgUrl = item.IMG
 				} )
+			
 		
 			})
 		},
@@ -195,7 +260,9 @@ export default {
 			const { returnMsg, msgType } = await itemListArr({ shop_id: this.shopId })
 			
 			msgType == 0 && (this.itemList = returnMsg)
-			console.log('获取分类列表', this.itemList)
+			
+			let [{ NAME }] = this.itemList.filter(item => item.CATEGORY_ID == this.params.category_id);
+			this.text = NAME;
 		},
 		// 添加分类
 		async addItems () {
@@ -225,7 +292,6 @@ export default {
 				num: this.num,
 				category_id: this.categoryId
 			}
-			console.log( obj )
 			categoryUpdate(obj).then(res => {
 				if(res.msgType == 0){
 					uni.showToast({
@@ -267,7 +333,6 @@ export default {
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				sourceType: ['album', 'camera'], //从相册选择
 				success: res => {
-					console.log(res)
 					const tempFilePaths = res.tempFilePaths;
 					        uni.uploadFile({
 					            url: baseUrl + '/uploadFile/file',
@@ -277,18 +342,12 @@ export default {
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
-									// let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
-									// this.imgList[i].imgUrl=baseUrl + url[1]
+								
 									this.imgList[i].imgUrl= JSON.parse(uploadFileRes.data).data
 									this.imgList[i].imgHide=true
 					            }
 					        });
-					// let obj={
-					// 	file:res.tempFiles[0].name
-					// }
-					// uploadImgFile(obj).then((res)=>{
-					// 	console.log(res)
-					// })
+					
 				}
 			});
 		},
@@ -332,7 +391,6 @@ export default {
 		},
 		// 点击修改
 		amend(chify,index){
-			console.log(chify, index)
 			this.hideInput = !this.hideInput;
 			this.itemShow=true;
 			this.categoryName=chify.NAME;
@@ -340,36 +398,7 @@ export default {
 			this.categoryId=chify.CATEGORY_ID
 			this.index=index
 		},
-		// 添加商品
-		addGoods() {
-			this.hideMask=true
-			// 上传商品  images1
-			let img = {}
-			this.imgList.forEach((item, index) => {
-				img['images' + (index + 1)] = item.imgUrl
-			})
-			var obj = {
-				shop_id: uni.getStorageSync('shopId'),
-				category_id: this.params.category_id,
-				name: this.params.name,
-				price: this.params.price || 0,
-				norms: this.params.norms,
-				stock: this.params.stock,
-				details:this.params.details,
-				activity:'优惠',
-				...img
-			};
-	
-			addGoodsInfo(obj).then(res => {
-				if(res.msgType === 0){
-					uni.navigateTo({
-						url: "../goodsManage/goodsManage"
-					})	
-				}else{
-					console.log(添加失败)
-				}
-			});
-		}
+		
 	}
 };
 </script>

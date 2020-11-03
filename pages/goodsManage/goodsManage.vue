@@ -37,6 +37,9 @@
 										<view>
 											价格：￥{{item1.PRICE}}
 										</view>
+										<view>
+											库存：￥{{item1.PRICE}}
+										</view>
 									</view>
 								</view>
 								<view class="item-evaluate" v-if="item1.CONTENT">
@@ -58,7 +61,7 @@
 		<!-- 内容结束 -->
 
 		<!-- 底部 -->
-		<navigator url="../addGoods/addGoods" class="goodsManage-footer">
+		<navigator url="../addGoods/addGoods?type=add" class="goodsManage-footer">
 			添加商品
 		</navigator>
 
@@ -224,7 +227,7 @@
 			changeData(index, index1) {
 				console.log(this.list[index].list[index1])
 				uni.navigateTo({
-					url: '../addGoods/addGoods?item=' + encodeURIComponent(JSON.stringify(this.list[index].list[index1]))
+					url: '../addGoods/addGoods?type=edit&item=' + encodeURIComponent(JSON.stringify(this.list[index].list[index1]))
 				})
 			},
 			// 密码输入状态
