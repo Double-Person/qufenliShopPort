@@ -25,7 +25,7 @@
 		mounted() {
 			setTimeout(() => {
 				this.setCheckAddress()
-			}, 1500)
+			}, 2000)
 		
 		},
 		methods:{
