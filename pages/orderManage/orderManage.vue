@@ -190,8 +190,9 @@
 			},
 			// 同意退款
 			refund(pamars) {
+				console.log(pamars);
 				orderAffirm({
-					ORDERSUMMARY_ID: pamars,
+					'ORDERSUMMARY_ID': pamars,
 					STATE: '3'
 				}).then(res => {
 					console.log(res)
@@ -206,7 +207,7 @@
 			},
 			rejectRefund(id) {
 				orderRepeal({
-					ORDERSUMMARY_ID: id
+					'ORDERSUMMARY_ID': id
 				}).then(res => {
 					console.log(res)
 					this.active = 2

@@ -25,7 +25,7 @@
 			</view>
 
 			<view class="money">
-				<image class="img" src="../../static/images/money.png" mode=""></image>
+				<image class="img" src="/static/images/money.png" mode=""></image>
 				<view class="mask top-mask">
 					￥ {{shopInfo.BALANCE}}
 					<!-- {{item.zbalance}} -->
@@ -48,7 +48,7 @@
 					</view>
 					<view class="info-text">
 						<!-- 招商银行（8707） -->
-						{{list[0].BANK}} ({{ (list[0].CARDNO).length > 4 ? (list[0].CARDNO).slice((list[0].CARDNO).length-4, (list[0].CARDNO).length) : list[0].CARDNO }})
+						<text>{{ cardNum == bindList.Wx && '微信' || cardNum == bindList.Ali && '支付宝' || cardNum == '' && '请选择' }}  {{ cardNum }}</text>
 					</view>
 				</view>
 				<view class="icon" @click="showCardList">
@@ -57,10 +57,14 @@
 
 			</view>
 			<view class="" v-show="isShowChangeCard" class="change-card-list">
-				<view class="list" v-for="(item, index) in list">
-					<view class="fl-center-between item" @click="changeCardId(item.CARDNO)">
-						<view>{{item.BANK}} {{computedPhone(item.CARDNO)}}</view>
-						<icon type="success_no_circle" size="20" v-if="cardNum == item.CARDNO" />
+				<view class="list">
+					<view class="fl-center-between item" @click="changeCardId(bindList.Wx)" v-if="bindList.Wx">
+						<view>微信 {{bindList.Wx}}</view>
+						<icon type="success_no_circle" size="20" v-if="cardNum == bindList.Wx" />
+					</view>
+					<view class="fl-center-between item" @click="changeCardId(bindList.Ali)" v-if="bindList.Ali">
+						<view>支付宝 {{bindList.Ali}}</view>
+						<icon type="success_no_circle" size="20" v-if="cardNum == bindList.Ali" />
 					</view>
 				</view>
 			</view>
@@ -93,17 +97,17 @@
 				shopInfo: {},
 				isShowChangeCard: false,
 				list: [],
+				bindList: {},
 				money: null,
 				cardNum: '', // 卡号
 				kbalance: 0, // uni.setStorageSync('kbalance')
 			};
 		},
 		onLoad() {
-			this.getBackCardInfo()
+			// this.getBackCardInfo()
 			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.kbalance = uni.getStorageSync('kbalance');
-
-			console.log(this.shopInfo)
+			this.bindList = JSON.parse(opt.bindList)
 		},
 		methods: {
 			//  转银行卡账号 和手机号

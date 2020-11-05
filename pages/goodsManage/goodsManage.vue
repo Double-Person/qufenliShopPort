@@ -225,7 +225,6 @@
 			},
 			// 修改数据
 			changeData(index, index1) {
-				console.log(this.list[index].list[index1])
 				uni.navigateTo({
 					url: '../addGoods/addGoods?type=edit&item=' + encodeURIComponent(JSON.stringify(this.list[index].list[index1]))
 				})
@@ -251,6 +250,7 @@
 						return item
 					})
 				}
+				console.log('++++', this.list)
 			},
 
 		},

@@ -12,7 +12,7 @@
 				</view>
 				<view class="qrimg">
 					<tki-qrcode ref="qrcode" cid="tki-qrcode-canvas" :val="codeVal" :size="size" unit="upx" background="#000000"
-					 foreground="#ffffff" pdground="#ffffff" icon="../../static/images/codeImg.jpg" :iconSize='40' :lv="3" :onval="true"
+					 foreground="#ffffff" pdground="#ffffff" icon="/static/images/codeImg.jpg" :iconSize='40' :lv="3" :onval="true"
 					 :loadMake="true" :usingComponents="true" :showLoading="true" loadingText="二维码生成中" @result="qrR" />
 				</view>
 				<view class="codeReceivables-content-box-text">
@@ -28,12 +28,14 @@
 	import commonHeader from "@/components/common-header/common-header";
 	// 生成二维码
 	import tkiQrcode from "@/components/tki-qrcode/tki-qrcode.vue"
+	import { merchantQrCode } from "@/common/apis.js"
 	export default {
 		data() {
 			return {
 				// 生成二维码
 				// codeVal:'https://yflh.hkzhtech.com/qufl/#/pages/setMoney/setMoney',
-				codeVal: "./setMoney/setMoney",
+				// codeVal: "./setMoney/setMoney",
+				codeVal: "https://img-blog.csdnimg.cn/20190618172316632.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE0MTU3ODI=,size_16,color_FFFFFF,t_70",
 				size: 410,
 				BacimgUrl: ''
 			};
@@ -46,29 +48,6 @@
 		methods: {
 			// 保存收款码
 			saveImg() {
-				// uni.downloadFile({
-				// 	url:'http://a0.att.hudong.com/78/52/01200000123847134434529793168.jpg',
-				// 	success: (res) => {
-				// 		if (res.statusCode === 200) {
-				// 			uni.saveImageToPhotosAlbum({
-				// 				filePath: res.tempFilePath,
-				// 				success: function() {
-				// 					uni.showToast({
-				// 						title: "保存成功",
-				// 						icon: "none"
-				// 					});
-				// 				},
-				// 				fail: function() {
-				// 					uni.showToast({
-				// 						title: "保存失败，请稍后重试",
-				// 						icon: "none"
-				// 					});
-				// 				}
-				// 			});
-				// 		}
-				// 	}
-				// })
-				// this.qrR()
 				this._saveCode() 
 			},
 			// 设置金额
@@ -78,6 +57,7 @@
 				})
 			},
 			qrR(e) {
+				console.log(e)
 				this.BacimgUrl = e;
 			},
 			_saveCode() {

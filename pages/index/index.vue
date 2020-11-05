@@ -188,9 +188,10 @@
 		methods: {
 			// 进入我的卡包
 			goMycard() {
-				if(Object.keys(this.bindList).length > 0) {
-					uni.navigateTo({
-						url: "../withdrawal/withdrawal"
+				// if(Object.keys(this.bindList).length > 0) {
+				if(this.bindList.Ali || this.bindList.Wx  ) {
+					uni.navigateTo({  // bindList
+						url: "../withdrawal/withdrawal?bindList=" + JSON.stringify(this.bindList)
 					})
 				}else{
 					uni.navigateTo({
