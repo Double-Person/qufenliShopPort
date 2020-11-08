@@ -35,7 +35,7 @@
 				// 生成二维码
 				// codeVal:'https://yflh.hkzhtech.com/qufl/#/pages/setMoney/setMoney',
 				// codeVal: "./setMoney/setMoney",
-				codeVal: "https://img-blog.csdnimg.cn/20190618172316632.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE0MTU3ODI=,size_16,color_FFFFFF,t_70",
+				codeVal: "weixin://wxpay/bizpayurl",  // ?pr=9MnPBWW
 				size: 410,
 				BacimgUrl: ''
 			};
