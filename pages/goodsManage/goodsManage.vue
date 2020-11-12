@@ -38,7 +38,7 @@
 											价格：￥{{item1.PRICE}}
 										</view>
 										<view>
-											库存：￥{{item1.PRICE}}
+											库存：{{item1.STOCK}}
 										</view>
 									</view>
 								</view>

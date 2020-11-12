@@ -41,7 +41,7 @@
 							<!-- :class="item.imgHide ? 'imgHide' : ''" -->
 							<view class="item-text" v-if="!item.imgUrl">
 								<text class="iconfont icon-tubiaolunkuo-"></text>
-								<view>添加图片-</view>
+								<view>添加图片</view>
 							</view>
 							<!-- :class="item.imgHide ? '' : 'imgHide'" -->
 							<view class="item-img" v-if="item.imgUrl" @click="addItem(i)"><image :src="item.imgUrl" mode=""></image></view>
@@ -261,7 +261,7 @@ export default {
 			
 			msgType == 0 && (this.itemList = returnMsg)
 			
-			let [{ NAME }] = this.itemList.filter(item => item.CATEGORY_ID == this.params.category_id);
+			let [{ NAME = '' }] = this.itemList.filter(item => item.CATEGORY_ID == this.params.category_id);
 			this.text = NAME;
 		},
 		// 添加分类
@@ -320,6 +320,7 @@ export default {
 				success: res => {
 					
 					res.tempFilePaths.map((item, index) => {
+						
 						this.imgList[index].imgUrl=item
 						this.imgList[index].imgHide=true
 					});
@@ -342,7 +343,6 @@ export default {
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
-								
 									this.imgList[i].imgUrl= JSON.parse(uploadFileRes.data).data
 									this.imgList[i].imgHide=true
 					            }
