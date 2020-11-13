@@ -190,10 +190,11 @@ export default {
 				activity:'优惠',
 				...img
 			};
+	
 			
 			if(this.type == 'add') {
 				addGoodsInfo(obj).then(res => {
-					if(res.msgType === 0){
+					if(res.msgType == 0){
 						uni.showToast({ title: '添加成功', icon: 'none' })
 						setTimeout(() => {
 							uni.navigateTo({ url: "../goodsManage/goodsManage" })

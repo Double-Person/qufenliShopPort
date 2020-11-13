@@ -4,7 +4,7 @@
 			<view class="index-header-top">
 				<pickerAddress class="index-header-left" @change="setCity">
 					<text class="iconfont icon-dingwei"></text>
-					<text @click="setCity">{{newCity}}</text>
+					<text @click="setCity">{{showCity}}</text>
 					<text class="iconfont icon-jiantou-xia"></text>
 				</pickerAddress>
 				<view class="index-header-title">
@@ -82,6 +82,7 @@
 	export default {
 		data() {
 			return {
+				showCity:'',
 				shopInfoObj: {},
 				newCity: '',
 				todaySy: 100,
@@ -214,6 +215,7 @@
 					},
 					success: (data) => {
 						this.newCity = data.data.regeocode.addressComponent.city + data.data.regeocode.addressComponent.district;
+						this.showCity = data.data.regeocode.addressComponent.district
 					},
 					fail(err) {
 

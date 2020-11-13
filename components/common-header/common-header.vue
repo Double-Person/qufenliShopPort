@@ -31,7 +31,7 @@
 					</view>
 					<view class="pengyouquan" @tap="share(2)">
 						<view>
-							<image src="../../static/images/pengyouquan.png" mode=""></image>
+							<image src="/static/images/pengyouquan.png" mode=""></image>
 						</view>
 						<text>朋友圈</text>
 					</view>
@@ -102,11 +102,33 @@
 				}
 				return;
 				// #endif
+				
 				// 修复小程序app返回退出应用bug(无法返回重定向至首页)
 				var pagelength = getCurrentPages();
+				
+				var pageLast = pagelength[pagelength.length - 1];
+				var currentWebview = pageLast.$getAppWebview();
+				let currentRouter = currentWebview.__uniapp_route;
+				// 添加商品页面返回商品管理页
+				if (currentRouter == 'pages/addGoods/addGoods') {
+					uni.navigateTo({
+						url: "/pages/goodsManage/goodsManage"
+					})
+					return false;
+				}
+				// 商品管理页返回主页
+				if (currentRouter == 'pages/goodsManage/goodsManage') {
+					uni.navigateTo({
+						// url: "/pages/goodsManage/goodsManage"
+						url: "/pages/index/index"
+					})
+					return false;
+				}
+				
+				
+				
 				if(pagelength.length===1){
-					// var path = pagelength[0].route;
-					// console.log(path)
+
 					uni.reLaunch({
 						// url:'/'+path
 						url:'../../pages/index/index'

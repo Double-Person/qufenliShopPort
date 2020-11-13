@@ -160,7 +160,10 @@
 						title: res.errMsg,
 						icon: 'none'
 					})
-					await this.getOrder()
+					await setTimeout(() => {
+						this.getOrder()
+					}, 500)
+					 
 				})
 			},
 			getDetail(item) {
