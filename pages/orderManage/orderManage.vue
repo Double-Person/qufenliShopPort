@@ -152,14 +152,31 @@
 			this.getOrder()
 		},
 		methods: {
-			// take  ORDERSUMMARY_ID
+			// take  ORDERSUMMARY_ID 确认发货
 			 confirmDelivery(ORDERSUMMARY_ID) {
 				 take({ORDERSUMMARY_ID}).then(async res => {
-					console.log(res)
-					await uni.showToast({
-						title: res.errMsg,
-						icon: 'none'
-					})
+					if(res.returnMsg.status == '03') {
+						await uni.showToast({
+							title: '申请退款中不能确认收货',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '02') {
+						uni.showToast({
+							title: '该订单还未支付成功',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '01') {
+						await uni.showToast({
+							title: '订单号不存在',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '00') {
+						await uni.showToast({
+							title: '发货成功',
+							icon: 'none'
+						})
+					}
+					
 					await setTimeout(() => {
 						this.getOrder()
 					}, 500)

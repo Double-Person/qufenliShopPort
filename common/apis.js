@@ -108,6 +108,8 @@ export const take = params => request.post('/api/ordersummary/order/take1', para
 // 查询商品详情
 export const findByShopId = params => request.get('/api/merchantgoods/findByShopId', {params});
 
+// shop_id  判断是否有交易密码
+export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
 
 

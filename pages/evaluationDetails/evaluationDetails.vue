@@ -5,7 +5,7 @@
 		<!-- 内容 -->
 		<view class="content-details">
 			<view>
-				<view class="content">
+				<!-- <view class="content">
 					<view class="title">
 						{{info.NAME || '发布人'}}
 					</view>
@@ -15,7 +15,6 @@
 					</view>
 					<view class="img">
 						<image :src="info.IMGS"></image>
-						<!-- <image :src="item1" mode="" v-for="(item1,index1) in item.img " :key="index1"></image> -->
 					</view>
 				</view>
 				<view class="shopReply">
@@ -25,11 +24,19 @@
 							{{info.REPLY}}
 						</view>
 					</view>
-				</view>
+				</view>  -->
 				<view class="btn">
 					<input type="text" :value="value" placeholder="商家回复..." @blur="inputTetx"/>
 					<text @tap="sendText">发表</text>
 				</view>
+			</view>
+		</view>
+	
+		<view class="comment">
+			<view v-for="(item,index) in info" :key="index" class="comment-item">
+				<!-- <text class="name">  {{ item.USID ? itemInfo.USERNAME : '商家回复' }}:</text> --> <!-- {{item.USID || '商家回复'}} -->
+				<text class="name">  {{ item.USID }}:</text>  <!-- {{item.USID || '商家回复'}} -->
+				<text class="comment-content">{{ item.REPLY }} </text>
 			</view>
 		</view>
 	</view>
@@ -55,6 +62,7 @@
 		},
 		onLoad (options) {  // item.EVALUATE_ID, item.GOODS_ID
 			this.itemInfo = JSON.parse(options.info)
+			console.log(this.itemInfo)
 			this.getInitDetail()
 		},
 		methods:{
@@ -98,7 +106,21 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+	.comment{
+		padding: 15rpx 50rpx;
+		.comment-item{
+			margin-bottom: 30rpx;
+			.name{
+				font-weight: bold;
+				margin-right: 15rpx;
+			}
+			.comment-content{
+				
+			}
+		}
+	}
+	
 	.evaluationDetails{
 		padding: 100rpx 0;
 		/* #ifdef APP-PLUS */
