@@ -110,6 +110,8 @@ export const findByShopId = params => request.get('/api/merchantgoods/findByShop
 // 判断商家是否有交易密码  shop_id
 export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
+// shop_id  判断是否有交易密码
+export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
 
 

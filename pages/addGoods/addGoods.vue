@@ -18,7 +18,8 @@
 				</view>
 				<view class="addGoods-content-item">
 					<view>规格</view>
-					<input type="text" v-model="params.norms" placeholder-class="placeholder-class" placeholder="请输入商品规格 例如：10串/份" style="width: 420rpx;" />
+					<input type="text" v-model="params.norms" placeholder-class="placeholder-class" placeholder="请输入商品规格 例如：10串/份"
+					 style="width: 420rpx;" />
 				</view>
 				<view class="addGoods-content-item">
 					<view>添加库存</view>
@@ -27,7 +28,8 @@
 				<view class="addGoods-content-describe">
 					<view class="title">产品描述</view>
 					<view class="text">
-						<textarea :maxlength="-1" v-model="params.details" class="text-area" placeholder-class="placeholder-class" placeholder="质量如何，服务是否周到，交通是否便利？（写够15字，才是好同志~）" />
+						<textarea :maxlength="-1" v-model="params.details" class="text-area" placeholder-class="placeholder-class"
+						 placeholder="质量如何，服务是否周到，交通是否便利？（写够15字，才是好同志~）" />
 						<!-- <text>加油，还差15个字即可发布！</text> -->
 					</view>
 				</view>
@@ -43,8 +45,8 @@
 								<text class="iconfont icon-tubiaolunkuo-"></text>
 								<view>添加图片</view>
 							</view>
-							<!-- :class="item.imgHide ? '' : 'imgHide'" -->
-							<view class="item-img" v-if="item.imgUrl" @click="addItem(i)"><image :src="item.imgUrl" mode=""></image></view>
+							<!-- :class="item.imgHide ? '' : 'imgHide'"  @click="addItem(i)" -->
+							<view class="item-img" v-if="item.imgUrl" ><image :src="item.imgUrl" mode=""></image></view>
 						</view>
 					</view>
 					<view class="btn" v-if="data">
@@ -127,12 +129,12 @@ export default {
 			itemShow:false,
 			inputVlue: '',
 			imgList:[
-				{imgUrl: '',imgHide: false},
-				{imgUrl: '',imgHide: false},
-				{imgUrl: '',imgHide: false},
-				{imgUrl: '',imgHide: false},
-				{imgUrl: '',imgHide: false},
-				{imgUrl: '',imgHide: false}
+				{imgUrl: '',imgHide: false, GOODSIMGS_ID: '' },
+				{imgUrl: '',imgHide: false, GOODSIMGS_ID: '' },
+				{imgUrl: '',imgHide: false, GOODSIMGS_ID: '' },
+				{imgUrl: '',imgHide: false, GOODSIMGS_ID: '' },
+				{imgUrl: '',imgHide: false, GOODSIMGS_ID: '' },
+				{imgUrl: '',imgHide: false, GOODSIMGS_ID: '' }
 			],
 			
 			shopId: '',
@@ -177,7 +179,12 @@ export default {
 			// 上传商品  images1
 			let img = {}
 			this.imgList.forEach((item, index) => {
-				img['images' + (index + 1)] = item.imgUrl
+				img['images' + (index + 1)] = item.imgUrl;
+				if(this.type == 'edit') {
+					img['goodsimgs_id' + (index + 1)] = item.GOODSIMGS_ID
+				}
+				
+				
 			})
 			var obj = {
 				shop_id: uni.getStorageSync('shopId'),
@@ -204,8 +211,13 @@ export default {
 					}
 				});
 			}
+			
+		
 			if(this.type == 'edit') {
 				obj.goods_id = this.GOODS_ID
+				// goodsimgs_id1  GOODSIMGS_ID
+				
+				
 				uni.request({
 					url: baseUrl + '/api/merchantgoods/editGoodsInfo',
 					data: obj,
@@ -247,6 +259,8 @@ export default {
 				this.GOODS_ID = GOODS_ID
 				imges.forEach( (item, index) => {
 					this.imgList[index].imgUrl = item.IMG
+					this.imgList[index].GOODSIMGS_ID = item.GOODSIMGS_ID
+					
 				} )
 			
 		
@@ -313,28 +327,31 @@ export default {
 			msgType == 0 && this.getItem()
 		},
 		// 上传图片
-		uploadImg(id) {
-			uni.chooseImage({
-				count: 6, //默认9
-				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-				sourceType: ['album', 'camera'], //从相册选择
-				success: res => {
+		// uploadImg(id) {
+		// 	uni.chooseImage({
+		// 		count: 6, //默认9
+		// 		sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+		// 		sourceType: ['album', 'camera'], //从相册选择
+		// 		success: res => {
 					
-					res.tempFilePaths.map((item, index) => {
+		// 			res.tempFilePaths.map((item, index) => {
 						
-						this.imgList[index].imgUrl=item
-						this.imgList[index].imgHide=true
-					});
+		// 				this.imgList[index].imgUrl=item
+		// 				this.imgList[index].imgHide=true
+		// 			});
 				
-				}
-			});
-		},
+		// 		}
+		// 	});
+		// },
 		// 点击单个图片项上传
 		addItem(i){
 			uni.chooseImage({
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				sourceType: ['album', 'camera'], //从相册选择
 				success: res => {
+					uni.showLoading({
+						title:'图片上传中',
+					})
 					const tempFilePaths = res.tempFilePaths;
 					        uni.uploadFile({
 					            url: baseUrl + '/uploadFile/file',
@@ -344,9 +361,13 @@ export default {
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
+												
 									this.imgList[i].imgUrl= JSON.parse(uploadFileRes.data).data
 									this.imgList[i].imgHide=true
-					            }
+					            },
+											complete() {
+												uni.hideLoading()
+											}
 					        });
 					
 				}

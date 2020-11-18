@@ -109,6 +109,7 @@
 				var pageLast = pagelength[pagelength.length - 1];
 				var currentWebview = pageLast.$getAppWebview();
 				let currentRouter = currentWebview.__uniapp_route;
+				console.log(currentRouter)
 				// 添加商品页面返回商品管理页
 				if (currentRouter == 'pages/addGoods/addGoods') {
 					uni.navigateTo({

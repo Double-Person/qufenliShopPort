@@ -5,7 +5,7 @@
 		<view class="tips">
 			请输入交易密码
 		</view>
-		<input type="password" placeholder-style="color:#333" v-model="form.paypass" placeholder="请输入原密码" v-if="isEdit" />
+		<input type="password" placeholder-style="color:#333" v-if="isSet" v-model="form.paypass" placeholder="请输入原密码" />
 		<input type="password" placeholder-style="color:#333" v-model="form.npaypass" placeholder="请输入新密码" />
 		<input type="password" placeholder-style="color:#333" v-model="form.newpaypass" placeholder="请再次输入新密码" />
 		<view class="submit" @tap="submit">
@@ -17,13 +17,17 @@
 <script>
 	import commonHeader from "@/components/common-header/common-header"
 	import {
-		changeDealPwd, shoppwdInfo
+		changeDealPwd,
+		shoppwdInfo
 	} from '@/common/apis.js'
 
 	export default {
+		components: {
+			commonHeader
+		},
 		data() {
 			return {
-				isEdit: false,// 是否已设置交易密码
+				isSet: false,
 				form: {
 					phone: '',
 					paypass: '',
@@ -32,30 +36,35 @@
 				}
 			};
 		},
-		components: {
-			commonHeader
-		},
+
 		onLoad() {
 			this._shoppwdInfo()
 		},
+
 		methods: {
-			_shoppwdInfo() {
-				shoppwdInfo({ shop_id: uni.getStorageSync('shopId') }).then(res => {
-					console.log(res)
-					this.isEdit = (res.returnMsg == "已经设置交易密码")
-				})
+			async _shoppwdInfo() {
+				let shop_id = uni.getStorageSync('shopId');
+				let {
+					returnMsg
+				} = await shoppwdInfo({
+					shop_id
+				});
+				if (returnMsg == "已经设置交易密码")
+					this.isSet = true
+				else
+					this.isSet = false
 			},
 			async submit() {
-				if (this.form.paypass  === '' && this.isEdit) {
-				    uni.showToast({
-				        title:'请输入原密码！',
-				        icon:'none'
-				    })
-				    return false
+				if(this.isSet == true && this.form.paypass == '') {
+					 uni.showToast({
+					 	title: '请输入原密码！',
+					 	icon: 'none'
+					 })
+					 return false
 				}
 				if (this.form.npaypass == '' || this.form.newpaypass == '') {
 					uni.showToast({
-						title: '请输入密码！',
+						title: '请输入新密码！',
 						icon: 'none'
 					})
 					return false
