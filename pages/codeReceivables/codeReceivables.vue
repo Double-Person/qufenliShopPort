@@ -34,8 +34,8 @@
 			return {
 				// 生成二维码
 				// codeVal:'https://yflh.hkzhtech.com/qufl/#/pages/setMoney/setMoney',
-				// codeVal: "./setMoney/setMoney",
-				codeVal: "weixin://wxpay/bizpayurl",  // ?pr=9MnPBWW
+				codeVal: "./setMoney/setMoney",
+				// codeVal: "weixin://wxpay/bizpayurl",  // ?pr=9MnPBWW
 				size: 410,
 				BacimgUrl: ''
 			};
@@ -57,7 +57,7 @@
 				})
 			},
 			qrR(e) {
-				console.log(e)
+				console.log('---------',e)
 				this.BacimgUrl = e;
 			},
 			_saveCode() {
