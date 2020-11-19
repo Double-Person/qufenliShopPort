@@ -36,7 +36,8 @@
 				<view class="addGoods-content-addimg">
 					<view class="title">
 						<view>添加商品图片</view>
-						<text class="iconfont icon-xiangji" @tap="uploadImg"></text>
+						<text class="iconfont icon-xiangji"></text>
+						 <!-- @tap="uploadImg" -->
 					</view>
 					<view class="content">
 						<view class="content-item" v-for="(item,i) in imgList" :key="i" @click="addItem(i)">
@@ -294,7 +295,8 @@ export default {
 				msgType == 0 && this.getItem()
 				this.hideInput =false;
 				this.categoryName = ''
-				this.num = null
+				this.num = null;
+			
 			// let arr = { id: this.inputVlue.length + 1, text: this.inputVlue };
 			// this.itemList.push(arr);
 		},
@@ -313,6 +315,9 @@ export default {
 						title: res.errMsg,
 						icon: 'none'
 					})
+					// this.showDrawer =false;
+					console.log('-----------')
+					this.getItem()
 				}
 				
 			})

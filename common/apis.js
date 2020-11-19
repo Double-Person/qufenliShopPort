@@ -10,7 +10,7 @@ export const login = params => request.get('/api/merchant/merchantLogin', {param
 // 2.店铺编辑接口
 export const shopEdit = params => request.get('/api/merchant/newEditShopInfo', {params});
 // 3.修改登录密码  ok
-export const changeLoginPwd = params => request.post('/api/merchant/editLoginpass', params);
+export const changeLoginPwd = params => request.get('/api/merchant/editLoginpass', {params});
 // 4.修改交易密码  ok
 export const changeDealPwd = params => request.get('/api/merchant/editPaypass', {params});
 // 5.绑定银行卡
@@ -110,8 +110,8 @@ export const findByShopId = params => request.get('/api/merchantgoods/findByShop
 // 判断商家是否有交易密码  shop_id
 export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
-// shop_id  判断是否有交易密码
-export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
+// // shop_id  判断是否有交易密码
+// export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
 
 
