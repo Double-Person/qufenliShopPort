@@ -49,6 +49,7 @@
 	// tabbar 
 	import tabbar from"@/components/common-tabbar/common-tabbar";
 	import testCode from '@/components/testCode/testCode';
+	import {forgetPwd, sendCode} from "@/common/apis.js"
 	export default {
 		data() {
 			return {
@@ -119,6 +120,33 @@
 			},
 			// 更换手机号
 			submit(){
+				let obj = {
+					phone: this.phone,
+					code:this.code,
+					payPass: this.pwd,
+					loginPass: this.pwd
+				}
+				forgetPwd(obj).then(res => {
+					console.log(res)
+					if(res.msgType == 0) {
+						uni.showToast({
+							title: '设置成功',
+							icon: 'none'
+						})
+						setTimeout(() => {
+							uni.reLaunch({
+								url: "/pages/index/index"
+							})
+						}, 500)
+					}else {
+						uni.showToast({
+							title: '提交失败',
+							icon: 'none'
+						})
+					}
+				})
+				
+				return false;
 				this.phoneMaskShow = false;
 				// 返回上一页
 				// #ifdef H5
@@ -171,6 +199,12 @@
 						this.codeHide = true;
 						clearInterval(setTime);
 					}, 59000)
+					sendCode({ MOBILE: this.phone }).then(res => {
+						console.log(res)
+						uni.showToast({
+							title: res.errMsg, icon: 'none'
+						})
+					})
 				}
 			},
 		}
