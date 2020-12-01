@@ -5,17 +5,23 @@ import Request from 'luch-request'
 const request = new Request()
 
 request.setConfig((config) => { /* 设置全局配置 */
-	config.baseURL = 'https://yflh.hkzhtech.com/qufl/' //process.env.VUE_APP_BASE_API /* 根域名不同 */
+	// config.baseURL = 'https://yflh.hkzhtech.com/qufl/' //process.env.VUE_APP_BASE_API /* 根域名不同 */
+	config.baseURL = 'http://192.168.0.113:8081' //process.env.VUE_APP_BASE_API /* 根域名不同 */
+	config.withCredentials = true
 	config.header = { ...config.header,
 	"Content-Type": "application/x-www-form-urlencoded",
-
 	}
 	return config
 })
 
 
 request.interceptors.request.use((config, cancel) => { /* 请求之前拦截器 */
-	const token = uni.getStorageSync('token')
+	let token = null;
+	try{
+		token = uni.getStorageSync('token')
+	}catch(e){
+		//TODO handle the exception
+	}
 	if (token) config.header['Authorization'] = 'Bearer ' + token;
 	return config
 })

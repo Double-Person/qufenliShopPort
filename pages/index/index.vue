@@ -110,18 +110,18 @@
 					})
 					// '015915f9770f40b69e35674663f0d001'
 					// 判断商家是否绑定银行卡信息  
-					shopBank({shop_id: res.data }).then(res => {
-						console.log(res)
-						// this.info = res.returnMsg
-						if(res.msgType == 0) {
-							this.bindList = res.returnMsg
-						}else {
-							uni.showToast({
-								title: res.errMsg,
-								icon: 'none'
-							})
-						}
-					})
+					// shopBank({shop_id: res.data }).then(res => {
+					// 	console.log(res)
+					// 	// this.info = res.returnMsg
+					// 	if(res.msgType == 0) {
+					// 		this.bindList = res.returnMsg
+					// 	}else {
+					// 		uni.showToast({
+					// 			title: res.errMsg,
+					// 			icon: 'none'
+					// 		})
+					// 	}
+					// })
 				}
 			})
 		},

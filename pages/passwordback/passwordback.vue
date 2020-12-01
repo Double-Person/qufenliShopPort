@@ -120,17 +120,19 @@
 			},
 			// 更换手机号
 			submit(){
+				console.log("----")
 				let obj = {
 					phone: this.phone,
 					code:this.code,
 					payPass: this.pwd,
 					loginPass: this.pwd
 				}
+				// return false;
 				forgetPwd(obj).then(res => {
 					console.log(res)
 					if(res.msgType == 0) {
 						uni.showToast({
-							title: '设置成功',
+							title: res.returnMsg,
 							icon: 'none'
 						})
 						setTimeout(() => {

@@ -20,7 +20,7 @@ export const orderTotal = params => request.get('/api/merchant/orderList', {para
 // 7.收益统计  ok
 export const profitTotal = params => request.get('/api/merchant/shopIncomeList', {params});
 // 8.忘记交易密码
-export const forgetPwd = params => request.get('/api/merchant/findPass', params);
+export const forgetPwd = params => request.get('/api/merchant/findPass', {params});
 // 9.商家入驻
 export const shopIn = params => request.post('/api/merchant/shopAuth', params);
 // 10.商品图片保存
@@ -110,7 +110,7 @@ export const findByShopId = params => request.get('/api/merchantgoods/findByShop
 // 判断商家是否有交易密码  shop_id
 export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
-// // shop_id  判断是否有交易密码
+// // shop_id  判断是否有交易密码  JSESSIONID
 // export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
 
 

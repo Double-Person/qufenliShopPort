@@ -63,24 +63,28 @@
 			}
 		},
 		onLoad() {
-			// 获取本地存储登录信息
-			uni.getStorage({
-				key: 'name',
-				success: (data) => {
-					var res = JSON.parse(data.data);
-					this.phone = res.phone;
-					this.pwd = res.password;
-					this.goIndex();
-				}
-			})
-			uni.getStorage({
-				key: 'outLogin',
-				success: (res) => {
-					if (res.data) {
-						this.rememberPwdHide = true;
+			try{
+				// 获取本地存储登录信息
+				uni.getStorage({
+					key: 'name',
+					success: (data) => {
+						var res = JSON.parse(data.data);
+						this.phone = res.phone;
+						this.pwd = res.password;
+						this.goIndex();
 					}
-				}
-			})
+				})
+				uni.getStorage({
+					key: 'outLogin',
+					success: (res) => {
+						if (res.data) {
+							this.rememberPwdHide = true;
+						}
+					}
+				})
+			}catch(e){
+				//TODO handle the exception
+			}
 		},
 		methods: {
 			// 获取输入手机号

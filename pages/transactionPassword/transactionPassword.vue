@@ -88,14 +88,24 @@
 				// #endif
 				const res = await changeDealPwd(params)
 				console.log(res)
-				uni.showToast({
-					title: res.errMsg,
-					icon: 'none'
-				})
-				
-				if (returnMsg === '修改成功') {
-					uni.navigateBack()
+				if(res.msgType == -1) {
+					uni.showToast({
+						title: res.errMsg || res.returnMsg,
+						icon: 'none'
+					})
 				}
+				if(res.msgType == 0) {
+					uni.showToast({
+						title: res.returnMsg,
+						icon: 'none'
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 500)
+				}
+				
+				
+				
 			}
 		}
 	}
