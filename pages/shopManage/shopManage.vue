@@ -33,7 +33,7 @@
 					<text>注：请上传jpg/png格式图片</text>
 				</view>
 				<view class="item-img" :class="imgHide?'imgHide':''">
-					<image :src="this.imgUrl" mode=""></image>
+					<image :src="baseImgUrl + imgUrl" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -88,11 +88,12 @@
 	import commonHeader from "@/components/common-header/common-header";
 	import tabbar from "@/components/common-tabbar/common-tabbar";
 	// import testCode from '@/components/testCode/testCode';
-	import { getShopData , shopEdit, uploadsFile, baseUrl } from '@/common/apis.js'
+	import { getShopData , shopEdit, uploadsFile, baseUrl, baseImgUrl } from '@/common/apis.js'
 	import { uploadFileUrl } from '@/common/request.js'
 	export default {
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				// 显示隐藏密码框
 				hideBox:false,
 				focusStata:false,
@@ -168,6 +169,8 @@
 									// 	let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
 									// this.shopInfo.BGIMG = baseUrl + url[1]
 									this.shopInfo.BGIMG = (JSON.parse(uploadFileRes.data).data)
+									console.log(this.shopInfo.BGIMG)
+									
 					            }
 					        });
 						

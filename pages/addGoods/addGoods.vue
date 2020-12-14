@@ -23,7 +23,7 @@
 				</view>
 				<view class="addGoods-content-item">
 					<view>添加库存</view>
-					<input type="text" v-model="params.stock" placeholder-class="placeholder-class" placeholder="20/份" />
+					<input type="number" v-model="params.stock" placeholder-class="placeholder-class" placeholder="20/份" />
 				</view>
 				<view class="addGoods-content-describe">
 					<view class="title">产品描述</view>
@@ -47,12 +47,13 @@
 								<view>添加图片</view>
 							</view>
 							<!-- :class="item.imgHide ? '' : 'imgHide'"  @click="addItem(i)" -->
-							<view class="item-img" v-if="item.imgUrl" ><image :src="item.imgUrl" mode=""></image></view>
+							<view class="item-img" v-if="item.imgUrl" ><image :src="baseImgUrl + item.imgUrl" mode=""></image></view>
 						</view>
 					</view>
 					<view class="btn" v-if="data">
-						<text @click="setTop">上架</text>
-						<text @click="setBottom">下架</text>
+						
+						<text @click="setTop" v-if="STATES == 0">上架</text>
+						<text @click="setBottom" v-if="STATES == 1">下架</text>
 						<text @click="setIndex(1)">推送首页</text>
 					</view>
 				</view>
@@ -83,8 +84,8 @@
 			<view class="uni-drawer-content">
 				<view class="item item1" v-for="(item, index) in itemList" :key="index" @tap="amend(item,index)">
 					<!-- <input type="text" disabled="true" :value="item.NAME" @click="changeItem(item)" />                  -->
-					<span @click="changeItem(item)">{{item.NAME}}</span>
-					<text class="iconfont icon-jian1" @tap="delitem(item.CATEGORY_ID)"></text>
+					<span @click="changeItem(item)">{{item.CATEGORY_NAME}}</span>
+					<text class="iconfont icon-jian1" @tap="delitem(item.SHOPCATEGORY_ID)"></text>
 				</view>
 				<view class="item addItem" @tap="addChify">
 					<text class="iconfont icon-tianjia"></text>
@@ -107,7 +108,7 @@
 import commonHeader from '@/components/common-header/common-header';
 // 抽屉
 import uniDrawer from '@/components/uni-drawer/uni-drawer';
-import { addGoodsInfo, editGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, findByShopId, baseUrl} from '@/common/apis.js';
+import { addGoodsInfo, editGoodsInfo, addGoodsItem, delGoodsItem, itemListArr, shopState, shopRecommend, uploadImgFile, categoryUpdate, findByShopId, baseUrl, baseImgUrl} from '@/common/apis.js';
 export default {
 	name: 'AddGoods',
 	components: { 
@@ -116,6 +117,7 @@ export default {
 	},
 	data () {
 		return {
+			baseImgUrl: baseImgUrl,
 			headeTitle: '添加商品',
 			GOODS_ID: '',
 			type: '',
@@ -250,7 +252,7 @@ export default {
 		// 查询单个商品详情
 		_findByShopId(goods_id) {
 			findByShopId({goods_id}).then(res => {
-				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK, GOODS_ID}, imges } = res.returnMsg;
+				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK, GOODS_ID, STATES}, imges } = res.returnMsg;
 				this.params.category_id =CATEGORY_ID
 				this.params.name = NAME
 				this.params.price = PRICE
@@ -258,6 +260,7 @@ export default {
 				this.params.norms = NORMS
 				this.params.stock = STOCK
 				this.GOODS_ID = GOODS_ID
+				this.STATES = STATES
 				imges.forEach( (item, index) => {
 					this.imgList[index].imgUrl = item.IMG
 					this.imgList[index].GOODSIMGS_ID = item.GOODSIMGS_ID
@@ -276,9 +279,11 @@ export default {
 			const { returnMsg, msgType } = await itemListArr({ shop_id: this.shopId })
 			
 			msgType == 0 && (this.itemList = returnMsg)
+			console.log('-----------', this.itemList)
 			
-			let [{ NAME = '' }] = this.itemList.filter(item => item.CATEGORY_ID == this.params.category_id);
-			this.text = NAME;
+			let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
+			// console.log('-----------', arr)
+			this.text = CATEGORY_NAME && CATEGORY_NAME.CATEGORY_NAME || '';
 		},
 		// 添加分类
 		async addItems () {
@@ -329,7 +334,12 @@ export default {
 				title: errMsg,
 				icon: 'none'
 			})
-			msgType == 0 && this.getItem()
+			 
+			if(msgType == 0) {
+				this.getItem()
+				this.categoryName = ''
+				this.num = ''
+			}
 		},
 		// 上传图片
 		// uploadImg(id) {
@@ -403,8 +413,8 @@ export default {
 		},
 		// 改变分类名
 		changeItem(item) {
-			this.text = item.NAME
-			this.params.category_id = item.CATEGORY_ID
+			this.text = item.CATEGORY_NAME
+			this.params.category_id = item.SHOPCATEGORY_ID
 		},
 		// 关闭抽屉
 		close(){
@@ -420,9 +430,9 @@ export default {
 		amend(chify,index){
 			this.hideInput = !this.hideInput;
 			this.itemShow=true;
-			this.categoryName=chify.NAME;
+			this.categoryName=chify.CATEGORY_NAME;
 			this.num=chify.NUM;
-			this.categoryId=chify.CATEGORY_ID
+			this.categoryId=chify.SHOPCATEGORY_ID
 			this.index=index
 		},
 		

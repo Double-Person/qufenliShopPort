@@ -13,7 +13,7 @@
 			<view class="goodsManage-content-left">
 				<scroll-view scroll-y="true" :style="{ 'height':scrollHeight }">
 					<view v-for="(item,index) in list" :key="index" :class="{'leftActive':index==leftIndex}" :data-index="index" @tap="leftTap">
-						{{item.NAME}}
+						{{item.CATEGORY_NAME}}
 					</view>
 				</scroll-view>
 			</view>
@@ -28,7 +28,7 @@
 							<view class="item" v-for="(item1,index1) in item.list" :key="index1">
 								<view class="item-goods">
 									<!-- item1.IMG -->
-									<image :src="item1.IMG ? item1.IMG : '../../static/images/goods.jpg'" mode=""></image>
+									<image :src="baseImgUrl + item1.IMG" mode=""></image>
 									<view class="item-goods-text">
 										<text>{{item1.GOODNAME}}</text>
 										<view>
@@ -80,7 +80,8 @@
 	// import testCode from '@/components/testCode/testCode';
 	import {
 		getShopMsg,
-		goodDelete
+		goodDelete,
+		baseImgUrl
 	} from "@/common/apis.js"
 	export default {
 		name: 'GoodsManager',
@@ -92,6 +93,7 @@
 		},
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				deleteGoodsId: '',
 				scrollHeight: '73%',
 
@@ -246,7 +248,7 @@
 				console.log(returnMsg, msgType)
 				if (msgType === 0) {
 					this.list = returnMsg.title.map(item => {
-						item.list = returnMsg.list.filter(ktem => ktem.CATAGORYNAME === item.NAME)
+						item.list = returnMsg.list.filter(ktem => ktem.CATEGORY_ID === item.SHOPCATEGORY_ID)
 						return item
 					})
 				}

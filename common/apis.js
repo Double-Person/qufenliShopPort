@@ -3,6 +3,8 @@
 import request from './ajax.js';
 
 export const baseUrl = 'https://yflh.hkzhtech.com/qufl'
+// 上传图片回显默认地址
+export const baseImgUrl = 'https://yflh.hkzhtech.com/qufl/'
 
 
 // 1.商家登录 ok
