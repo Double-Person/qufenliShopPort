@@ -16,7 +16,7 @@
 			</view>
 			<view class="shopManage-content-item">
 				<text>店铺地址</text>
-				<input type="text" v-model="shopInfo.CITY" placeholder-style="textAlign:right;fontSize:28rpx;" placeholder="请输入店铺地址" />
+				<input type="text" v-model="(shopInfo.CITY || '') + shopInfo.AREA + shopInfo.FULLADD" placeholder-style="textAlign:right;fontSize:28rpx;" placeholder="请输入店铺地址" />
 			</view>
 			<view class="shopManage-content-item">
 				<text>上传店铺背景图</text>
@@ -33,7 +33,7 @@
 					<text>注：请上传jpg/png格式图片</text>
 				</view>
 				<view class="item-img" :class="imgHide?'imgHide':''">
-					<image :src="baseImgUrl + imgUrl" mode=""></image>
+					<image :src="baseImgUrl + shopInfo.BGIMG" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -169,6 +169,7 @@
 									// 	let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
 									// this.shopInfo.BGIMG = baseUrl + url[1]
 									this.shopInfo.BGIMG = (JSON.parse(uploadFileRes.data).data)
+									this.imgUrl = this.shopInfo.BGIMG;
 									console.log(this.shopInfo.BGIMG)
 									
 					            }

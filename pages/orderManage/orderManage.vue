@@ -84,7 +84,7 @@
 
 
 					</view>
-					<view class="item-btn" v-show="classifyIndex == 1" @click="confirmDelivery(item.ordersummary_id)">
+					<view class="item-btn" v-show="classifyIndex == 1 && !item.take_status" @click="confirmDelivery(item.ordersummary_id)">
 						<text>确认发货</text>
 					</view>
 					<view class="item-btn" v-show="hideBox">
@@ -228,15 +228,37 @@
 			rejectRefund(id) {
 				orderRepeal({
 					'ORDERSUMMARY_ID': id
-				}).then(res => {
+				}).then(async res => {
 					console.log(res)
+					if(res.returnMsg.status == '04') {
+						await uni.showToast({
+							title: '微信退款失败',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '03') {
+						await uni.showToast({
+							title: '支付宝退款失败',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '02') {
+						uni.showToast({
+							title: '只能对退款中的订单才能确认退款',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '01') {
+						await uni.showToast({
+							title: '订单号不存在',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '00') {
+						await uni.showToast({
+							title: '退款成功',
+							icon: 'none'
+						})
+					}
 					this.active = 2
 					this.classifyIndex = 2
-					uni.showToast({
-						title: res.errMsg,
-						duration: 2000,
-						icon: 'none'
-					})
+					
 					this.getOrder()
 				})
 			},

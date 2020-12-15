@@ -31,7 +31,7 @@
 					</view>
 					<view class="item-content">
 						<view class="left">
-							<image :src="item.IMG" mode=""></image>
+							<image :src="baseImgUrl + item.IMG" mode=""></image>
 							<view>
 								<text class="left-title">
 									{{item.NAME}}
@@ -55,7 +55,7 @@
 						付款方式：<text>{{item.PAYTYPEY==0 && '微信支付'||item.PAYTYPEY==1 && '支付宝支付'||item.PAYTYPEY==3 && '银行卡支付'}}</text>
 					</view>
 					<view class="item-stock">
-						库存：<text>剩余{{item.STOCK}}/份</text>
+						库存：<text>剩余{{item.STOCK}}份</text>
 					</view>
 					<view class="item-total">
 						<text></text>
@@ -81,7 +81,7 @@
 	import commonHeader from "@/components/common-header/common-header";
 	// tabbar
 	import tabbar from "@/components/common-tabbar/common-tabbar";
-	import {orderTotal} from '@/common/apis.js';
+	import {orderTotal, baseImgUrl} from '@/common/apis.js';
 	
 	export default {
 		data() {
@@ -89,18 +89,12 @@
 				format: true
 			})
 			return {
+				baseImgUrl: baseImgUrl,
 				// 日期选择
 				date: currentDate,
 				// 订单内容
 				orderList:[
-					{id:"01",imgUrl:"../../static/images/cartLOGO.png",title:"油条豆浆先生","state":"已完成",goodsUrl:"../../static/images/content01.png",
-					name:"意大利黑胡椒面",num:1,date:"2019-11-12 08:11",price:"99.99",orderCode:"88080080880","pay":"微信支付","stock":"30"},
-					{id:"02",imgUrl:"../../static/images/cartLOGO.png",title:"油条豆浆先生","state":"已完成",goodsUrl:"../../static/images/content01.png",
-					name:"意大利黑胡椒面",num:3,date:"2019-11-12 08:11",price:"99.99",orderCode:"88080080880","pay":"微信支付","stock":"30"},
-					{id:"03",imgUrl:"../../static/images/cartLOGO.png",title:"油条豆浆先生","state":"已完成",goodsUrl:"../../static/images/content01.png",
-					name:"意大利黑胡椒面",num:4,date:"2019-11-12 08:11",price:"99.99",orderCode:"88080080880","pay":"微信支付","stock":"30"},
-					{id:"04",imgUrl:"../../static/images/cartLOGO.png",title:"油条豆浆先生","state":"已完成",goodsUrl:"../../static/images/content01.png",
-					name:"意大利黑胡椒面",num:2,date:"2019-11-12 08:11",price:"99.99",orderCode:"88080080880","pay":"微信支付","stock":"30"}
+					
 				],
 				// 提示信息
 				tipsState:true

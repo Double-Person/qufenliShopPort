@@ -13,7 +13,7 @@
 				<image src="/static/images/shoukuan.png" mode="" @tap="goCodeReceivables"></image>
 			</view>
 			<view class="index-header-content">
-				<image :src="shopInfoObj.BGIMG ? shopInfoObj.BGIMG : '../../static/images/cartLOGO.png'" mode="" @tap="goMycard"></image>
+				<image :src="baseImgUrl + shopInfoObj.BGIMG" mode="" @tap="goMycard"></image>
 				<view>
 					账户余额
 				</view>
@@ -77,11 +77,13 @@
 		orderTotal,
 		profitTotal,
 		homeInfo,
-		shopBank
+		shopBank,
+		baseImgUrl
 	} from '@/common/apis.js';
 	export default {
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				showCity:'',
 				shopInfoObj: {},
 				newCity: '',
@@ -105,7 +107,7 @@
 					}).then(res => {
 						
 						this.shopInfoObj = res.returnMsg
-						console.log(this.shopInfoObj)
+						console.log('---', this.shopInfoObj)
 						uni.setStorageSync('shopInfo', res.returnMsg)
 					})
 					// '015915f9770f40b69e35674663f0d001'
@@ -242,9 +244,9 @@
 
 			// 手动设置城市
 			setCity(data) {
-				this.newCity = data.data.slice(1).join('')
+				this.newCity = data.data && data.data.slice(1).join('')
 				// 存入全局变量
-				getApp().globalData.city = data.data.slice(1);
+				getApp().globalData.city = data.data && data.data.slice(1);
 			},
 			
 			// 前往收款页面
