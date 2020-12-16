@@ -55,7 +55,7 @@
 			return {
 				codeText: "获取验证码",
 				btnState: true,
-				phone: "15982315561", // 15982315561
+				phone: "", // 15982315561
 				pwd: "", // 
 
 				rememberPwdHide: true,

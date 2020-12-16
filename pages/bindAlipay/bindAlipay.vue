@@ -83,13 +83,55 @@
 					return false
 				}
 				let obj = {
-					name: this.name,
-					aliAccount: this.wxNum,
-					mobile: this.phone,
-					code: this.code
+					NAME: this.name, 
+					ZFB: this.wxNum,
+					CELLPHONE: this.phone,
+					code: this.code,
+					SHOP_ID: uni.getStorageSync('shopId')
 				}
 				aliAccount(obj).then(res => {
 					console.log(res)
+					if(res.returnMsg.status == '00') {
+						uni.showToast({
+							title: '绑定成功',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '01') {
+						uni.showToast({
+							title: '验证码为空',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '02') {
+						uni.showToast({
+							title: '验证码不正确',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '03') {
+						uni.showToast({
+							title: '验证码超时',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '04') {
+						uni.showToast({
+							title: '未实名认证',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '05') {
+						uni.showToast({
+							title: '真实姓名不一致',
+							icon: 'none'
+						})
+					}else if(res.returnMsg.status == '06') {
+						uni.showToast({
+							title: '手机号错误',
+							icon: 'none'
+						})
+					}else{
+						return uni.showToast({
+							title: '绑定失败',
+							icon: 'none'
+						})
+					}
 				})
 				// #ifdef H5
 				let canBack = true;
@@ -109,7 +151,9 @@
 				}
 				return;
 				// #endif  
-				uni.navigateBack(1)
+				uni.navigateTo({
+					url: "/pages/myCard/myCard"
+				})
 			},
 			getCode() {
 				if (this.phone.length !== 11) {

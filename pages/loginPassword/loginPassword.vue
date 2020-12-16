@@ -64,9 +64,10 @@
 						icon: 'none'
 					})
 					setTimeout(() => {
-						// 	uni.reLaunch({
-						// 		url: "/pages/index/index"
-						// 	})
+							uni.reLaunch({
+								url: "/pages/login/login"
+							})
+							uni.removeStorageSync('name')
 					}, 1000)
 
 				} else {

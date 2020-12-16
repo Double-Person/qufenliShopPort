@@ -279,7 +279,6 @@ export default {
 			const { returnMsg, msgType } = await itemListArr({ shop_id: this.shopId })
 			
 			msgType == 0 && (this.itemList = returnMsg)
-			console.log('-----------', this.itemList)
 			
 			let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
 			// console.log('-----------', arr)
@@ -321,7 +320,6 @@ export default {
 						icon: 'none'
 					})
 					// this.showDrawer =false;
-					console.log('-----------')
 					this.getItem()
 				}
 				
@@ -363,6 +361,7 @@ export default {
 			uni.chooseImage({
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				sourceType: ['album', 'camera'], //从相册选择
+				count: 1,
 				success: res => {
 					uni.showLoading({
 						title:'图片上传中',

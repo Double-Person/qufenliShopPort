@@ -89,9 +89,12 @@ export const orderAffirm = params => request.get('/api/ordersummary/order/affirm
 export const addShopBank = params => request.get('/api/merchant/addShopBank', {params});
 
 // 33 绑定收款微信账号
-export const wxAccount = params => request.post('/api/ordersummary/wx/account', params)
+// export const wxAccount = params => request.post('/api/ordersummary/wx/account', params)
+export const wxAccount = params => request.post('/api/merchant/wx/account', params)
 // 34 绑定收款支付宝账号
-export const aliAccount = params => request.post('/api/ordersummary/ali/account', params)
+// export const aliAccount = params => request.post('/api/ordersummary/ali/account', params)
+export const aliAccount = params => request.post('/api/merchant/ali/account', params)
+
 // 35 判断是否绑定银行卡
 export const shopBank = params => request.get('/api/merchant/shopBank', {params});
 // 36 解绑银行卡

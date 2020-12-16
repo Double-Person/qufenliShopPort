@@ -104,26 +104,24 @@
 					// 商家数据
 					homeInfo({
 						shop_id: res.data
-					}).then(res => {
+					}).then(res1 => {
 						
-						this.shopInfoObj = res.returnMsg
-						console.log('---', this.shopInfoObj)
-						uni.setStorageSync('shopInfo', res.returnMsg)
+						this.shopInfoObj = res1.returnMsg
+						uni.setStorageSync('shopInfo', res1.returnMsg)
 					})
 					// '015915f9770f40b69e35674663f0d001'
 					// 判断商家是否绑定银行卡信息  
-					// shopBank({shop_id: res.data }).then(res => {
-					// 	console.log(res)
-					// 	// this.info = res.returnMsg
-					// 	if(res.msgType == 0) {
-					// 		this.bindList = res.returnMsg
-					// 	}else {
-					// 		uni.showToast({
-					// 			title: res.errMsg,
-					// 			icon: 'none'
-					// 		})
-					// 	}
-					// })
+					shopBank({shop_id: res.data }).then(res2 => {
+						// this.info = res.returnMsg
+						if(res2.msgType == 0) {
+							this.bindList = res2.returnMsg
+						}else {
+							uni.showToast({
+								title: res2.errMsg,
+								icon: 'none'
+							})
+						}
+					})
 				}
 			})
 		},
@@ -131,7 +129,6 @@
 
 			// 判断全局是否有值
 			if (getApp().globalData.city.length) {
-				console.log(getApp().globalData)
 				this.newCity = getApp().globalData.city.join('')
 			} else {
 				// 定位
@@ -153,7 +150,6 @@
 				// #endif
 				uni.getLocation({
 					success: (res) => {
-						console.log(res)
 						uni.request({
 							url: "https://restapi.amap.com/v3/geocode/regeo?parameters",
 							method: 'GET',
@@ -222,7 +218,7 @@
 					fail(err) {
 
 						uni.showToast({
-							title: "定位不成功",
+							title: "定位失败",
 							icon: 'none'
 						})
 					}

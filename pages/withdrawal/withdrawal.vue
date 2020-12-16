@@ -7,7 +7,7 @@
 			<view class="fl-center-between user-info">
 				
 				<view class="user-ava">
-					<image :src="shopInfo.BGIMG" mode=""></image>
+					<image :src="baseImgUrl + shopInfo.BGIMG" mode=""></image>
 				</view>
 				<view class="fl-center-between info-icon">
 					<view class="user">
@@ -19,7 +19,7 @@
 						</view>
 					</view>
 					<view class="icon" @click="userInfolick">
-						<image class="img" src="../../static/images/more.png" mode=""></image>
+						<image class="img" src="/static/images/more.png" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -87,13 +87,14 @@
 <script>
 	// header
 	import commonHeader from "@/components/common-header/common-header";
-	// import { withdrawal, backCardInfo } from "@/common/apis.js";
+	import { withdrawal, backCardInfo, baseImgUrl } from "@/common/apis.js";
 	export default {
 		components: {
 			commonHeader,
 		},
 		data() {
 			return {   /// 6214892828150901
+			baseImgUrl: baseImgUrl,
 				shopInfo: {},
 				isShowChangeCard: false,
 				list: [],
@@ -103,11 +104,14 @@
 				kbalance: 0, // uni.setStorageSync('kbalance')
 			};
 		},
-		onLoad() {
+		onLoad(opt) {
 			// this.getBackCardInfo()
 			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.kbalance = uni.getStorageSync('kbalance');
-			this.bindList = JSON.parse(opt.bindList)
+			
+			if(opt.bindList){
+				this.bindList = JSON.parse(opt.bindList)
+			}
 		},
 		methods: {
 			//  转银行卡账号 和手机号
@@ -128,7 +132,7 @@
 			},
 			userInfolick() {
 				uni.navigateTo({
-					url: '/pages/personalData/personalData'
+					url: '/pages/shopManage/shopManage'
 				})
 			},
 			// 全部体现
@@ -138,18 +142,24 @@
 			//  获取银行卡信息
 			getBackCardInfo() {
 				let userinfo_id = uni.getStorageSync('USERINFO_ID');
-				// backCardInfo({
-				// 	userinfo_id
-				// }).then(res => {
-				// 	console.log('获取银行卡信息', res.returnMsg)
-				// 	this.list = res.returnMsg
-				// 	if (res.returnMsg.length > 0) {
-				// 		this.cardNum == res.returnMsg[0].card
-				// 	}
-				// })
+				backCardInfo({
+					userinfo_id
+				}).then(res => {
+					console.log('获取银行卡信息', res.returnMsg)
+					this.list = res.returnMsg
+					if (res.returnMsg.length > 0) {
+						this.cardNum == res.returnMsg[0].card
+					}
+				})
 			},
 			// 提现
 			getWithdrawal() {
+				if(~this.kbalance <= 0) {
+					return uni.showToast({
+						title: '暂无可提现金额',
+						icon: 'none'
+					})
+				}
 				let userinfo_id = uni.getStorageSync('USERINFO_ID');
 
 				this.money = Number(Number(this.money).toFixed(2))
@@ -163,11 +173,11 @@
 					})
 					return false;
 				}
-
+console.log(this.list)
 				if (!this.cardNum) {
 					this.cardNum = this.list[0].CARDNO
 				}
-				console.log(this.list)
+				
 				let obj = {
 					userinfo_id, // 参数userinfo_id  用户id
 					amount: Number(this.money), // amount  金额  
@@ -231,7 +241,7 @@
 		.user-ava {
 			width: 100rpx;
 			height: 100rpx;
-			margin-right: 20rpx;
+			
 			border-radius: 50%;
 			border: none;
 			overflow: hidden;
@@ -245,6 +255,7 @@
 		.info-icon {
 
 			width: 100%;
+			margin-left: 20rpx;
 
 			.user {
 				.name {

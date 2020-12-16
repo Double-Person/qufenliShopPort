@@ -15,7 +15,7 @@
 						<view class="text">
 							<text>微信</text>
 							<view>
-								<!-- {{info.Wx}} -->
+								{{info.Wx}}
 							</view>
 						</view>
 					</view>
@@ -30,7 +30,7 @@
 						<view class="text">
 							<text>支付宝</text>
 							<view>
-								<!-- {{info.Ali}} -->
+								{{info.Ali}}
 							</view>
 						</view>
 					</view>
@@ -40,7 +40,7 @@
 					</view>
 				</view>
 				<!-- 招商银行卡 -->
-				<view class="myCard-content-item">
+				<view class="myCard-content-item" v-if="false">
 					<view class="left">
 						<text class="iconfont icon-bangdingshezhiyinxingqiabangding" style="color: #FF9707;"></text>
 						<view class="text">
