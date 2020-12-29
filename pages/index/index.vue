@@ -92,6 +92,10 @@
 			}
 		},
 		mounted() {
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			})
 			// 获取当前时间
 			uni.getStorage({
 				key: 'shopId',
@@ -122,6 +126,9 @@
 							})
 						}
 					})
+				},
+				complete() {
+					uni.hideLoading()
 				}
 			})
 		},

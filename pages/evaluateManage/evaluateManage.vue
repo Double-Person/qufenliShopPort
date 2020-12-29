@@ -13,13 +13,13 @@
 				</view>
 				<view class="content" @tap="goDetails(item)">
 					<view class="content-left">
-						<image :src="item.IMG" mode=""></image>
+						<image :src="baseImgUrl + item.IMG" mode=""></image>
 					</view>
 					<view class="content-right">
 						<text>下单时间：{{item.CREATETIME}}</text>
 						<view>商品id：{{item.GOODS_ID}}</view>
 						<view>评分：{{ item.SCORE || 0 }}</view>
-						<view>支付方式：{{ (item.PAYTYPEY == 0 && '余额支付') || (item.PAYTYPEY == 1 && '微信支付') || (item.PAYTYPEY == 2 && '支付宝支付') || (item.PAYTYPEY == 3 && '银行卡支付') }}</view>
+						<view>支付方式：{{ (item.PAYTYPEY == 2 && '余额支付') || (item.PAYTYPEY == 0 && '微信支付') || (item.PAYTYPEY == 1 && '支付宝支付') || (item.PAYTYPEY == 3 && '银行卡支付') }}</view>
 						<view>收货地址：{{item.ADDRESS}}</view>
 					</view>
 
@@ -51,8 +51,9 @@
 	import tabbar from "@/components/common-tabbar/common-tabbar";
 	import {
 		getShopEvaluateList,
-		delShopEvaluate
-	} from "../../common/apis.js"
+		delShopEvaluate,
+		baseImgUrl
+	} from "@/common/apis.js"
 	export default {
 		name: 'EvaluateManager',
 		components: {
@@ -61,6 +62,7 @@
 		},
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				myEvaluateList: [
 					// {id:"01",title:"豆浆油条先生",date:"2019-09-01 15:30","goodsUrl":"../../static/images/content01.png",date:"2019-11-11 08:11",text:"这个意大利面真的是撒飒飒太好吃下次还要再来飒飒as一份这个意大利面真的是太好吃下次还要再来一份大厦上师大奥"},
 				],

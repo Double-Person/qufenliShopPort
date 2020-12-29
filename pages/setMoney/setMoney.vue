@@ -38,9 +38,17 @@
 				this.input = e.target.value;
 			},
 			submit() {
+				if(this.input == '') {
+					return uni.showToast({
+						title: '请设置收款金额',
+						icon: 'none'
+					})
+				}
 
 				this.getCode()
-				uni.navigateBack(1)
+				uni.navigateTo({
+					url: '../codeReceivables/codeReceivables?money=' + this.input
+				})
 			},
 			getCode() {
 				let shop_id = ''

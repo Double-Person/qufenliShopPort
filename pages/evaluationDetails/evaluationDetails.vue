@@ -62,7 +62,6 @@
 		},
 		onLoad (options) {  // item.EVALUATE_ID, item.GOODS_ID
 			this.itemInfo = JSON.parse(options.info)
-			console.log(this.itemInfo)
 			this.getInitDetail()
 		},
 		methods:{

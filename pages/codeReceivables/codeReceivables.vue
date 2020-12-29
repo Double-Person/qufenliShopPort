@@ -11,13 +11,13 @@
 					无需加好友，扫二维码向我付钱
 				</view>
 				<view class="qrimg">
-					<tki-qrcode ref="qrcode" cid="tki-qrcode-canvas" :val="codeVal" :size="size" unit="upx" background="#000000"
+					<tkiQrcode ref="qrcode" cid="tki-qrcode-canvas" :val="JSON.stringify(codeVal)" :size="size" unit="upx" background="#000000"
 					 foreground="#ffffff" pdground="#ffffff" icon="/static/images/codeImg.jpg" :iconSize='40' :lv="3" :onval="true"
 					 :loadMake="true" :usingComponents="true" :showLoading="true" loadingText="二维码生成中" @result="qrR" />
 				</view>
 				<view class="codeReceivables-content-box-text">
 					<text @tap="setMoney">设置金额</text><text style="color: #979797;">|</text>
-					<text @tap="saveImg">保存收款码</text>
+					<text @tap="_saveCode">保存收款码</text>
 				</view>
 			</view>
 		</view>
@@ -34,8 +34,10 @@
 			return {
 				// 生成二维码
 				// codeVal:'https://yflh.hkzhtech.com/qufl/#/pages/setMoney/setMoney',
-				codeVal: "./setMoney/setMoney",
-				// codeVal: "weixin://wxpay/bizpayurl",  // ?pr=9MnPBWW
+				codeVal: {
+					shopId: '1111111',
+					money: 0
+				},
 				size: 410,
 				BacimgUrl: ''
 			};
@@ -44,12 +46,33 @@
 			commonHeader,
 			tkiQrcode
 		},
+		onLoad(opt) {
+			
+			this.codeVal.money = opt.money || 0
+			if(this.codeVal.money == 0) {
+				uni.showModal({
+				    title: '提示',
+				    content: '立即前往设置收款金额',
+					confirmText: '立即前往',
+					cancelText: '暂不设置',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.navigateTo({
+				            	url: '../setMoney/setMoney'
+				            })
+				        } else if (res.cancel) {
+				           uni.navigateTo({
+				           	url: '../index/index'
+				           })
+				        }
+				    }
+				});
+			}
+		},
 		// /api/merchant/qrCode   get 请求  参数： shop_id  商家id    money 金额
 		methods: {
-			// 保存收款码
-			saveImg() {
-				this._saveCode() 
-			},
+			
+
 			// 设置金额
 			setMoney() {
 				uni.navigateTo({
@@ -57,9 +80,9 @@
 				})
 			},
 			qrR(e) {
-				console.log('---------',e)
 				this.BacimgUrl = e;
 			},
+			// 保存收款码
 			_saveCode() {
 				let imgUrl = this.BacimgUrl;
 				if (imgUrl != "") {

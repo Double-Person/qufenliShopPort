@@ -97,12 +97,13 @@ export default {
 					showLoading: that.showLoading, // 是否显示loading
 					loadingText: that.loadingText, // loading文字
 					text: that.val, // 生成内容
+					val: that.val, // 生成内容
 					size: that.cpSize, // 二维码大小
 					background: that.background, // 背景色
 					foreground: that.foreground, // 前景色
 					pdground: that.pdground, // 定位角点颜色
 					correctLevel: that.lv, // 容错级别
-					image: that.icon, // 二维码图标
+					// image: that.icon, // 二维码图标
 					imageSize: that.iconSize,// 二维码图标大小
 					cbResult: function (res) { // 生成二维码的回调
 						that._result(res)

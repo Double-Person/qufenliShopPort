@@ -24,7 +24,7 @@
 						<view class="item-title">
 							<view class="left">
 								<!-- item.head -->
-								<image :src="item.head ? item.head : '../../static/images/goods.jpg'" mode=""></image>
+								<image :src="item.head ? (baseImgUrl + item.head) : '/static/images/goods.jpg'" mode=""></image>
 								<text>{{item.ordersummary_id}}</text>
 							</view>
 						</view>
@@ -32,14 +32,11 @@
 						<view class="item-content" v-for="(goods, $goods) in item.goodlist">
 							<view class="left">
 								<!-- goods.img -->
-								<image :src="'../../static/images/goods.jpg'" mode=""></image>
+								<image :src="goods.IMG ? (baseImgUrl + goods.IMG) : '/static/images/goods.jpg'" mode=""></image>
 								<view>
 
 									<view class="left-date">
 										商品名称：{{goods.NAME}}
-									</view>
-									<view class="left-date">
-										下单时间：{{item.ordertime}}
 									</view>
 									<view class="left-price">
 										单价：￥{{goods.PRICE}}
@@ -52,6 +49,9 @@
 						</view>
 						<view class="item-code">
 							订单编号：<text>{{item.ordersummary_id}}</text>
+						</view>
+						<view class="item-code">
+							下单时间：{{item.ordertime}}
 						</view>
 						<view class="item-pay">
 							付款方式：<text>{{getPayType(item.pay)}}</text>
@@ -67,7 +67,7 @@
 						</view>
 
 
-						<view class="item-beizhu">
+						<view class="item-beizhu" v-if="item.remarks">
 							备注：<text>{{item.remarks}}</text>
 						</view>
 						<view class="item-beizhu" v-show="hideBox">
@@ -112,11 +112,13 @@
 		getRefund,
 		orderAffirm,
 		orderRepeal,
-		take
+		take,
+		baseImgUrl
 	} from '@/common/apis.js'
 	export default {
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				active: 1,
 				orderList: [],
 				// 显示隐藏密码框

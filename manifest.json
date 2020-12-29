@@ -56,7 +56,16 @@
             /* SDK配置 */
             "sdkConfigs" : {
                 "ad" : {},
-                "oauth" : {},
+                "oauth" : {
+                    "weixin" : {
+                        "appid" : "wx9a062afb3e6ff487",
+                        "appsecret" : "",
+                        "UniversalLinks" : ""
+                    },
+                    "qq" : {
+                        "appid" : ""
+                    }
+                },
                 "maps" : {},
                 "share" : {},
                 "geolocation" : {}

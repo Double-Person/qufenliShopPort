@@ -25,20 +25,20 @@
 					<view class="right">
 						<view class="top">
 							<view class="name">
-								<text>{{item.USERNAME}}</text>
+								<text>{{item.ORDERNO}}</text>
 							</view>
 							<view class="price">
-								+￥{{item.ACTUALPAY}}
+								+￥{{item.PRICE}}
 							</view>
 						</view>
 						<view class="bottom">
-							{{item.CREATETIME}}  {{item.PAYTYPEY==0 && '微信支付'||item.PAYTYPEY==1 && '支付宝支付'||item.PAYTYPEY==3 && '银行卡支付'}}
+							{{item.CREATETIME}} {{item.PAYTYPEY==0 && '微信支付'||item.PAYTYPEY==1 && '支付宝支付'||item.PAYTYPEY==3 && '银行卡支付'||item.PAYTYPEY==2 && '余额支付'}}
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-        <view v-else style="text-align: center;padding-top: 80px;color: #999;font-size: 30rpx;">暂无数据</view>
+		<view v-else style="text-align: center;padding-top: 80px;color: #999;font-size: 30rpx;">暂无数据</view>
 		<!-- 提示内容 -->
 		<view class="mybalance-tips" style="color: #666;textAlign: center;" :class="tipsState?'tipsState':''">
 			暂无信息哟！
@@ -53,7 +53,9 @@
 	import commonHeader from "@/components/common-header/common-header";
 	// tabbar
 	import tabbar from "@/components/common-tabbar/common-tabbar";
-	import {profitTotal} from '@/common/apis.js';
+	import {
+		profitTotal
+	} from '@/common/apis.js';
 	export default {
 		data() {
 			const currentDate = this.getDate({
@@ -64,7 +66,7 @@
 				// 日期选择
 				date: currentDate,
 				// 提示信息
-				tipsState:true
+				tipsState: true
 			}
 		},
 		components: {
@@ -80,7 +82,7 @@
 			}
 		},
 		mounted() {
-		   this.getList(0)
+			this.getList(1)
 		},
 		methods: {
 			// 日期选择
@@ -106,31 +108,39 @@
 			},
 			getList(start) {
 				uni.getStorage({
-				    key:'shopId',
-				    success:(res)=>{
-				        profitTotal({shop_id:res.data, date: start == 0 ? '': this.date}).then(res=>{
-									const date = new Date();
-									let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
-									month = month > 9 ? month : '0' + month;;
-									day = day > 9 ? day : '0' + day;
-									let now = `${year}-${month}-${day}`;
-									if(this.date == now) {
-										this.listData = res.returnMsg[0].todayOrderList
-									}else{
-										this.listData = res.returnMsg[0].orderList
-									}
-				            
-				        }).catch(err=>{
-				        	uni.showToast({
-				        		title:'网络出错啦!',
-				        		icon:'none'
-				        	})
-				        })
-				    }
+					key: 'shopId',
+					success: (res) => {
+						uni.showLoading({
+							title:'加载中',
+							mask: true 
+						})
+						profitTotal({
+							shop_id: res.data,
+							date: start == 0 ? '' : this.date
+						}).then(res => {
+							this.listData = res.returnMsg
+							// const date = new Date();
+							// let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
+							// month = month > 9 ? month : '0' + month;;
+							// day = day > 9 ? day : '0' + day;
+							// let now = `${year}-${month}-${day}`;
+							// if(this.date == now) {
+							// 	this.listData = res.returnMsg[0].todayOrderList
+							// }else{
+							// 	this.listData = res.returnMsg[0].orderList
+							// }
+
+						}).catch(err => {
+							uni.showToast({
+								title: '网络出错啦!',
+								icon: 'none'
+							})
+						}).finally(() => uni.hideLoading())
+					}
 				})
 			}
 		},
-		
+
 	}
 </script>
 
@@ -145,6 +155,7 @@
 		padding-top: 140rpx;
 		/* #endif */
 		padding-bottom: 100rpx;
+
 		.mybalance-date {
 			height: 100rpx;
 			background: #f8f6f9;
@@ -234,7 +245,8 @@
 				}
 			}
 		}
-		.tipsState{
+
+		.tipsState {
 			display: none;
 		}
 	}
