@@ -3,10 +3,10 @@
 import request from './ajax.js';
 
 // export const baseUrl = 'https://yflh.hkzhtech.com/qufl'
-export const baseUrl = 'http://192.168.0.112:8081'
+export const baseUrl = 'http://192.168.0.113:8081'
 // 上传图片回显默认地址
 // export const baseImgUrl = 'https://yflh.hkzhtech.com/qufl/'
-export const baseImgUrl = 'http://192.168.0.112:8081/'
+export const baseImgUrl = 'http://192.168.0.113:8081/'
 
 
 // 1.商家登录 ok

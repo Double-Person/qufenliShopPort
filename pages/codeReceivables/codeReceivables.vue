@@ -10,10 +10,14 @@
 				<view class="codeReceivables-content-box-title">
 					无需加好友，扫二维码向我付钱
 				</view>
-				<view class="qrimg">
-					<tkiQrcode ref="qrcode" cid="tki-qrcode-canvas" :val="JSON.stringify(codeVal)" :size="size" unit="upx" background="#000000"
-					 foreground="#ffffff" pdground="#ffffff" icon="/static/images/codeImg.jpg" :iconSize='40' :lv="3" :onval="true"
-					 :loadMake="true" :usingComponents="true" :showLoading="true" loadingText="二维码生成中" @result="qrR" />
+				<view class="qrimg">					 
+					 <!-- background="#000000" foreground="#ffffff" pdground="#ffffff" -->
+					 <tki-qrcode 
+					 cid="qrcode1" ref="qrcode" :val="JSON.stringify(codeVal)" :size="size" unit="upx" 
+					 
+					 icon="/static/images/codeImg.jpg" :iconSize="40" :lv="3" :onval="true" :loadMake="true" :usingComponents="true" 
+					 @result="qrR" />
+					
 				</view>
 				<view class="codeReceivables-content-box-text">
 					<text @tap="setMoney">设置金额</text><text style="color: #979797;">|</text>
@@ -33,13 +37,13 @@
 		data() {
 			return {
 				// 生成二维码
-				// codeVal:'https://yflh.hkzhtech.com/qufl/#/pages/setMoney/setMoney',
 				codeVal: {
-					shopId: '1111111',
+					shopId: '',
 					money: 0
 				},
-				size: 410,
-				BacimgUrl: ''
+				BacimgUrl: '',
+				size: 410, // 二维码大小
+				src: '' // 二维码生成后的图片地址或base64
 			};
 		},
 		components: {
@@ -49,6 +53,7 @@
 		onLoad(opt) {
 			
 			this.codeVal.money = opt.money || 0
+			this.codeVal.shopId = uni.getStorageSync('shopId');
 			if(this.codeVal.money == 0) {
 				uni.showModal({
 				    title: '提示',
@@ -67,12 +72,15 @@
 				        }
 				    }
 				});
+			}else {
+				setTimeout(() =>{
+					this.$refs.qrcode._makeCode()
+				}, 200)
+				
 			}
 		},
 		// /api/merchant/qrCode   get 请求  参数： shop_id  商家id    money 金额
 		methods: {
-			
-
 			// 设置金额
 			setMoney() {
 				uni.navigateTo({
@@ -84,19 +92,21 @@
 			},
 			// 保存收款码
 			_saveCode() {
-				let imgUrl = this.BacimgUrl;
-				if (imgUrl != "") {
-					uni.saveImageToPhotosAlbum({
-						filePath: imgUrl,
-						success: function() {
-							uni.showToast({
-								title: '二维码保存成功',
-								icon: 'success',
-								duration: 2000
-							});
-						}
-					});
-				}
+				this.$refs.qrcode._saveCode();
+				// return false;
+				// let imgUrl = this.BacimgUrl;
+				// if (imgUrl != "") {
+				// 	uni.saveImageToPhotosAlbum({
+				// 		filePath: imgUrl,
+				// 		success: function() {
+				// 			uni.showToast({
+				// 				title: '二维码保存成功',
+				// 				icon: 'success',
+				// 				duration: 2000
+				// 			});
+				// 		}
+				// 	});
+				// }
 			},
 		}
 	}
