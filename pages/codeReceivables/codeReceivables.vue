@@ -54,30 +54,9 @@
 			
 			this.codeVal.money = opt.money || 0
 			this.codeVal.shopId = uni.getStorageSync('shopId');
-			if(this.codeVal.money == 0) {
-				uni.showModal({
-				    title: '提示',
-				    content: '立即前往设置收款金额',
-					confirmText: '立即前往',
-					cancelText: '暂不设置',
-				    success: function (res) {
-				        if (res.confirm) {
-				            uni.navigateTo({
-				            	url: '../setMoney/setMoney'
-				            })
-				        } else if (res.cancel) {
-				           uni.navigateTo({
-				           	url: '../index/index'
-				           })
-				        }
-				    }
-				});
-			}else {
-				setTimeout(() =>{
-					this.$refs.qrcode._makeCode()
-				}, 200)
-				
-			}
+			setTimeout(() =>{
+				this.$refs.qrcode._makeCode()
+			}, 200)
 		},
 		// /api/merchant/qrCode   get 请求  参数： shop_id  商家id    money 金额
 		methods: {

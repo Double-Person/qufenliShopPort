@@ -54,6 +54,13 @@
 				</view>
 				<text>{{shopInfoObj.order}}笔</text>
 			</view>
+			
+			<view class="index-content-item" @tap="goOrderlist(5)">
+				<view>
+					线下收益
+				</view>
+				<text>{{shopInfoObj.income}}元</text>
+			</view>
 			<!-- 商家收款 -->
 			<view class="submit-btn" @tap="goCodeReceivables">
 				商家收款
@@ -106,10 +113,7 @@
 					}
 					
 					// 商家数据
-					homeInfo({
-						shop_id: res.data
-					}).then(res1 => {
-						
+					homeInfo({ shop_id: res.data }).then(res1 => {			
 						this.shopInfoObj = res1.returnMsg
 						uni.setStorageSync('shopInfo', res1.returnMsg)
 					})
@@ -278,6 +282,11 @@
 				if (index === 4) {
 					uni.navigateTo({
 						url: "../cumulativeOrder/cumulativeOrder"
+					})
+				}
+				if (index === 5) {
+					uni.navigateTo({
+						url: "../offlineEarnings/offlineEarnings"
 					})
 				}
 			},

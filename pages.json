@@ -26,6 +26,11 @@
             "path" : "pages/cumulativeProfit/cumulativeProfit",
             "style" : {}
         }
+		,{
+		    "path" : "pages/offlineEarnings/offlineEarnings",
+		    "style" : {}
+		}
+		
         ,{
             "path" : "pages/todayOrder/todayOrder",
             "style" : {}
