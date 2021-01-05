@@ -77,13 +77,14 @@
 							<text></text>
 							<view>
 								共{{item.number}}件商品 总金额
-								<text class="shopMoney">￥{{item.money}}</text>
+								<text class="shopMoney">￥{{computedMoney(item.goodlist)}}</text>
 							</view>
 						</view>
 						
 
 
 					</view>
+					<!-- N 代发货 -->
 					<view class="item-btn" v-show="classifyIndex == 1 && !item.take_status" @click="confirmDelivery(item.ordersummary_id)">
 						<text>确认发货</text>
 					</view>
@@ -154,6 +155,10 @@
 			this.getOrder()
 		},
 		methods: {
+			computedMoney(list) {
+				let sum = list.reduce((pre, nex) => pre.COUTNS * pre.PRICE + nex.COUTNS * nex.PRICE);
+				return sum
+			},
 			// take  ORDERSUMMARY_ID 确认发货
 			 confirmDelivery(ORDERSUMMARY_ID) {
 				 take({ORDERSUMMARY_ID}).then(async res => {

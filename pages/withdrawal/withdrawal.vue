@@ -31,7 +31,7 @@
 					<!-- {{item.zbalance}} -->
 				</view>
 				<view class="mask bottom-mask">
-					￥ {{ kbalance || 0}}
+					￥ {{ shopInfo.BALANCE || 0}}
 					<!-- {{item.kbalance}} -->
 				</view>
 			</view>
@@ -41,29 +41,31 @@
 				<input type="text" class="input" v-model.number="money" placeholder="输入提现金额" />
 				<text class="all" @click="balanceAll()">全部</text>
 			</view>
-			<view class="fl-center-between from" v-if="list.length">
+			<view class="fl-center-between from" v-if="bindList.Wx || bindList.Ali">
 				<view class="bank">
 					<view class="info-text from-item">
 						提现到
 					</view>
 					<view class="info-text">
+			
+						<text>{{ cardNum == bindList.Wx && '微信' || cardNum == bindList.Ali && '支付宝' || cardNum == '' && '请选择' }} {{ cardNum }}</text>
 						<!-- 招商银行（8707） -->
-						<text>{{ cardNum == bindList.Wx && '微信' || cardNum == bindList.Ali && '支付宝' || cardNum == '' && '请选择' }}  {{ cardNum }}</text>
+						<!-- {{list[0].BANK}} ({{ (list[0].CARDNO).length > 4 ? (list[0].CARDNO).slice((list[0].CARDNO).length-4, (list[0].CARDNO).length) : list[0].CARDNO }}) -->
 					</view>
 				</view>
 				<view class="icon" @click="showCardList">
 					<image class="img" src="/static/images/more.png" mode=""></image>
 				</view>
-
+			
 			</view>
 			<view class="" v-show="isShowChangeCard" class="change-card-list">
 				<view class="list">
-					<view class="fl-center-between item" @click="changeCardId(bindList.Wx)" v-if="bindList.Wx">
-						<view>微信 {{bindList.Wx}}</view>
+					<view class="fl-center-between item" @click="changeCardId(bindList.Wx, 'wechat')" v-if="bindList.Wx">
+						<view>微信 <text style="margin-left: 30rpx;">{{bindList.Wx}}</text></view>
 						<icon type="success_no_circle" size="20" v-if="cardNum == bindList.Wx" />
 					</view>
-					<view class="fl-center-between item" @click="changeCardId(bindList.Ali)" v-if="bindList.Ali">
-						<view>支付宝 {{bindList.Ali}}</view>
+					<view class="fl-center-between item" @click="changeCardId(bindList.Ali, 'ali')" v-if="bindList.Ali">
+						<view>支付宝 <text style="margin-left: 30rpx;">{{bindList.Ali}}</text></view>
 						<icon type="success_no_circle" size="20" v-if="cardNum == bindList.Ali" />
 					</view>
 				</view>
@@ -87,31 +89,38 @@
 <script>
 	// header
 	import commonHeader from "@/components/common-header/common-header";
-	import { withdrawal, backCardInfo, baseImgUrl } from "@/common/apis.js";
+	import { withdrawal, backCardInfo, wxtx, baseImgUrl } from "@/common/apis.js";
 	export default {
 		components: {
 			commonHeader,
 		},
 		data() {
-			return {   /// 6214892828150901
-			baseImgUrl: baseImgUrl,
-				shopInfo: {},
+			return {
+				type: '',
+				baseImgUrl: baseImgUrl,
+				userInfo: {},
 				isShowChangeCard: false,
 				list: [],
 				bindList: {},
 				money: null,
 				cardNum: '', // 卡号
 				kbalance: 0, // uni.setStorageSync('kbalance')
+				openid: 'ofTYkxBM2Jh0KluonnXzNpLLxYuA'
 			};
 		},
 		onLoad(opt) {
 			// this.getBackCardInfo()
 			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.kbalance = uni.getStorageSync('kbalance');
+			console.log(this.shopInfo)
 			
 			if(opt.bindList){
 				this.bindList = JSON.parse(opt.bindList)
 			}
+			
+			// #ifdef APP-PLUS
+			this.getOpenIdByWchat();
+			// #endif
 		},
 		methods: {
 			//  转银行卡账号 和手机号
@@ -123,7 +132,8 @@
 				return phone.substring(0, 5) + '***' + phone.substring(phoneStr.length - 3, phoneStr.length)
 			},
 			// 选择提现的卡
-			changeCardId(card) {
+			changeCardId(card, type) {
+				this.type = type;
 				this.cardNum = card
 				this.isShowChangeCard = false
 			},
@@ -139,28 +149,16 @@
 			balanceAll() {
 				this.money = this.kbalance
 			},
-			//  获取银行卡信息
-			getBackCardInfo() {
-				let userinfo_id = uni.getStorageSync('USERINFO_ID');
-				backCardInfo({
-					userinfo_id
-				}).then(res => {
-					console.log('获取银行卡信息', res.returnMsg)
-					this.list = res.returnMsg
-					if (res.returnMsg.length > 0) {
-						this.cardNum == res.returnMsg[0].card
-					}
-				})
-			},
+		
 			// 提现
 			getWithdrawal() {
-				if(~this.kbalance <= 0) {
+				if(this.kbalance <= 0) {
 					return uni.showToast({
 						title: '暂无可提现金额',
 						icon: 'none'
 					})
 				}
-				let userinfo_id = uni.getStorageSync('USERINFO_ID');
+				let shopId = uni.getStorageSync('shopId');
 
 				this.money = Number(Number(this.money).toFixed(2))
 				if (this.money <= 0) {
@@ -173,29 +171,79 @@
 					})
 					return false;
 				}
-console.log(this.list)
+console.log(this.cardNum)
+				
 				if (!this.cardNum) {
-					this.cardNum = this.list[0].CARDNO
+					return uni.showToast({
+						title: '请选择提现位置',
+						icon: 'none'
+					})
+				}
+				if(!this.openid) {
+					 uni.showToast({
+						title: '请授权登录',
+						icon: 'none'
+					})
+					if(this.type == 'wechat') {
+						this.getOpenIdByWchat()
+					}else if(this.type == 'ali') {
+						
+					}
+					
+					return false
 				}
 				
 				let obj = {
-					userinfo_id, // 参数userinfo_id  用户id
-					amount: Number(this.money), // amount  金额  
-					cardNum: this.cardNum // cardNum卡号  this.cardNum == 
+					id:shopId, // 参数userinfo_id  用户id
+					types: 1, // 0用户、1商家
+					TYPES: 1, // 0用户、1商家
+					money: Number(this.money), // amount  金额  
+					openid: this.openid
 				}
 				console.log(obj)
-				// withdrawal(obj).then(res => {
-				// 	console.log(res)
-				// 	uni.showToast({
-				// 		title: res.errMsg,
-				// 		icon: 'none'
-				// 	})
-				// 	setTimeout(() => {
-				// 		uni.navigateTo({
-				// 			url: '/pages/personal/personal'
-				// 		})
-				// 	})
-				// })
+				// 微信提现
+				if(this.type == 'wechat') {
+					this.weChatWithdrawal(obj)
+				}else if(this.type == 'ali') {
+					
+				}
+				
+			},
+			// 微信提现
+			weChatWithdrawal(obj) {
+				wxtx(obj).then(res => {
+					console.log(res)
+					if (res.msgType == 0) {
+						uni.showToast({
+							title: '提现成功',
+							icon: 'none'
+						})
+					} else {
+						uni.showToast({
+							title: res.errMsg,
+							icon: 'none'
+						})
+					}
+				
+					
+				})
+			},
+			
+			// 获取微信openId
+			getOpenIdByWchat() {
+				const that = this;
+				uni.login({
+					provider: 'weixin',
+					success: function(loginRes) {
+						uni.getUserInfo({
+							provider: 'weixin',
+							success: function(infoRes) {
+								console.log('用户昵称为：', infoRes.userInfo);
+								that.openid = infoRes.userInfo.openId
+							}
+						});
+					}
+				});
 			}
 
 		}

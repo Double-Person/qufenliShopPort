@@ -59,7 +59,7 @@
 				<view>
 					线下收益
 				</view>
-				<text>{{shopInfoObj.income}}元</text>
+				<text>{{shopInfoObj.findmoney}}元</text>
 			</view>
 			<!-- 商家收款 -->
 			<view class="submit-btn" @tap="goCodeReceivables">

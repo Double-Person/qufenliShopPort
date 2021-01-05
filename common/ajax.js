@@ -6,7 +6,7 @@ const request = new Request()
 
 request.setConfig((config) => { /* 设置全局配置 */
 	// config.baseURL = 'https://yflh.hkzhtech.com/qufl/' //process.env.VUE_APP_BASE_API /* 根域名不同 */
-	config.baseURL = 'http://192.168.0.113:8081' //process.env.VUE_APP_BASE_API /* 根域名不同 */
+	config.baseURL = 'http://192.168.0.107:8081' //process.env.VUE_APP_BASE_API /* 根域名不同 */
 	config.withCredentials = true
 	config.header = { ...config.header,
 		"Content-Type": "application/x-www-form-urlencoded",

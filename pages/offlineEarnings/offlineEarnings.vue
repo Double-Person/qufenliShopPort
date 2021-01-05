@@ -24,14 +24,14 @@
 					<view class="right">
 						<view class="top">
 							<view class="name">
-								<text>{{item.ORDERNO}}</text>
+								<text>{{item.NUMBER}}</text>
 							</view>
 							<view class="price">
-								+￥{{item.PRICE}}
+								+￥{{item.ORIGINALPRICE}}
 							</view>
 						</view>
 						<view class="bottom">
-							{{item.CREATETIME}} {{item.PAYTYPEY==0 && '微信支付'||item.PAYTYPEY==1 && '支付宝支付'||item.PAYTYPEY==3 && '银行卡支付'||item.PAYTYPEY==2 && '余额支付'}}
+							{{item.CREATETIME}} {{ payType(item.TYPES) }}
 						</view>
 					</view>
 				</view>
@@ -53,7 +53,7 @@
 	// tabbar
 	import tabbar from "@/components/common-tabbar/common-tabbar";
 	import {
-		profitTotal
+		offlinetradingList
 	} from '@/common/apis.js';
 	export default {
 		data() {
@@ -73,6 +73,7 @@
 			tabbar
 		},
 		computed: {
+			
 			startDate() {
 				return this.getDate('start');
 			},
@@ -84,6 +85,9 @@
 			this.getList(0)
 		},
 		methods: {
+			payType(TYPES) {
+				return TYPES == 0 && '余额支付' || TYPES == 1 && '微信支付' || TYPES == 2 && '支付宝支付'
+			},
 			// 日期选择
 			bindDateChange: function(e) {
 				var arr = e.detail.value.split('-');
@@ -112,27 +116,12 @@
 						uni.showLoading({
 							title: '加载中'
 						})
-						profitTotal({
-							shop_id: res.data,
-							date: (start == 0 ? '' : this.date)
+						offlinetradingList({
+							SHOP_ID: res.data,
+							CREATETIME: (start == 0 ? '' : this.date)
 						}).then(res => {
-							this.listData = res.returnMsg
-						// 	const date = new Date();
-						// 	let year = date.getFullYear(),
-						// 		month = date.getMonth() + 1,
-						// 		day = date.getDate();
-						// 	month = month > 9 ? month : '0' + month;;
-						// 	day = day > 9 ? day : '0' + day;
-						// 	let now = `${year}-${month}-${day}`;
-						
-						// 	if (this.date == now) {
-						// 		this.listData = res.returnMsg[0].todayOrderList
-						// 	} else {
-						// 		this.listData = res.returnMsg[0].orderList
-						// 	}
-						// 	if (start == 0) {
-						// 		this.listData = res.returnMsg[0].orderList
-						// 	}
+							this.listData = res.varList
+							
 						}).catch(err => {
 							uni.showToast({
 								title: '网络出错啦!',
@@ -140,7 +129,7 @@
 							})
 						}).finally(() => uni.hideLoading())
 					},
-					
+
 
 				})
 			}

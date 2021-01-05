@@ -3,10 +3,10 @@
 import request from './ajax.js';
 
 // export const baseUrl = 'https://yflh.hkzhtech.com/qufl'
-export const baseUrl = 'http://192.168.0.113:8081'
+export const baseUrl = 'http://192.168.0.107:8081'
 // 上传图片回显默认地址
 // export const baseImgUrl = 'https://yflh.hkzhtech.com/qufl/'
-export const baseImgUrl = 'http://192.168.0.113:8081/'
+export const baseImgUrl = 'http://192.168.0.107:8081/'
 
 
 // 1.商家登录 ok
@@ -116,6 +116,15 @@ export const take = params => request.post('/api/ordersummary/order/take1', para
 export const findByShopId = params => request.get('/api/merchantgoods/findByShopId', {params});
 // 判断商家是否有交易密码  shop_id
 export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
+
+
+export const offlinetradingList = params => request.get('/api/merchant/offlinetrading/list', {params});
+
+// 微信提现
+/**
+ * money 金额  types  0用户、1商家   id 用户或商家的id   openid  
+ */
+export const wxtx = params => request.post('/api/tx/wxtx', params);
 
 // // shop_id  判断是否有交易密码  JSESSIONID
 // export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});
