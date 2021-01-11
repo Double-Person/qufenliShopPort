@@ -157,7 +157,8 @@
 		methods: {
 			computedMoney(list) {
 				let sum = list.reduce((pre, nex) => pre.COUTNS * pre.PRICE + nex.COUTNS * nex.PRICE);
-				return sum
+				return typeof sum == 'object' ? sum.PRICE : sum
+				
 			},
 			// take  ORDERSUMMARY_ID 确认发货
 			 confirmDelivery(ORDERSUMMARY_ID) {
