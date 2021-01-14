@@ -16,7 +16,16 @@
 			</view>
 			<view class="shopManage-content-item">
 				<text>店铺地址</text>
-				<input type="text" v-model="(shopInfo.CITY || '') + shopInfo.AREA + shopInfo.FULLADD" placeholder-style="textAlign:right;fontSize:28rpx;" placeholder="请输入店铺地址" />
+				<pickerAddress class="index-header-left" @change="setCity">
+					<text @click="setCity">{{(shopInfo.CITY || '') + shopInfo.AREA }}</text>
+					<text class="iconfont icon-jiantou-xia"></text>
+				</pickerAddress>
+				
+				<!-- <input type="text" v-model="(shopInfo.CITY || '') + shopInfo.AREA + shopInfo.FULLADD" placeholder-style="textAlign:right;fontSize:28rpx;" placeholder="请输入店铺地址" /> -->
+			</view>
+			<view class="shopManage-content-item">
+				<text>详细地址</text>
+				<input type="text" v-model="shopInfo.FULLADD" placeholder-style="textAlign:right;fontSize:28rpx;" placeholder="详细地址" />
 			</view>
 			<view class="shopManage-content-item">
 				<text>上传店铺背景图</text>
@@ -89,7 +98,9 @@
 	import tabbar from "@/components/common-tabbar/common-tabbar";
 	// import testCode from '@/components/testCode/testCode';
 	import { getShopData , shopEdit, uploadsFile, baseUrl, baseImgUrl } from '@/common/apis.js'
-	import { uploadFileUrl } from '@/common/request.js'
+	import { uploadFileUrl } from '@/common/request.js';
+	// 城市选择器
+	import pickerAddress from '@/components/pickerAddress/pickerAddress.vue';
 	export default {
 		data() {
 			return {
@@ -105,12 +116,23 @@
 		components: {
 			commonHeader,
 			tabbar,
+			pickerAddress
 			// testCode
 		},
 		onLoad () {
 			this.getShopInfo()
 		},
 		methods: {
+			// 手动设置城市
+			setCity(data) {
+				console.log(data)
+				const [, CITY, AREA] = data.data;
+				this.shopInfo.CITY = CITY;
+				this.shopInfo.AREA = AREA;
+				
+				
+
+			},
 			// 获取商户信息
 			async getShopInfo () {
 				const id = uni.getStorageSync('shopId')

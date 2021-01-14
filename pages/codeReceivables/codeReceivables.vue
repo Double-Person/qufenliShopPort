@@ -10,12 +10,13 @@
 				<view class="codeReceivables-content-box-title">
 					无需加好友，扫二维码向我付钱
 				</view>
+				
 				<view class="qrimg">					 
 					 <!-- background="#000000" foreground="#ffffff" pdground="#ffffff" -->
 					 <tki-qrcode 
 					 cid="qrcode1" ref="qrcode" :val="JSON.stringify(codeVal)" :size="size" unit="upx" 
 					 
-					 icon="/static/images/codeImg.jpg" :iconSize="40" :lv="3" :onval="true" :loadMake="true" :usingComponents="true" 
+					 :icon="icon" :iconSize="40" :lv="3" :onval="true" :loadMake="true" :usingComponents="true" 
 					 @result="qrR" />
 					
 				</view>
@@ -32,10 +33,11 @@
 	import commonHeader from "@/components/common-header/common-header";
 	// 生成二维码
 	import tkiQrcode from "@/components/tki-qrcode/tki-qrcode.vue"
-	import { merchantQrCode } from "@/common/apis.js"
+	import { merchantQrCode, baseImgUrl } from "@/common/apis.js"
 	export default {
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				// 生成二维码
 				codeVal: {
 					shopId: '',
@@ -43,7 +45,8 @@
 				},
 				BacimgUrl: '',
 				size: 410, // 二维码大小
-				src: '' // 二维码生成后的图片地址或base64
+				src: '', // 二维码生成后的图片地址或base64
+				icon: ''
 			};
 		},
 		components: {
@@ -54,6 +57,9 @@
 			
 			this.codeVal.money = opt.money || 0
 			this.codeVal.shopId = uni.getStorageSync('shopId');
+			const shopInfo =  uni.getStorageSync('shopInfo');
+			// this.icon = this.baseImgUrl + shopInfo.BGIMG;
+	
 			setTimeout(() =>{
 				this.$refs.qrcode._makeCode()
 			}, 200)
@@ -72,20 +78,7 @@
 			// 保存收款码
 			_saveCode() {
 				this.$refs.qrcode._saveCode();
-				// return false;
-				// let imgUrl = this.BacimgUrl;
-				// if (imgUrl != "") {
-				// 	uni.saveImageToPhotosAlbum({
-				// 		filePath: imgUrl,
-				// 		success: function() {
-				// 			uni.showToast({
-				// 				title: '二维码保存成功',
-				// 				icon: 'success',
-				// 				duration: 2000
-				// 			});
-				// 		}
-				// 	});
-				// }
+				
 			},
 		}
 	}

@@ -452,11 +452,12 @@
 				border-radius: 10rpx;
 				color: #fff;
 				font-size: 40rpx;
-				margin: 20rpx auto 30rpx;
+				margin: 20rpx auto 120rpx auto;
 				text-align: center;
 				line-height: 88rpx;
 				box-shadow: 0 10rpx 20rpx #FF9960;
 				letter-spacing: 5rpx;
+				
 			}
 		}
 	}

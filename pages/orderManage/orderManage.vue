@@ -82,10 +82,10 @@
 						</view>
 						
 
-
+<!-- n 待收货 k 代发货 y 也完成 -->
 					</view>
 					<!-- N 代发货 -->
-					<view class="item-btn" v-show="classifyIndex == 1 && !item.take_status" @click="confirmDelivery(item.ordersummary_id)">
+					<view class="item-btn" v-show="classifyIndex == 1 && item.take_status == 'K'" @click="confirmDelivery(item.ordersummary_id)">
 						<text>确认发货</text>
 					</view>
 					<view class="item-btn" v-show="hideBox">

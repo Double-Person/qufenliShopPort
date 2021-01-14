@@ -52,9 +52,9 @@
 					</view>
 					<view class="btn" v-if="data">
 						
-						<text @click="setTop" v-if="STATES == 0">上架</text>
-						<text @click="setBottom" v-if="STATES == 1">下架</text>
-						<text @click="setIndex(1)">推送首页</text>
+						<text @click="setState(1)" v-if="STATES == 0">上架</text>
+						<text @click="setState(0)" v-if="STATES == 1">下架</text>
+						<text @click="setIndex()">{{ PUSHHP == 1 ? '取消推送' : '推送首页' }}</text>
 					</view>
 				</view>
 			</view>
@@ -117,6 +117,8 @@ export default {
 	},
 	data () {
 		return {
+			PUSHHP: '',
+			STATES: '',
 			baseImgUrl: baseImgUrl,
 			headeTitle: '添加商品',
 			GOODS_ID: '',
@@ -252,7 +254,7 @@ export default {
 		// 查询单个商品详情
 		_findByShopId(goods_id) {
 			findByShopId({goods_id}).then(res => {
-				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK, GOODS_ID, STATES}, imges } = res.returnMsg;
+				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK, GOODS_ID, STATES, PUSHHP}, imges } = res.returnMsg;
 				this.params.category_id =CATEGORY_ID
 				this.params.name = NAME
 				this.params.price = PRICE
@@ -260,7 +262,8 @@ export default {
 				this.params.norms = NORMS
 				this.params.stock = STOCK
 				this.GOODS_ID = GOODS_ID
-				this.STATES = STATES
+				this.STATES = STATES;
+				this.PUSHHP = PUSHHP
 				imges.forEach( (item, index) => {
 					this.imgList[index].imgUrl = item.IMG
 					this.imgList[index].GOODSIMGS_ID = item.GOODSIMGS_ID
@@ -281,7 +284,6 @@ export default {
 			msgType == 0 && (this.itemList = returnMsg)
 			
 			let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
-			// console.log('-----------', arr)
 			this.text = CATEGORY_NAME && CATEGORY_NAME.CATEGORY_NAME || '';
 		},
 		// 添加分类
@@ -345,8 +347,7 @@ export default {
 		// 		count: 6, //默认9
 		// 		sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 		// 		sourceType: ['album', 'camera'], //从相册选择
-		// 		success: res => {
-					
+		// 		success: res => {		
 		// 			res.tempFilePaths.map((item, index) => {
 						
 		// 				this.imgList[index].imgUrl=item
@@ -387,28 +388,22 @@ export default {
 				}
 			});
 		},
-		//上架	
-		async setTop () {
-			const { msgType, errMsg } = await shopState({ goods_id: this.data.GOODS_ID, states: 0 })
+		//上架	 下架
+		async setState (states) {
+			const { msgType, errMsg } = await shopState({ goods_id: this.data.GOODS_ID, states })
 			uni.showToast({
 				title: errMsg || '操作成功',
 				icon: 'none'
 			})
+			this._findByShopId(this.data.GOODS_ID)
 		},
-		//下架
-		async setBottom () {
-			const { msgType, errMsg } = await shopState({ goods_id: this.data.GOODS_ID, states: 1 })
-			uni.showToast({
-				title: errMsg || '操作成功',
-				icon: 'none'
-			})
-		},
-		async setIndex (index) {
-			const { msgType, errMsg } = await shopRecommend({ goods_id: this.data.GOODS_ID, pushhp: index })
-			uni.showToast({
-				title: errMsg || '操作成功',
-				icon: 'none'
-			})
+		
+		
+		async setIndex () {
+			let pushhp = (!(this.PUSHHP * 1)) * 1
+			const { msgType, errMsg } = await shopRecommend({ goods_id: this.data.GOODS_ID, pushhp })
+			uni.showToast({ title: errMsg || '操作成功', icon: 'none' });
+			this._findByShopId(this.data.GOODS_ID)
 		},
 		// 改变分类名
 		changeItem(item) {
