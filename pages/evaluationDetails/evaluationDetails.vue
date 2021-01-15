@@ -35,8 +35,8 @@
 		<view class="comment">
 			<view v-for="(item,index) in info" :key="index" class="comment-item">
 				<!-- <text class="name">  {{ item.USID ? itemInfo.USERNAME : '商家回复' }}:</text> --> <!-- {{item.USID || '商家回复'}} -->
-				<text class="name">  {{ item.USID }}:</text>  <!-- {{item.USID || '商家回复'}} -->
-				<text class="comment-content">{{ item.REPLY }} </text>
+				<text class="name">  {{ showName(item.USID) }}:</text>  <!-- {{item.USID || '商家回复'}} -->
+				<text class="comment-content">{{ showContent(item.REPLY, item.CONTENT ) }} </text>
 			</view>
 		</view>
 	</view>
@@ -65,6 +65,29 @@
 			this.getInitDetail()
 		},
 		methods:{
+			showContent(REPLY, CONTENT) {
+				if(REPLY) {
+					if(REPLY == 'null') {
+						return CONTENT || '' 
+					}else {
+						return REPLY
+					}
+				}else {
+					return CONTENT || '' 
+				}
+				
+			},
+			showName(USID) {
+				if(USID) {
+					if(USID == 'null') {
+						return '用户'
+					}else {
+						return USID
+					}
+				}
+				return '用户'
+				
+			},
 			async getInitDetail () {
 				const { returnMsg, msgType } = await getShopEvaluateDetail({ evaluate_id: this.itemInfo.EVALUATE_ID })
 				msgType == 0 && (this.info = returnMsg)
@@ -90,9 +113,7 @@
 						uni.showToast({
 							title:'回复成功！'
 						})
-						uni.navigateTo({
-							url:'../evaluateManage/evaluateManage'
-						})
+						this.getInitDetail()
 					}
 				}else{
 					uni.showToast({
@@ -115,7 +136,7 @@
 				margin-right: 15rpx;
 			}
 			.comment-content{
-				
+				word-wrap:break-word;
 			}
 		}
 	}

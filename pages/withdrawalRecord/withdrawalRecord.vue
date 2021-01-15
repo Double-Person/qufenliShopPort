@@ -23,7 +23,7 @@
 					<view class="right">
 						<view class="top">
 							<view class="name">
-								<text>提现</text>
+								<text>提现 （{{ item.ACCOUNT_TYPE == 1 ? '支付宝' : '微信' }}）</text>
 								<view>
 									{{item.CREATION_TIME}}
 								</view>
@@ -67,6 +67,10 @@
 				timeStamp: ''
 			}
 		},
+		components: {
+			commonHeader,
+			tabbar
+		},
 		methods: {
 
 			// 日期选择
@@ -96,7 +100,7 @@
 			},
 			getData(timeStamp) {
 				uni.getStorage({
-					key: 'USERINFO_ID',
+					key: 'shopId',
 					success: res => {
 
 						var obj = {
@@ -115,10 +119,7 @@
 				})
 			}
 		},
-		components: {
-			commonHeader,
-			tabbar
-		},
+		
 		computed: {
 			startDate() {
 				return this.getDate('start');

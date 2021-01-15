@@ -20,7 +20,7 @@
 						</view>
 					</view>
 					<view class="right" @tap="goBindWeixin">
-						{{info && info.Wx? '已绑定' : '去绑定'}}
+						{{info && info.Wx? '重新绑定' : '去绑定'}}
 					</view>
 				</view>
 				<!-- 支付宝 -->
@@ -36,25 +36,9 @@
 					</view>
 					<view class="right" @tap="goBindAlipay">
 						
-						{{info &&info.Ali? '已绑定' : '去绑定'}}
+						{{info &&info.Ali? '重新绑定' : '去绑定'}}
 					</view>
-				</view>
-				<!-- 招商银行卡 -->
-				<view class="myCard-content-item" v-if="false">
-					<view class="left">
-						<text class="iconfont icon-bangdingshezhiyinxingqiabangding" style="color: #FF9707;"></text>
-						<view class="text">
-							<text>招商银行卡</text>
-							<view>
-								<!-- 哈哈哈哈哈 -->
-							</view>
-						</view>
-					</view>
-					<view class="right"  @tap="goBindBankCard">
-						
-						{{info &&info.Card ? '已绑定' : '去绑定'}}
-					</view>
-				</view>
+				</view>				
 			</view>
 		</view>
 		<!-- 内容结束 -->
@@ -118,22 +102,7 @@
 				uni.navigateTo({
 					url:"../bindWeixin/bindWeixin"
 				})
-			},
-			// 前往绑定银行卡
-			goBindBankCard(){
-							
-				let info = this.info && this.info.Card || ''
-				if(info) {
-					uni.navigateTo({
-						url:"../bindBankCard/bindBankCard?info=" + JSON.stringify(info)
-					})
-				}else{
-					uni.navigateTo({
-						url:"../bindBankCard/bindBankCard"
-					})
-				}
-				
-			}
+			},			
 		}
 	}
 </script>

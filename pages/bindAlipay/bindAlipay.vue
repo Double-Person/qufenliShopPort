@@ -14,12 +14,12 @@
 			</view>
 			<view class="bindAlipay-content-item">
 				<text>手机号</text>
-				<input type="text" v-model="phone" maxlength="11" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请输入手机号" />
+				<input type="number" v-model="phone" maxlength="11" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请输入手机号" />
 			</view>
 			<view class="bindAlipay-content-item">
 				<text>验证码</text>
 				<view>
-					<input type="text" v-model="code" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请填写验证码" />
+					<input type="number" v-model="code" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请填写验证码" />
 					<button class="testCode" :class="selectCode?'selectCode':''" :disabled="disabled" @tap="getCode">{{codeText}}</button>
 				</view>
 			</view>
@@ -90,70 +90,47 @@
 					SHOP_ID: uni.getStorageSync('shopId')
 				}
 				aliAccount(obj).then(res => {
-					console.log(res)
+	
 					if(res.returnMsg.status == '00') {
-						uni.showToast({
-							title: '绑定成功',
-							icon: 'none'
+						uni.showToast({ title: '绑定成功', icon: 'none' })
+						// #ifdef H5
+						let canBack = true;
+						const pages = getCurrentPages();
+						// 有可返回的页面则直接返回，uni.navigateBack默认返回失败之后会自动刷新页面 ，无法继续返回  
+						if (pages.length > 1) {
+							uni.navigateBack(1)
+							return;
+						}
+						// vue router 可以返回uni.navigateBack失败的页面 但是会重新加载  
+						let a = this.$router.go(-1)
+						// router.go失败之后则重定向到首页  
+						if (a == undefined) {
+							uni.reLaunch({
+								url: "/pages/index/index"
+							})
+						}
+						return;
+						// #endif  
+						uni.navigateTo({
+							url: "/pages/myCard/myCard"
 						})
 					}else if(res.returnMsg.status == '01') {
-						uni.showToast({
-							title: '验证码为空',
-							icon: 'none'
-						})
+						uni.showToast({ title: '验证码为空', icon: 'none' })
 					}else if(res.returnMsg.status == '02') {
-						uni.showToast({
-							title: '验证码不正确',
-							icon: 'none'
-						})
+						uni.showToast({ title: '验证码不正确', icon: 'none' })
 					}else if(res.returnMsg.status == '03') {
-						uni.showToast({
-							title: '验证码超时',
-							icon: 'none'
-						})
+						uni.showToast({ title: '验证码超时', icon: 'none' })
 					}else if(res.returnMsg.status == '04') {
-						uni.showToast({
-							title: '未实名认证',
-							icon: 'none'
-						})
+						uni.showToast({ title: '未实名认证', icon: 'none' })
 					}else if(res.returnMsg.status == '05') {
-						uni.showToast({
-							title: '真实姓名不一致',
-							icon: 'none'
-						})
+						uni.showToast({ title: '真实姓名不一致', icon: 'none' })
 					}else if(res.returnMsg.status == '06') {
-						uni.showToast({
-							title: '手机号错误',
-							icon: 'none'
-						})
+						uni.showToast({ title: '手机号错误', icon: 'none' })
 					}else{
-						return uni.showToast({
-							title: '绑定失败',
-							icon: 'none'
-						})
+						return uni.showToast({ title: '绑定失败', icon: 'none' })
 					}
 				})
-				// #ifdef H5
-				let canBack = true;
-				const pages = getCurrentPages();
-				// 有可返回的页面则直接返回，uni.navigateBack默认返回失败之后会自动刷新页面 ，无法继续返回  
-				if (pages.length > 1) {
-					uni.navigateBack(1)
-					return;
-				}
-				// vue router 可以返回uni.navigateBack失败的页面 但是会重新加载  
-				let a = this.$router.go(-1)
-				// router.go失败之后则重定向到首页  
-				if (a == undefined) {
-					uni.reLaunch({
-						url: "/pages/index/index"
-					})
-				}
-				return;
-				// #endif  
-				uni.navigateTo({
-					url: "/pages/myCard/myCard"
-				})
+				
 			},
 			getCode() {
 				if (this.phone.length !== 11) {
@@ -205,7 +182,7 @@
 		/* #endif */
 		.bindAlipay-content {
 			background: #fff;
-			padding-left: 30rpx;
+			padding: 0 30rpx;
 
 			.bindAlipay-content-item {
 				display: flex;
@@ -220,6 +197,7 @@
 
 				input {
 					width: 250rpx;
+					text-align: right;
 				}
 
 				view {
@@ -251,7 +229,7 @@
 
 			.bindAlipay-content-item:first-child {
 				input {
-					flex: 1;
+					flex: 1;	
 				}
 			}
 

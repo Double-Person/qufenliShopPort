@@ -4,6 +4,8 @@
 			<text class="iconfont icon-zuojiantou" @tap="backPage"></text>
 			<text class="title">{{headerTitl}}</text>
 			<view class="right">
+				<text class="header-right-title-common" @click="withdrawalRecord" v-if="isShowHistory">提现记录</text>
+				
 				<text class="iconfont icon-xingxing" :class="xingHide?'xingHide':''"></text>
 				<text class="iconfont icon-lingdang-xianxing" @tap="goNews" :class="lingHide?'lingHide':''"></text>
 				<text class="iconfont icon-fenxiang" @tap="maskState=true" :class="fenxiangHide?'fenxiangHide':''"></text>
@@ -68,6 +70,10 @@
 				type:String,
 				default:'true'
 			},
+			isShowHistory: {
+				type: Boolean,
+				default: false
+			},
 			fenxiangHide:{
 				type:String,
 				default:'true'
@@ -83,6 +89,12 @@
 			}
 		},
 		methods: {
+			//  提现记录
+			withdrawalRecord() {
+				uni.navigateTo({
+					url: '../../pages/withdrawalRecord/withdrawalRecord'
+				})
+			},
 			backPage() {
 				// #ifdef H5
 				let canBack = true;
@@ -188,6 +200,12 @@
 </script>
 
 <style lang="less">
+	.header-right-title-common {
+		height: 40rpx;
+		font-size: 28rpx;
+		color: #FFFFFF;
+		line-height: 40rpx;
+	}
 	.common-header {
 		height: 100rpx;
 		font-size: 40rpx;

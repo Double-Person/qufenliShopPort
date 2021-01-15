@@ -89,7 +89,7 @@
 <script>
 	// header
 	import commonHeader from "@/components/common-header/common-header";
-	import { withdrawal, backCardInfo, wxtx, baseImgUrl } from "@/common/apis.js";
+	import { withdrawal, backCardInfo, wxtx, alitx, baseImgUrl } from "@/common/apis.js";
 	export default {
 		components: {
 			commonHeader,
@@ -105,14 +105,13 @@
 				money: null,
 				cardNum: '', // 卡号
 				kbalance: 0, // uni.setStorageSync('kbalance')
-				openid: 'ofTYkxBM2Jh0KluonnXzNpLLxYuA'
+				openid: ''//ofTYkxBM2Jh0KluonnXzNpLLxYuA'
 			};
 		},
 		onLoad(opt) {
 			// this.getBackCardInfo()
 			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.kbalance = uni.getStorageSync('kbalance');
-			console.log(this.shopInfo)
 			
 			if(opt.bindList){
 				this.bindList = JSON.parse(opt.bindList)
@@ -180,17 +179,17 @@ console.log(this.cardNum)
 					})
 				}
 				if(!this.openid) {
-					 uni.showToast({
-						title: '请授权登录',
-						icon: 'none'
-					})
+					 
 					if(this.type == 'wechat') {
+						uni.showToast({
+							title: '请授权登录',
+							icon: 'none'
+						})
 						this.getOpenIdByWchat()
-					}else if(this.type == 'ali') {
-						
+						return false
 					}
 					
-					return false
+					
 				}
 				
 				let obj = {
@@ -205,14 +204,13 @@ console.log(this.cardNum)
 				if(this.type == 'wechat') {
 					this.weChatWithdrawal(obj)
 				}else if(this.type == 'ali') {
-					
+					this.aliWithdrawal(obj)
 				}
 				
 			},
 			// 微信提现
 			weChatWithdrawal(obj) {
 				wxtx(obj).then(res => {
-					console.log(res)
 					if (res.msgType == 0) {
 						uni.showToast({
 							title: '提现成功',
@@ -229,6 +227,30 @@ console.log(this.cardNum)
 				})
 			},
 			
+			// 支付宝提现
+			aliWithdrawal(obj) {
+				obj.openid = '';
+				obj.zfb = this.cardNum;
+				alitx(obj).then(res => {
+					if (res.msgType == 0) {
+						uni.showToast({
+							title: '提现成功',
+							icon: 'none'
+						})
+					} else {
+						uni.showToast({
+							title: res.errMsg,
+							icon: 'none'
+						})
+					}
+				
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '/pages/personal/personal'
+						})
+					}, 1000)
+				})
+			},
 			// 获取微信openId
 			getOpenIdByWchat() {
 				const that = this;

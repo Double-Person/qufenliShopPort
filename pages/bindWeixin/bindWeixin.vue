@@ -14,13 +14,13 @@
 			</view>
 			<view class="bindWeixin-content-item">
 				<text>手机号</text>
-				<input type="text" v-model="phone" maxlength="11" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请输入手机号" />
+				<input type="number" v-model="phone" maxlength="11" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请输入手机号" />
 			</view>
 			<view class="bindWeixin-content-item">
 				<text>验证码</text>
 				<view>
 
-					<input type="text" v-model="code" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请填写验证码" />
+					<input type="number" v-model="code" placeholder-style="color:#999;fontSize:28rpx;" placeholder="请填写验证码" />
 					<button class="testCode" :class="selectCode?'selectCode':''" :disabled="disabled" @tap="getCode">{{codeText}}</button>
 				</view>
 			</view>
@@ -92,11 +92,33 @@
 					SHOP_ID: uni.getStorageSync('shopId')
 				}
 				wxAccount(obj).then(res => {
+					console.log(obj)
 					console.log(res)
 					if(res.returnMsg.status == '00') {
 						uni.showToast({
 							title: '绑定成功',
 							icon: 'none'
+						})
+						// #ifdef H5
+						let canBack = true;
+						const pages = getCurrentPages();
+						// 有可返回的页面则直接返回，uni.navigateBack默认返回失败之后会自动刷新页面 ，无法继续返回  
+						if (pages.length > 1) {
+							uni.navigateBack(1)
+							return;
+						}
+						// vue router 可以返回uni.navigateBack失败的页面 但是会重新加载  
+						let a = this.$router.go(-1)
+						// router.go失败之后则重定向到首页  
+						if (a == undefined) {
+							uni.reLaunch({
+								url: "/pages/index/index"
+							})
+						}
+						return;
+						// #endif  
+						uni.navigateTo({
+							url: '../myCard/myCard'
 						})
 					}else if(res.returnMsg.status == '01') {
 						uni.showToast({
@@ -130,25 +152,7 @@
 						})
 					}
 				})
-				// #ifdef H5
-				let canBack = true;
-				const pages = getCurrentPages();
-				// 有可返回的页面则直接返回，uni.navigateBack默认返回失败之后会自动刷新页面 ，无法继续返回  
-				if (pages.length > 1) {
-					uni.navigateBack(1)
-					return;
-				}
-				// vue router 可以返回uni.navigateBack失败的页面 但是会重新加载  
-				let a = this.$router.go(-1)
-				// router.go失败之后则重定向到首页  
-				if (a == undefined) {
-					uni.reLaunch({
-						url: "/pages/index/index"
-					})
-				}
-				return;
-				// #endif  
-				uni.navigateBack(1)
+				
 			},
 			getCode() {
 				if (this.phone.length !== 11) {

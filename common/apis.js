@@ -2,11 +2,18 @@
 // import request from './request.js';
 import request from './ajax.js';
 
-// export const baseUrl = 'https://yflh.hkzhtech.com/qufl'
-export const baseUrl = 'http://192.168.0.111:8081'
-// 上传图片回显默认地址
-// export const baseImgUrl = 'https://yflh.hkzhtech.com/qufl/'
-export const baseImgUrl = 'http://192.168.0.111:8081/'
+// // export const baseUrl = 'https://yflh.hkzhtech.com/qufl'
+// export const baseUrl = 'http://192.168.0.111:8081'
+// // 上传图片回显默认地址
+// // export const baseImgUrl = 'https://yflh.hkzhtech.com/qufl/'
+// export const baseImgUrl = 'http://192.168.0.111:8081/'
+
+const COMMON_URL = 'https://yflh.hkzhtech.com/qufl';
+// const COMMON_URL = 'http://192.168.0.111:8081';
+export const baseUrl = COMMON_URL;
+
+export const baseImgUrl = COMMON_URL + '/'
+
 
 
 // 1.商家登录 ok
@@ -125,6 +132,15 @@ export const offlinetradingList = params => request.get('/api/merchant/offlinetr
  * money 金额  types  0用户、1商家   id 用户或商家的id   openid  
  */
 export const wxtx = params => request.post('/api/tx/wxtx', params);
+/** 支付宝提现
+ * money 提现金额  types 提现类型 0用户、1商家 id  用户或商家的id  zfb 
+ */
+export const alitx = params => request.post('/api/tx/ali/pay', params);
+
+// 提现记录接口   参数 userinfo_id ==========
+export const withdrawalInfo = params => request.get('/api/merchant/withdrawalInfo', {
+	params
+})
 
 // // shop_id  判断是否有交易密码  JSESSIONID
 // export const shoppwdInfo = params => request.get('/api/ordersummary/shoppwdInfo', {params});

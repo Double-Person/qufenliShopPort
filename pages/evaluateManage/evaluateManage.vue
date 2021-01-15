@@ -90,16 +90,10 @@
 				uni.hideLoading()
 			},
 			// 删除
-			async deleteEvaluate(id) {
-				const {
-					msgType
-				} = await delShopEvaluate({
-					evaluate_id: id
-				})
+			async deleteEvaluate(EVALUATE_ID) {
+				const { msgType } = await delShopEvaluate({EVALUATE_ID})
 				msgType == 0 && this.getEvalist()
-				msgType == 0 && uni.showToast({
-					title: '删除成功！'
-				})
+				msgType == 0 && uni.showToast({ title: '删除成功！' })
 			},
 			// 密码输入状态
 			inputPwdStata(e) {
