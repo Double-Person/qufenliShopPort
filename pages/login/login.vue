@@ -63,28 +63,34 @@
 			}
 		},
 		onLoad() {
-			try{
-				// 获取本地存储登录信息
-				uni.getStorage({
-					key: 'name',
-					success: (data) => {
-						var res = JSON.parse(data.data);
-						this.phone = res.phone;
-						this.pwd = res.password;
-						this.goIndex();
-					}
-				})
-				uni.getStorage({
-					key: 'outLogin',
-					success: (res) => {
-						if (res.data) {
-							this.rememberPwdHide = true;
+			let saveStataShop = uni.getStorage('saveStataShop');
+
+			if (saveStataShop) {
+				try {
+					// 获取本地存储登录信息
+					uni.getStorage({
+						key: 'name',
+						success: (data) => {
+							var res = JSON.parse(data.data);
+							this.phone = res.phone;
+							this.pwd = res.password;
+							console.log(res)
+							this.goIndex();
 						}
-					}
-				})
-			}catch(e){
-				//TODO handle the exception
+					})
+					uni.getStorage({
+						key: 'outLogin',
+						success: (res) => {
+							if (res.data) {
+								this.rememberPwdHide = true;
+							}
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
 			}
+
 		},
 		methods: {
 			// 获取输入手机号
@@ -127,7 +133,7 @@
 							})
 						})
 						uni.getStorage({
-							key: 'saveStata',
+							key: 'saveStataShop',
 							success: (res) => {
 								if (res.data) {
 									uni.reLaunch({
@@ -151,6 +157,7 @@
 					}
 
 				}).catch(err => {
+					console.log(err)
 					uni.showToast({
 						title: '登陆失败，请核对后再登录！',
 						icon: "none"
@@ -175,7 +182,7 @@
 				this.rememberPwdHide = true;
 				// 保存状态到本地
 				uni.setStorage({
-					key: 'saveStata',
+					key: 'saveStataShop',
 					data: true
 				})
 				// 账号密码保存
@@ -200,7 +207,7 @@
 			cancelSave() {
 				// 保存状态到本地
 				uni.setStorage({
-					key: 'saveStata',
+					key: 'saveStataShop',
 					data: false
 				})
 				// 移出本地数据

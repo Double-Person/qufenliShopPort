@@ -52,8 +52,8 @@
 					</view>
 					<view class="btn" v-if="data">
 						
-						<text @click="setState(1)" v-if="STATES == 0">上架</text>
-						<text @click="setState(0)" v-if="STATES == 1">下架</text>
+						<text @click="setState(0)" v-if="STATES == 1">上架</text>
+						<text @click="setState(1)" v-if="STATES == 0">下架</text>
 						<text @click="setIndex()">{{ PUSHHP == 1 ? '取消推送' : '推送首页' }}</text>
 					</view>
 				</view>

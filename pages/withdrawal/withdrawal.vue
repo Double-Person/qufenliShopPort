@@ -239,7 +239,7 @@ console.log(this.cardNum)
 						})
 					} else {
 						uni.showToast({
-							title: res.errMsg,
+							title: res.returnMsg || '提现失败' ,
 							icon: 'none'
 						})
 					}

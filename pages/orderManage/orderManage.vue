@@ -76,7 +76,7 @@
 						<view class="item-total">
 							<text></text>
 							<view>
-								共{{item.number}}件商品 总金额
+								共{{item.number}}种商品 总金额
 								<text class="shopMoney">￥{{computedMoney(item.goodlist)}}</text>
 							</view>
 						</view>
@@ -156,9 +156,11 @@
 		},
 		methods: {
 			computedMoney(list) {
-				let sum = list.reduce((pre, nex) => pre.COUTNS * pre.PRICE + nex.COUTNS * nex.PRICE);
-				return typeof sum == 'object' ? sum.PRICE : sum
-				
+				let num = 0
+				for (let good of list) {
+					num += good.PRICE * good.COUTNS
+				}
+				return num				
 			},
 			// take  ORDERSUMMARY_ID 确认发货
 			 confirmDelivery(ORDERSUMMARY_ID) {

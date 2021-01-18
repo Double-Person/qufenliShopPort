@@ -235,13 +235,13 @@
 			// 提交
 			submit(){
 				console.log()
-				let {SHOP_NAME, CITY, AREA, LATITUDE, LONGITUDE, NOTICE, PHONE, BGIMG ,WX} = this.shopInfo
+				let {SHOP_NAME, CITY, AREA, LATITUDE, LONGITUDE, NOTICE, PHONE, BGIMG ,WX, FULLADD} = this.shopInfo
 				const params = {
 					shop_id:uni.getStorageSync('shopId'),
 					shop_name:SHOP_NAME,
-					city:CITY,
+					city:CITY, 
 					area:AREA,
-					fulladd:CITY,
+					fulladd:FULLADD,
 					laittude:LATITUDE,
 					longitude:LONGITUDE,
 					bgimg:BGIMG,
@@ -268,16 +268,20 @@
 			// 退出登录
 			outLogin(){
 				uni.setStorage({
-					key:'saveStata',
+					key:'saveStataShop', 
 					data:false,
 					success:()=>{
 						uni.setStorage({
 							key:"outLogin",
 							data:true
 						})
+						uni.removeStorage({
+							key: 'name',
+						})
 						uni.reLaunch({
 							url:"../login/login"
 						})
+						
 					}
 				})
 			}

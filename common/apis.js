@@ -8,8 +8,8 @@ import request from './ajax.js';
 // // export const baseImgUrl = 'https://yflh.hkzhtech.com/qufl/'
 // export const baseImgUrl = 'http://192.168.0.111:8081/'
 
-const COMMON_URL = 'https://yflh.hkzhtech.com/qufl';
-// const COMMON_URL = 'http://192.168.0.111:8081';
+// const COMMON_URL = 'https://yflh.hkzhtech.com/qufl';
+const COMMON_URL = 'http://192.168.0.106:8081';
 export const baseUrl = COMMON_URL;
 
 export const baseImgUrl = COMMON_URL + '/'
