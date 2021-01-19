@@ -119,17 +119,7 @@
 							date: start == 0 ? '' : this.date
 						}).then(res => {
 							this.listData = res.returnMsg
-							// const date = new Date();
-							// let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
-							// month = month > 9 ? month : '0' + month;;
-							// day = day > 9 ? day : '0' + day;
-							// let now = `${year}-${month}-${day}`;
-							// if(this.date == now) {
-							// 	this.listData = res.returnMsg[0].todayOrderList
-							// }else{
-							// 	this.listData = res.returnMsg[0].orderList
-							// }
-
+							
 						}).catch(err => {
 							uni.showToast({
 								title: '网络出错啦!',

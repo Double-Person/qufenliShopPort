@@ -1,13 +1,7 @@
 <template>
 	<view class="shopManage">
 		<commonHeader headerTitl="店铺管理" xingHide=true lingHide=true fenxiangHide=true></commonHeader>
-		<!-- 验证密码蒙层 -->
-		<!-- 		<view class="shopManage-testPwd" :class="hideBox?'hideBox':''">
-			<view class="shopManage-testPwd-title">
-				请输入登录密码
-			</view>
-			<testCode @isPwdStata="inputPwdStata" :focusStata='focusStata'></testCode>
-		</view> -->
+
 		<!-- 内容 -->
 		<view class="shopManage-content">
 			<view class="shopManage-content-item">
@@ -20,7 +14,7 @@
 					<text @click="setCity">{{(shopInfo.CITY || '') + shopInfo.AREA }}</text>
 					<text class="iconfont icon-jiantou-xia"></text>
 				</pickerAddress>
-				
+
 				<!-- <input type="text" v-model="(shopInfo.CITY || '') + shopInfo.AREA + shopInfo.FULLADD" placeholder-style="textAlign:right;fontSize:28rpx;" placeholder="请输入店铺地址" /> -->
 			</view>
 			<view class="shopManage-content-item">
@@ -96,9 +90,7 @@
 <script>
 	import commonHeader from "@/components/common-header/common-header";
 	import tabbar from "@/components/common-tabbar/common-tabbar";
-	// import testCode from '@/components/testCode/testCode';
 	import { getShopData , shopEdit, uploadsFile, baseUrl, baseImgUrl } from '@/common/apis.js'
-	import { uploadFileUrl } from '@/common/request.js';
 	// 城市选择器
 	import pickerAddress from '@/components/pickerAddress/pickerAddress.vue';
 	export default {
@@ -117,7 +109,6 @@
 			commonHeader,
 			tabbar,
 			pickerAddress
-			// testCode
 		},
 		onLoad () {
 			this.getShopInfo()
@@ -125,13 +116,9 @@
 		methods: {
 			// 手动设置城市
 			setCity(data) {
-				console.log(data)
 				const [, CITY, AREA] = data.data;
 				this.shopInfo.CITY = CITY;
 				this.shopInfo.AREA = AREA;
-				
-				
-
 			},
 			// 获取商户信息
 			async getShopInfo () {
@@ -143,7 +130,6 @@
 					this.imgUrl = this.shopInfo.BGIMG
 					this.imgHide = false;
 				}
-				console.log(this.shopInfo)
 			},
 			// 前往设置密码
 			goSetPwd(index){
@@ -175,66 +161,30 @@
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success:  (res)=> {
-						console.log(res)
 						this.imgUrl = res.tempFilePaths[0];
 						this.imgHide = false;
 						
-					const tempFilePaths = res.tempFilePaths;
-					        uni.uploadFile({
-					            url: baseUrl + '/uploadFile/file', //仅为示例，非真实的接口地址
-					            filePath: tempFilePaths[0],
-					            name: 'file',
-					            formData: {
-					                file: 'test'
-					            },
-					            success: (uploadFileRes) => {
-									// 	let url = (JSON.parse(uploadFileRes.data).data).split('/usr/local/tomcat8.5/apache-tomcat-8.5.47/webapps/qufl');
-									// this.shopInfo.BGIMG = baseUrl + url[1]
-									this.shopInfo.BGIMG = (JSON.parse(uploadFileRes.data).data)
-									this.imgUrl = this.shopInfo.BGIMG;
-									console.log(this.shopInfo.BGIMG)
-									
-					            }
-					        });
-						
+						const tempFilePaths = res.tempFilePaths;
+								uni.uploadFile({
+									url: baseUrl + '/uploadFile/file', //仅为示例，非真实的接口地址
+									filePath: tempFilePaths[0],
+									name: 'file',
+									formData: {
+										file: 'test'
+									},
+									success: (uploadFileRes) => {
+										this.shopInfo.BGIMG = (JSON.parse(uploadFileRes.data).data)
+										this.imgUrl = this.shopInfo.BGIMG;
+									}
+								});
+							
+							}
 						}
-					}
 				);
 			},
-			// 店铺名称
-			// getShopname(e){
-			// 	this.shopName = e.detail.value;
-			// },
-			// 店铺地址
-			// getShopadd(e){
-			// 	this.shopAddress = e.detail.value;
-			// 	// 地址转换为经纬度
-			// 	uni.request({
-			// 		method:'GET',
-			// 		url:'http://restapi.amap.com/v3/geocode/geo?key=60ca6302ddbfc1545c05fed7e8fff834&s=rsv3&city=35&address='+e.detail.value,
-			// 		success:(res)=>{
-			// 			var arr = res.data.geocodes[0].location.split(',');
-			// 			this.longitude = arr[0];
-			// 			this.latitude = arr[1];
-			// 			console.log(this.longitude,this.latitude)
-			// 		}
-			// 	})
-			// },
-			// 店铺电话
-			// getShopPhone(e){
-			// 	this.shopPhone = e.detail.value;
-			// },
-			// 店铺微信
-			// getShopWeixin(e){
-			// 	this.shopWeixin = e.detail.value;
-			// },
-			// 店铺文字
-			// getShopText(e){
-			// 	this.shopText = e.detail.value;
-			// },
+		
 			// 提交
 			submit(){
-				console.log()
 				let {SHOP_NAME, CITY, AREA, LATITUDE, LONGITUDE, NOTICE, PHONE, BGIMG ,WX, FULLADD} = this.shopInfo
 				const params = {
 					shop_id:uni.getStorageSync('shopId'),
@@ -253,7 +203,7 @@
 					if(res.msgType === 0){
 						uni.showToast({
 						    title: '编辑成功',
-						    duration: 1000
+						    icon: 'none'
 						});
 					}
 				

@@ -2,13 +2,7 @@
 	<view class="myOrder">
 		<!-- header -->
 		<commonHeader headerTitl="订单管理" xingHide=true lingHide=true fenxiangHide=true></commonHeader>
-		<!-- 验证密码蒙层 -->
-		<!-- 		<view class="shopManage-testPwd" :class="hideBox?'hideBox':''">
-			<view class="shopManage-testPwd-title">
-				请输入登录密码
-			</view>
-			<testCode @isPwdStata="inputPwdStata" :focusStata='focusStata'></testCode>
-		</view> -->
+
 		<!-- tab切换 -->
 		<view class="myOrder-title">
 			<text v-for="(item, $index) in classify" :key="$index" :class="{ active: $index === classifyIndex }" @tap="changeTitle($index, item.label)">{{ item.label }}</text>
@@ -80,9 +74,9 @@
 								<text class="shopMoney">￥{{computedMoney(item.goodlist)}}</text>
 							</view>
 						</view>
-						
 
-<!-- n 待收货 k 代发货 y 也完成 -->
+
+						<!-- n 待收货 k 代发货 y 也完成 -->
 					</view>
 					<!-- N 代发货 -->
 					<view class="item-btn" v-show="classifyIndex == 1 && item.take_status == 'K'" @click="confirmDelivery(item.ordersummary_id)">
@@ -98,7 +92,7 @@
 				</view>
 			</view>
 			<view v-else style="font-size: 14px; padding: 50px; text-align: center;">暂无数据</view>
-	
+
 		</view>
 		<!-- tabbar -->
 		<!-- <tabbar active="3"></tabbar> -->
@@ -107,7 +101,6 @@
 <script>
 	import commonHeader from "@/components/common-header/common-header";
 	import tabbar from "@/components/common-tabbar/common-tabbar";
-	// import testCode from '@/components/testCode/testCode';
 	import {
 		orderList,
 		getRefund,
@@ -160,37 +153,39 @@
 				for (let good of list) {
 					num += good.PRICE * good.COUTNS
 				}
-				return num				
+				return num
 			},
 			// take  ORDERSUMMARY_ID 确认发货
-			 confirmDelivery(ORDERSUMMARY_ID) {
-				 take({ORDERSUMMARY_ID}).then(async res => {
-					if(res.returnMsg.status == '03') {
+			confirmDelivery(ORDERSUMMARY_ID) {
+				take({
+					ORDERSUMMARY_ID
+				}).then(async res => {
+					if (res.returnMsg.status == '03') {
 						await uni.showToast({
 							title: '申请退款中不能确认收货',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '02') {
+					} else if (res.returnMsg.status == '02') {
 						uni.showToast({
 							title: '该订单还未支付成功',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '01') {
+					} else if (res.returnMsg.status == '01') {
 						await uni.showToast({
 							title: '订单号不存在',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '00') {
+					} else if (res.returnMsg.status == '00') {
 						await uni.showToast({
 							title: '发货成功',
 							icon: 'none'
 						})
 					}
-					
+
 					await setTimeout(() => {
 						this.getOrder()
 					}, 500)
-					 
+
 				})
 			},
 			getDetail(item) {
@@ -204,7 +199,9 @@
 					shop_id: uni.getStorageSync('shopId'),
 					type: this.classify[this.classifyIndex].value
 				}
-				uni.showLoading({ title: '加载中' })
+				uni.showLoading({
+					title: '加载中'
+				})
 				const {
 					returnMsg,
 					msgType
@@ -240,27 +237,27 @@
 					'ORDERSUMMARY_ID': id
 				}).then(async res => {
 					console.log(res)
-					if(res.returnMsg.status == '04') {
+					if (res.returnMsg.status == '04') {
 						await uni.showToast({
 							title: '微信退款失败',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '03') {
+					} else if (res.returnMsg.status == '03') {
 						await uni.showToast({
 							title: '支付宝退款失败',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '02') {
+					} else if (res.returnMsg.status == '02') {
 						uni.showToast({
 							title: '只能对退款中的订单才能确认退款',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '01') {
+					} else if (res.returnMsg.status == '01') {
 						await uni.showToast({
 							title: '订单号不存在',
 							icon: 'none'
 						})
-					}else if(res.returnMsg.status == '00') {
+					} else if (res.returnMsg.status == '00') {
 						await uni.showToast({
 							title: '退款成功',
 							icon: 'none'
@@ -268,7 +265,7 @@
 					}
 					this.active = 2
 					this.classifyIndex = 2
-					
+
 					this.getOrder()
 				})
 			},
@@ -304,21 +301,7 @@
 		components: {
 			commonHeader,
 			tabbar,
-			// testCode
 		},
-		onLoad() {
-			// 判断输入密码是否超时
-			// uni.getStorage({
-			// 	key:'isPwd',
-			// 	success:(res)=>{
-			// 		if(res.data){
-			// 			this.hideBox = true;
-			// 		}else{
-			// 			this.focusStata = true;
-			// 		}
-			// 	}
-			// })
-		}
 	}
 </script>
 

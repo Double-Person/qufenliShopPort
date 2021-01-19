@@ -302,9 +302,6 @@ export default {
 				this.hideInput =false;
 				this.categoryName = ''
 				this.num = null;
-			
-			// let arr = { id: this.inputVlue.length + 1, text: this.inputVlue };
-			// this.itemList.push(arr);
 		},
 		// 修改分类 等待接口
 		amendItems () {
@@ -341,22 +338,7 @@ export default {
 				this.num = ''
 			}
 		},
-		// 上传图片
-		// uploadImg(id) {
-		// 	uni.chooseImage({
-		// 		count: 6, //默认9
-		// 		sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-		// 		sourceType: ['album', 'camera'], //从相册选择
-		// 		success: res => {		
-		// 			res.tempFilePaths.map((item, index) => {
-						
-		// 				this.imgList[index].imgUrl=item
-		// 				this.imgList[index].imgHide=true
-		// 			});
-				
-		// 		}
-		// 	});
-		// },
+	
 		// 点击单个图片项上传
 		addItem(i){
 			uni.chooseImage({
@@ -376,7 +358,6 @@ export default {
 					                file: 'test'
 					            },
 					            success: (uploadFileRes) => {
-												
 									this.imgList[i].imgUrl= JSON.parse(uploadFileRes.data).data
 									this.imgList[i].imgHide=true
 					            },

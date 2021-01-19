@@ -5,7 +5,7 @@
 
 		<view class="content">
 			<view class="fl-center-between user-info">
-				
+
 				<view class="user-ava">
 					<image :src="baseImgUrl + shopInfo.BGIMG" mode=""></image>
 				</view>
@@ -47,7 +47,7 @@
 						提现到
 					</view>
 					<view class="info-text">
-			
+
 						<text>{{ cardNum == '' && '请选择' || cardNum == bindList.Wx && '微信' || cardNum == bindList.Ali && '支付宝' }} {{ cardNum }}</text>
 						<!-- 招商银行（8707） -->
 						<!-- {{list[0].BANK}} ({{ (list[0].CARDNO).length > 4 ? (list[0].CARDNO).slice((list[0].CARDNO).length-4, (list[0].CARDNO).length) : list[0].CARDNO }}) -->
@@ -56,7 +56,7 @@
 				<view class="icon" @click="showCardList">
 					<image class="img" src="/static/images/more.png" mode=""></image>
 				</view>
-			
+
 			</view>
 			<view class="" v-show="isShowChangeCard" class="change-card-list">
 				<view class="list">
@@ -89,7 +89,13 @@
 <script>
 	// header
 	import commonHeader from "@/components/common-header/common-header";
-	import { withdrawal, backCardInfo, wxtx, alitx, baseImgUrl } from "@/common/apis.js";
+	import {
+		withdrawal,
+		backCardInfo,
+		wxtx,
+		alitx,
+		baseImgUrl
+	} from "@/common/apis.js";
 	export default {
 		components: {
 			commonHeader,
@@ -105,21 +111,20 @@
 				money: null,
 				cardNum: '', // 卡号
 				kbalance: 0, // uni.setStorageSync('kbalance')
-				openid: ''//ofTYkxBM2Jh0KluonnXzNpLLxYuA'
+				openid: '' //ofTYkxBM2Jh0KluonnXzNpLLxYuA'
 			};
 		},
 		onLoad(opt) {
 			// this.getBackCardInfo()
 			this.shopInfo = uni.getStorageSync('shopInfo');
-			this.kbalance = uni.getStorageSync('kbalance');
-			
-			if(opt.bindList){
+			// this.kbalance = uni.getStorageSync('kbalance');
+			this.kbalance = this.shopInfo.BALANCE
+
+			if (opt.bindList) {
 				this.bindList = JSON.parse(opt.bindList)
 			}
-			
-			// #ifdef APP-PLUS
-			this.getOpenIdByWchat();
-			// #endif
+
+
 		},
 		methods: {
 			//  转银行卡账号 和手机号
@@ -135,6 +140,12 @@
 				this.type = type;
 				this.cardNum = card
 				this.isShowChangeCard = false
+				// #ifdef APP-PLUS
+				if (type == 'wechat') {
+					this.getOpenIdByWchat();
+				}
+				// #endif
+
 			},
 			showCardList() {
 				this.isShowChangeCard = !this.isShowChangeCard
@@ -148,10 +159,10 @@
 			balanceAll() {
 				this.money = this.kbalance
 			},
-		
+
 			// 提现
 			getWithdrawal() {
-				if(this.kbalance <= 0) {
+				if (this.kbalance <= 0) {
 					return uni.showToast({
 						title: '暂无可提现金额',
 						icon: 'none'
@@ -161,52 +172,37 @@
 
 				this.money = Number(Number(this.money).toFixed(2))
 				if (this.money <= 0) {
-
 					// this.money = null
-					uni.showToast({
-						duration: 2000,
-						title: '请输入正确的提现金额',
-						icon: 'none'
-					})
-					return false;
+					return uni.showToast({ title: '请输入正确的提现金额', icon: 'none' })
 				}
-console.log(this.cardNum)
-				
+
 				if (!this.cardNum) {
-					return uni.showToast({
-						title: '请选择提现位置',
-						icon: 'none'
-					})
+					return uni.showToast({ title: '请选择提现位置', icon: 'none' })
 				}
-				if(!this.openid) {
-					 
-					if(this.type == 'wechat') {
-						uni.showToast({
-							title: '请授权登录',
-							icon: 'none'
-						})
+				if (!this.openid) {
+					if (this.type == 'wechat') {
+						uni.showToast({ title: '请授权登录', icon: 'none' })
 						this.getOpenIdByWchat()
 						return false
 					}
-					
-					
+
+
 				}
-				
+
 				let obj = {
-					id:shopId, // 参数userinfo_id  用户id
+					id: shopId, // 参数userinfo_id  用户id
 					types: 1, // 0用户、1商家
 					TYPES: 1, // 0用户、1商家
 					money: Number(this.money), // amount  金额  
 					openid: this.openid
 				}
-				console.log(obj)
 				// 微信提现
-				if(this.type == 'wechat') {
+				if (this.type == 'wechat') {
 					this.weChatWithdrawal(obj)
-				}else if(this.type == 'ali') {
+				} else if (this.type == 'ali') {
 					this.aliWithdrawal(obj)
 				}
-				
+
 			},
 			// 微信提现
 			weChatWithdrawal(obj) {
@@ -222,15 +218,16 @@ console.log(this.cardNum)
 							icon: 'none'
 						})
 					}
-				
-					
+
+
 				})
 			},
-			
+
 			// 支付宝提现
 			aliWithdrawal(obj) {
 				obj.openid = '';
 				obj.zfb = this.cardNum;
+				
 				alitx(obj).then(res => {
 					if (res.msgType == 0) {
 						uni.showToast({
@@ -239,11 +236,11 @@ console.log(this.cardNum)
 						})
 					} else {
 						uni.showToast({
-							title: res.returnMsg || '提现失败' ,
+							title: res.returnMsg || '提现失败',
 							icon: 'none'
 						})
 					}
-				
+
 					setTimeout(() => {
 						uni.navigateTo({
 							url: '/pages/personal/personal'
@@ -260,7 +257,6 @@ console.log(this.cardNum)
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
-								console.log('用户昵称为：', infoRes.userInfo);
 								that.openid = infoRes.userInfo.openId
 							}
 						});
@@ -311,11 +307,12 @@ console.log(this.cardNum)
 		.user-ava {
 			width: 100rpx;
 			height: 100rpx;
-			
+
 			border-radius: 50%;
 			border: none;
 			overflow: hidden;
-			image{
+
+			image {
 				width: 100rpx;
 				height: 100rpx;
 				object-fit: cover;

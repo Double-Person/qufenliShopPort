@@ -21,15 +21,6 @@
 			</view>
 		</view>
 		<view class="index-content">
-			<!-- 			<view class="index-content-one">
-				<view class="index-content-one-left">
-					<text>80000.00</text>
-					<view>
-						可提现额
-					</view>
-				</view>
-				<text class="index-content-one-right" @tap="goMycard">提现</text>
-			</view> -->
 			<view class="index-content-item" @tap="goOrderlist(1)">
 				<view>
 					今日收益
@@ -67,7 +58,7 @@
 			</view>
 		</view>
 		<!-- tabbar -->
-		<tabbar active="1"></tabbar>
+		<tabbar active="1" />
 	</view>
 </template>
 
@@ -209,9 +200,6 @@
 					})
 				}
 				
-				// uni.navigateTo({
-				// 	url: "../myCard/myCard"
-				// })
 			},
 			//   金纬度转位置
 			conversionPoint(res) {
@@ -227,7 +215,6 @@
 						this.showCity = data.data.regeocode.addressComponent.district
 					},
 					fail(err) {
-
 						uni.showToast({
 							title: "定位失败",
 							icon: 'none'
@@ -240,7 +227,6 @@
 				uni.getLocation({
 					type: 'wgs84',
 					success: (res) => {
-
 						this.longitude = res.longitude
 						this.latitude = res.latitude
 						this.conversionPoint(res)

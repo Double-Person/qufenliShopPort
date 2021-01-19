@@ -54,12 +54,10 @@
 			tkiQrcode
 		},
 		onLoad(opt) {
-			
 			this.codeVal.money = opt.money || 0
 			this.codeVal.shopId = uni.getStorageSync('shopId');
 			const shopInfo =  uni.getStorageSync('shopInfo');
 			// this.icon = this.baseImgUrl + shopInfo.BGIMG;
-	
 			setTimeout(() =>{
 				this.$refs.qrcode._makeCode()
 			}, 200)
@@ -78,7 +76,6 @@
 			// 保存收款码
 			_saveCode() {
 				this.$refs.qrcode._saveCode();
-				
 			},
 		}
 	}

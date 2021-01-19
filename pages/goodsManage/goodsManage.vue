@@ -130,17 +130,11 @@
 					goods_id: this.deleteGoodsId
 				}).then(res => {
 					if (res.msgType == 0) {
-						uni.showToast({
-							title: '删除成功',
-							icon: 'none'
-						})
+						uni.showToast({ title: '删除成功', icon: 'none' })
 						this.close()
 						this.getGoods()
 					} else {
-						uni.showToast({
-							title: '删除失败',
-							icon: 'none'
-						})
+						uni.showToast({ title: '删除失败', icon: 'none' })
 					}
 				})
 			},

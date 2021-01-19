@@ -9,7 +9,7 @@
 		<view class="login-content">
 			<view class="login-content-item">
 				<text>+86</text>
-				<input type="text" v-model="phone" @input="inputPhone" :maxlength="11" placeholder="请输入手机号" placeholder-style="color:#999" />
+				<input type="number" v-model="phone" @input="inputPhone" :maxlength="11" placeholder="请输入手机号" placeholder-style="color:#999" />
 			</view>
 			<view class="login-content-item password">
 				<text>密码</text>

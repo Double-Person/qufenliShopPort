@@ -30,19 +30,8 @@
 				</view>
 			</view>
 		</view>
-		<!-- 内容结束 -->
 
-		<!-- 验证密码蒙层 -->
-		<!-- 		<view class="shopManage-testPwd" :class="hideBox?'hideBox':''">
-			<view class="shopManage-testPwd-title">
-				请输入登录密码
-			</view>
-			<testCode @isPwdStata="inputPwdStata" :focusStata='focusStata'></testCode>
-		</view> -->
-
-
-		<!-- tabbar -->
-		<tabbar active="4"></tabbar>
+		<tabbar active="4" />
 	</view>
 </template>
 
@@ -63,9 +52,7 @@
 		data() {
 			return {
 				baseImgUrl: baseImgUrl,
-				myEvaluateList: [
-					// {id:"01",title:"豆浆油条先生",date:"2019-09-01 15:30","goodsUrl":"../../static/images/content01.png",date:"2019-11-11 08:11",text:"这个意大利面真的是撒飒飒太好吃下次还要再来飒飒as一份这个意大利面真的是太好吃下次还要再来一份大厦上师大奥"},
-				],
+				myEvaluateList: [],
 				// 显示隐藏密码框
 				hideBox: false,
 				focusStata: false,
@@ -78,7 +65,8 @@
 			// 获取评论列表
 			async getEvalist() {
 				uni.showLoading({
-					title: '加载中'
+					title: '加载中',
+					mask: true
 				})
 				const {
 					returnMsg,
@@ -91,15 +79,20 @@
 			},
 			// 删除
 			async deleteEvaluate(EVALUATE_ID) {
-				const { msgType } = await delShopEvaluate({EVALUATE_ID})
+				const {
+					msgType
+				} = await delShopEvaluate({
+					EVALUATE_ID
+				})
 				msgType == 0 && this.getEvalist()
-				msgType == 0 && uni.showToast({ title: '删除成功！' })
+				msgType == 0 && uni.showToast({
+					title: '删除成功！'
+				})
 			},
 			// 密码输入状态
 			inputPwdStata(e) {
-				if (e) {
+				if (e)
 					this.hideBox = true
-				}
 			},
 			// 进入评价详情
 			goDetails(item) {

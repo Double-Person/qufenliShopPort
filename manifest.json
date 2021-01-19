@@ -1,9 +1,9 @@
 {
     "name" : "趣分利商家端",
-    "appid" : "__UNI__1EBB0A6",
+    "appid" : "__UNI__01FD6C9",
     "description" : "",
-    "versionName" : "1.0.0",
-    "versionCode" : "100",
+    "versionName" : "1.0.2",
+    "versionCode" : 102,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -56,8 +56,8 @@
                 "ad" : {},
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "wx9a062afb3e6ff487",
-                        "appsecret" : "98c09155569b0ee32e09333fdde6b7cf",
+                        "appid" : "wx1e9df48bcf6ee639",
+                        "appsecret" : "1138dfaff435e6fdf4cdee3be65de2e3",
                         "UniversalLinks" : ""
                     }
                 },

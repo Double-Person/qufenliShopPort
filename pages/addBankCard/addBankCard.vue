@@ -76,7 +76,6 @@
 			// 添加银行卡
 			addCard(){
 				if(this.cardState&&this.usernameState){
-					console.log(this.username,this.card)  // 
 					uni.getStorage({
 					    key: 'shopId',
 					    success:  (res)=> {
@@ -87,16 +86,6 @@
 					    }
 					});
 				 
-					
-					return false;
-					uni.showToast({
-						title:'添加成功'
-					})
-					
-					getApp().globalData.cardStata = true;
-					uni.navigateTo({
-						url:'../myCard/myCard'
-					})
 				}else{
 					uni.showToast({
 						title:'请先输入正确信息',

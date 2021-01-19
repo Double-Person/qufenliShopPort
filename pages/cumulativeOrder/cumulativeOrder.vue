@@ -162,20 +162,11 @@
 			uni.getStorage({
 				key: 'shopId',
 				success: (res) => {
-					uni.showLoading({
-						title: '加载中',
-						mask: true
-					})
-					orderTotal({
-						shop_id: res.data,
-						data: ''
-					}).then(res => {
+					uni.showLoading({ title: '加载中', mask: true })
+					orderTotal({ shop_id: res.data, data: '' }).then(res => {
 						this.orderList = res.returnMsg.type_order
 					}).catch(err => {
-						uni.showToast({
-							title: '网络出错啦!',
-							icon: 'none'
-						})
+						uni.showToast({ title: '网络出错啦!', icon: 'none' })
 					}).finally(() => uni.hideLoading())
 				}
 			})
