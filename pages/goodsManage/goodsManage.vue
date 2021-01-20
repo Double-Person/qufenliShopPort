@@ -42,10 +42,10 @@
 										</view>
 									</view>
 								</view>
-								<view class="item-evaluate" v-if="item1.CONTENT">
-									{{item1.CONTENT}}
+								<view class="item-evaluate" v-if="item1.DETAILS">
+									{{item1.DETAILS}}
 								</view>
-								<view class="item-btn" :style="{'margin-top': item1.CONTENT? '0': '20rpx'}">
+								<view class="item-btn" :style="{'margin-top': item1.DETAILS? '0': '20rpx'}">
 									<text @tap="changeData(index,index1)">修改</text>
 									<text @click="delGoods(item1)">删除</text>
 								</view>
@@ -246,7 +246,6 @@
 						return item
 					})
 				}
-				console.log('++++', this.list)
 			},
 
 		},

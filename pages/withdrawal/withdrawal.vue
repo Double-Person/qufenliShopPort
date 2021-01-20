@@ -171,9 +171,9 @@
 				let shopId = uni.getStorageSync('shopId');
 
 				this.money = Number(Number(this.money).toFixed(2))
-				if (this.money <= 0) {
+				if (this.money < 1) {
 					// this.money = null
-					return uni.showToast({ title: '请输入正确的提现金额', icon: 'none' })
+					return uni.showToast({ title: '提现金额必须大于1元', icon: 'none' })
 				}
 
 				if (!this.cardNum) {

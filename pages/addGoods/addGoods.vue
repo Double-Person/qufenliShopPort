@@ -181,6 +181,10 @@ export default {
 		// 添加修改商品
 		addGoods() {
 			this.hideMask=true
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			})
 			// 上传商品  images1
 			let img = {}
 			this.imgList.forEach((item, index) => {
@@ -206,13 +210,14 @@ export default {
 			
 			if(this.type == 'add') {
 				addGoodsInfo(obj).then(res => {
+					uni.hideLoading()
 					if(res.msgType == 0){
 						uni.showToast({ title: '添加成功', icon: 'none' })
 						setTimeout(() => {
 							uni.navigateTo({ url: "../goodsManage/goodsManage" })
 						}, 1000)	
 					}else{
-					
+					uni.showToast({ title: '添加失败', icon: 'none' })
 					}
 				});
 			}
@@ -221,13 +226,12 @@ export default {
 			if(this.type == 'edit') {
 				obj.goods_id = this.GOODS_ID
 				// goodsimgs_id1  GOODSIMGS_ID
-				
-				
 				uni.request({
 					url: baseUrl + '/api/merchantgoods/editGoodsInfo',
 					data: obj,
 					method:'POST',
 					success(res) {
+						uni.hideLoading()
 						if(res.data.msgType == 0){
 							uni.showToast({ title: '修改成功', icon: 'none' })
 							setTimeout(() => {
@@ -253,6 +257,10 @@ export default {
 		},
 		// 查询单个商品详情
 		_findByShopId(goods_id) {
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			})
 			findByShopId({goods_id}).then(res => {
 				let {goodInfo: {CATEGORY_ID, NAME, PRICE, DETAILS, NORMS, STOCK, GOODS_ID, STATES, PUSHHP}, imges } = res.returnMsg;
 				this.params.category_id =CATEGORY_ID
@@ -266,12 +274,9 @@ export default {
 				this.PUSHHP = PUSHHP
 				imges.forEach( (item, index) => {
 					this.imgList[index].imgUrl = item.IMG
-					this.imgList[index].GOODSIMGS_ID = item.GOODSIMGS_ID
-					
-				} )
-			
-		
-			})
+					this.imgList[index].GOODSIMGS_ID = item.GOODSIMGS_ID	
+				} )		
+			}).finally(() => uni.hideLoading())
 		},
 		// 输入内容
 		inputValue(e) {
@@ -280,32 +285,29 @@ export default {
 		// 获取分类列表
 		async getItem () {
 			const { returnMsg, msgType } = await itemListArr({ shop_id: this.shopId })
-			
 			msgType == 0 && (this.itemList = returnMsg)
-			
 			let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
 			this.text = CATEGORY_NAME && CATEGORY_NAME.CATEGORY_NAME || '';
 		},
 		// 添加分类
 		async addItems () {
-				const params = {
-					shop_id: this.shopId,
-					name: this.categoryName,
-					num: this.num
-				}
-				const { msgType, errMsg } = await addGoodsItem(params)
-				uni.showToast({
-					title: errMsg,
-					icon: 'none'
-				})
-				msgType == 0 && this.getItem()
-				this.hideInput =false;
-				this.categoryName = ''
-				this.num = null;
+			const params = {
+				shop_id: this.shopId,
+				name: this.categoryName,
+				num: this.num
+			}
+			const { msgType, errMsg } = await addGoodsItem(params)
+			uni.showToast({
+				title: errMsg,
+				icon: 'none'
+			})
+			msgType == 0 && this.getItem()
+			this.hideInput =false;
+			this.categoryName = ''
+			this.num = null;
 		},
 		// 修改分类 等待接口
 		amendItems () {
-			
 			let obj = {
 				shop_id: this.shopId,
 				name:this.categoryName,
@@ -315,7 +317,7 @@ export default {
 			categoryUpdate(obj).then(res => {
 				if(res.msgType == 0){
 					uni.showToast({
-						title: res.errMsg,
+						title: res.errMsg || '提交失败',
 						icon: 'none'
 					})
 					// this.showDrawer =false;
