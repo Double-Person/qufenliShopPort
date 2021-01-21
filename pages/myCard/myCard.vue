@@ -9,7 +9,7 @@
 			</view>
 			<view class="kabao">
 				<!-- 微信 -->
-				<view class="myCard-content-item">
+				<!-- <view class="myCard-content-item">
 					<view class="left">
 						<text class="iconfont icon-weixin" style="color: #34C117;"></text>
 						<view class="text">
@@ -22,7 +22,7 @@
 					<view class="right" @tap="goBindWeixin">
 						{{info && info.Wx? '重新绑定' : '去绑定'}}
 					</view>
-				</view>
+				</view> -->
 				<!-- 支付宝 -->
 				<view class="myCard-content-item">
 					<view class="left">
@@ -89,7 +89,6 @@
 				    key: 'shopId',
 				    success:  (res)=> {
 						shopBank({shop_id: res.data}).then(res => {
-							console.log(res)
 							this.info = res.returnMsg
 						})
 				    }

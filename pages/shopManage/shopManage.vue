@@ -129,6 +129,9 @@
 				if(this.shopInfo.BGIMG) {
 					this.imgUrl = this.shopInfo.BGIMG
 					this.imgHide = false;
+					
+					this.shopInfo.NOTICE = (returnMsg.NOTICE == 'null' ? '' : returnMsg.NOTICE);
+					this.shopInfo.WX = (returnMsg.WX == 'null' ? '' : returnMsg.WX);
 				}
 			},
 			// 前往设置密码
@@ -185,7 +188,7 @@
 		
 			// 提交
 			submit(){
-				let {SHOP_NAME, CITY, AREA, LATITUDE, LONGITUDE, NOTICE, PHONE, BGIMG ,WX, FULLADD} = this.shopInfo
+				let {SHOP_NAME, CITY, AREA, LATITUDE, LONGITUDE, NOTICE, PHONE, BGIMG ,WX, FULLADD} = this.shopInfo;
 				const params = {
 					shop_id:uni.getStorageSync('shopId'),
 					shop_name:SHOP_NAME,

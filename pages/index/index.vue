@@ -17,7 +17,7 @@
 				<view>
 					账户余额
 				</view>
-				<text @tap="goMycard">{{shopInfoObj.BALANCE}}</text>
+				<text @tap="goMycard">{{shopInfoObj.BALANCE || 0}}</text>
 			</view>
 		</view>
 		<view class="index-content">
@@ -25,32 +25,32 @@
 				<view>
 					今日收益
 				</view>
-				<text>{{shopInfoObj.todayincome}}元</text>
+				<text>{{shopInfoObj.todayincome || 0}}元</text>
 			</view>
 			<view class="index-content-item" @tap="goOrderlist(2)">
 				<view>
 					累计收益
 				</view>
-				<text>{{shopInfoObj.income}}元</text>
+				<text>{{shopInfoObj.income || 0}}元</text>
 			</view>
 			<view class="index-content-item" @tap="goOrderlist(3)">
 				<view>
 					今日订单
 				</view>
-				<text>{{shopInfoObj.todayorder}}笔</text>
+				<text>{{shopInfoObj.todayorder || 0}}笔</text>
 			</view>
 			<view class="index-content-item" @tap="goOrderlist(4)">
 				<view>
 					累计订单
 				</view>
-				<text>{{shopInfoObj.order}}笔</text>
+				<text>{{shopInfoObj.order || 0}}笔</text>
 			</view>
 			
 			<view class="index-content-item" @tap="goOrderlist(5)">
 				<view>
 					线下收益
 				</view>
-				<text>{{shopInfoObj.findmoney}}元</text>
+				<text>{{shopInfoObj.findmoney || 0}}元</text>
 			</view>
 			<!-- 商家收款 -->
 			<view class="submit-btn" @tap="goCodeReceivables">
@@ -189,16 +189,18 @@
 		methods: {
 			// 进入我的卡包
 			goMycard() {
-				// if(Object.keys(this.bindList).length > 0) {
-				if(this.bindList.Ali || this.bindList.Wx  ) {
-					uni.navigateTo({  // bindList
-						url: "../withdrawal/withdrawal?bindList=" + JSON.stringify(this.bindList)
-					})
-				}else{
-					uni.navigateTo({
-						url: "../myCard/myCard"
-					})
-				}
+				uni.navigateTo({  // bindList
+					url: "../withdrawal/withdrawal?bindList=" + JSON.stringify(this.bindList)
+				})
+				// if(this.bindList.Ali || this.bindList.Wx  ) {
+				// 	uni.navigateTo({  // bindList
+				// 		url: "../withdrawal/withdrawal?bindList=" + JSON.stringify(this.bindList)
+				// 	})
+				// }else{
+				// 	uni.navigateTo({
+				// 		url: "../myCard/myCard"
+				// 	})
+				// }
 				
 			},
 			//   金纬度转位置

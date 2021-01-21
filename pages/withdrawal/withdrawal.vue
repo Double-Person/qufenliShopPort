@@ -27,7 +27,7 @@
 			<view class="money">
 				<image class="img" src="/static/images/money.png" mode=""></image>
 				<view class="mask top-mask">
-					￥ {{shopInfo.BALANCE}}
+					￥ {{shopInfo.BALANCE || 0}}
 					<!-- {{item.zbalance}} -->
 				</view>
 				<view class="mask bottom-mask">
@@ -48,7 +48,7 @@
 					</view>
 					<view class="info-text">
 
-						<text>{{ cardNum == '' && '请选择' || cardNum == bindList.Wx && '微信' || cardNum == bindList.Ali && '支付宝' }} {{ cardNum }}</text>
+						<text>{{ cardNum == '' && '请选择' || cardNum == bindList.Ali && '支付宝' || cardNum == 'wx' && '微信' }}</text>
 						<!-- 招商银行（8707） -->
 						<!-- {{list[0].BANK}} ({{ (list[0].CARDNO).length > 4 ? (list[0].CARDNO).slice((list[0].CARDNO).length-4, (list[0].CARDNO).length) : list[0].CARDNO }}) -->
 					</view>
@@ -60,11 +60,11 @@
 			</view>
 			<view class="" v-show="isShowChangeCard" class="change-card-list">
 				<view class="list">
-					<view class="fl-center-between item" @click="changeCardId(bindList.Wx, 'wechat')" v-if="bindList.Wx">
-						<view>微信 <text style="margin-left: 30rpx;">{{bindList.Wx}}</text></view>
+					<view class="fl-center-between item" @click="changeCardId('wx', 'wechat')" v-if="bindList.Wx">
+						<view>微信 <text style="margin-left: 30rpx;"></text></view>
 						<icon type="success_no_circle" size="20" v-if="cardNum == bindList.Wx" />
 					</view>
-					<view class="fl-center-between item" @click="changeCardId(bindList.Ali, 'ali')" v-if="bindList.Ali">
+					<view class="fl-center-between item" @click="changeCardId(bindList.Ali, 'ali')" v-if="bindList.Ali && bindList.Ali!= 'null'">
 						<view>支付宝 <text style="margin-left: 30rpx;">{{bindList.Ali}}</text></view>
 						<icon type="success_no_circle" size="20" v-if="cardNum == bindList.Ali" />
 					</view>
@@ -122,6 +122,7 @@
 
 			if (opt.bindList) {
 				this.bindList = JSON.parse(opt.bindList)
+				this.bindList.Wx = 'wx'
 			}
 
 

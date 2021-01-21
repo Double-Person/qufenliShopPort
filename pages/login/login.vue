@@ -178,15 +178,15 @@
 			// 	})
 			// },
 			// 保存密码
-			savePwd() {
+			async savePwd() {
 				this.rememberPwdHide = true;
 				// 保存状态到本地
-				uni.setStorage({
+				await uni.setStorage({
 					key: 'saveStataShop',
 					data: true
 				})
 				// 账号密码保存
-				uni.setStorage({
+				await uni.setStorage({
 					key: 'name',
 					data: JSON.stringify(this.saveObj),
 					success() {

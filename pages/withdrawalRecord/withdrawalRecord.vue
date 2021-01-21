@@ -109,7 +109,15 @@
 							TYPES: 1    // 0 用户 1 商家
 						}
 						withdrawalInfo(obj).then(res => {
-							this.listData = res.returnMsg
+							if(res.msgType == 0) {
+								this.listData = res.returnMsg
+							}else {
+								uni.showToast({
+									title: res.returnMsg || '请求失败！',
+									icon: 'none'
+								})
+							}
+							
 						}).catch(err => {
 							uni.showToast({
 								title: '请求失败！',
