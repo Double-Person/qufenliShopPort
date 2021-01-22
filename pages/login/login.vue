@@ -13,7 +13,7 @@
 			</view>
 			<view class="login-content-item password">
 				<text>密码</text>
-				<input type="password" v-model="pwd" @input="inputPwd" :maxlength="6" placeholder="请输入6位数密码" placeholder-style="color:#999" />
+				<input type="password" v-model="pwd" @input="inputPwd" placeholder="请输入密码" placeholder-style="color:#999" />
 			</view>
 			<view class="tips">
 				<text @tap="forgetPwd">忘记密码</text>
@@ -96,7 +96,7 @@
 			// 获取输入手机号
 			inputPhone(e) {
 				this.phone = e.detail.value;
-				if (e.detail.value.length === 11 && this.pwd.length === 6) {
+				if (this.phone.length === 11 && this.pwd.length > 0) {
 					this.btnState = false
 				} else {
 					this.btnState = true
@@ -105,7 +105,7 @@
 			// 获取登录密码
 			inputPwd(e) {
 				this.pwd = e.detail.value;
-				if (e.detail.value.length === 6 && this.phone.length === 11) {
+				if (this.pwd.length >0 && this.phone.length === 11) {
 					this.btnState = false
 				} else {
 					this.btnState = true
