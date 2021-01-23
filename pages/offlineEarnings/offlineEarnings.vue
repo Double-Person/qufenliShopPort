@@ -120,8 +120,7 @@
 							SHOP_ID: res.data,
 							CREATETIME: (start == 0 ? '' : this.date)
 						}).then(res => {
-							this.listData = res.varList
-							
+							this.listData = res.varList					
 						}).catch(err => {
 							uni.showToast({
 								title: '网络出错啦!',

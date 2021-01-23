@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@dcloudio/types@^2.0.16":
+  version "2.0.22"
+  resolved "https://registry.npm.taobao.org/@dcloudio/types/download/@dcloudio/types-2.0.22.tgz#b2be8d512628f36d20297fe8702ef66189276859"
+  integrity sha1-sr6NUSYo820gKX/ocC72YYknaFk=
+
+luch-request@^3.0.4:
+  version "3.0.5"
+  resolved "https://registry.npm.taobao.org/luch-request/download/luch-request-3.0.5.tgz#13f25661166b3ce7c861f1a11d3fc6990bc85b28"
+  integrity sha1-E/JWYRZrPOfIYfGhHT/GmQvIWyg=
+  dependencies:
+    "@dcloudio/types" "^2.0.16"
+
 uni-request@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uni-request/-/uni-request-1.0.2.tgz#aa276b1e86d5822e4a747a48464892274487dc52"
