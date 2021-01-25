@@ -19,7 +19,9 @@
 						<text>下单时间：{{item.CREATETIME}}</text>
 						<view>商品id：{{item.GOODS_ID}}</view>
 						<view>评分：{{ item.SCORE || 0 }}</view>
-						<view>支付方式：{{ (item.PAYTYPEY == 2 && '余额支付') || (item.PAYTYPEY == 0 && '微信支付') || (item.PAYTYPEY == 1 && '支付宝支付') || (item.PAYTYPEY == 3 && '银行卡支付') }}</view>
+						<view>
+							支付方式：
+							{{ (item.PAYTYPEY == 2 && '余额支付') || (item.PAYTYPEY == 0 && '微信支付') || (item.PAYTYPEY == 1 && '支付宝支付') || (item.PAYTYPEY == 3 && '银行卡支付') }}</view>
 						<view>收货地址：{{item.ADDRESS}}</view>
 					</view>
 

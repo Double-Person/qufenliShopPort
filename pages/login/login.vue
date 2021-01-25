@@ -63,33 +63,39 @@
 			}
 		},
 		onLoad() {
-			let saveStataShop = uni.getStorage('saveStataShop');
-
-			if (saveStataShop) {
-				try {
-					// 获取本地存储登录信息
-					uni.getStorage({
-						key: 'name',
-						success: (data) => {
-							var res = JSON.parse(data.data);
-							this.phone = res.phone;
-							this.pwd = res.password;
-							console.log(res)
-							this.goIndex();
+			let that = this;
+			uni.getStorage({
+			    key: 'saveStataShop',
+				success: function (res) {
+					let saveStataShop = res.data;
+					if (saveStataShop) {
+						try {
+							// 获取本地存储登录信息
+							uni.getStorage({
+								key: 'name',
+								success: (data) => {
+									var res = JSON.parse(data.data);
+									that.phone = res.phone;
+									that.pwd = res.password;
+									that.goIndex();
+								}
+							})
+							uni.getStorage({
+								key: 'outLogin',
+								success: (res) => {
+									if (res.data) {
+										that.rememberPwdHide = true;
+									}
+								}
+							})
+						} catch (e) {
+							//TODO handle the exception
 						}
-					})
-					uni.getStorage({
-						key: 'outLogin',
-						success: (res) => {
-							if (res.data) {
-								this.rememberPwdHide = true;
-							}
-						}
-					})
-				} catch (e) {
-					//TODO handle the exception
+					}
 				}
-			}
+			});
+
+			
 
 		},
 		methods: {
@@ -185,6 +191,7 @@
 					key: 'saveStataShop',
 					data: true
 				})
+			
 				// 账号密码保存
 				await uni.setStorage({
 					key: 'name',
@@ -204,19 +211,24 @@
 				})
 			},
 			// 取消保存
-			cancelSave() {
+			async cancelSave() {
+				console.log('--------')
 				// 保存状态到本地
-				uni.setStorage({
+				await uni.setStorage({
 					key: 'saveStataShop',
 					data: false
 				})
 				// 移出本地数据
-				uni.removeStorage({
+				await uni.removeStorage({
 					key: 'name',
 					success: () => {
+						
+					},
+	
+					complete() {
 						this.rememberPwdHide = true;
 						uni.reLaunch({
-							url: "../index/index"
+							url: "/pages/index/index"
 						})
 					}
 				})
