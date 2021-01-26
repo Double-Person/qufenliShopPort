@@ -36,7 +36,7 @@
 				<view class="addGoods-content-addimg">
 					<view class="title">
 						<view>添加商品图片</view>
-						<text class="iconfont icon-xiangji"></text>
+						<!-- <text class="iconfont icon-xiangji"></text> -->
 						 <!-- @tap="uploadImg" -->
 					</view>
 					<view class="content">

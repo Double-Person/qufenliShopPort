@@ -19,6 +19,9 @@
 				<!-- {{item.USID || '商家回复'}} -->
 				<text class="name"> {{ showName(item.USID) }}:</text> <!-- {{item.USID || '商家回复'}} -->
 				<text class="comment-content">{{ showContent(item.REPLY, item.CONTENT ) }} </text>
+				<view class="content-img-warp" v-if="item.IMGS">
+					<image :src="baseImgUrl + item.IMGS" mode=""></image>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -28,7 +31,8 @@
 	import commonHeader from "@/components/common-header/common-header";
 	import {
 		getShopEvaluateDetail,
-		getShopComment
+		getShopComment,
+		baseImgUrl
 	} from '@/common/apis.js'
 
 	export default {
@@ -38,6 +42,7 @@
 		},
 		data() {
 			return {
+				baseImgUrl: baseImgUrl,
 				id: null,
 				goods_id: null,
 				itemInfo: {},
@@ -114,6 +119,14 @@
 </script>
 
 <style lang="less" scoped>
+	.content-img-warp{
+		width: 100%;
+		image{
+			width: 150rpx;
+			height: 150rpx;
+			margin-left: 150rpx;
+		}
+	}
 	.comment {
 		padding: 15rpx 50rpx;
 
