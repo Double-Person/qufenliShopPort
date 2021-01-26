@@ -25,6 +25,7 @@
 						<view class="top">
 							<view class="name">
 								<text>{{item.NUMBER}}</text>
+								<view>{{item.PHONE}}</view>
 							</view>
 							<view class="price">
 								+￥{{item.ORIGINALPRICE}}
