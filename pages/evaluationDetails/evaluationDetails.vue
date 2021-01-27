@@ -20,7 +20,7 @@
 				<text class="name"> {{ showName(item.USID) }}:</text> <!-- {{item.USID || '商家回复'}} -->
 				<text class="comment-content">{{ showContent(item.REPLY, item.CONTENT ) }} </text>
 				<view class="content-img-warp" v-if="item.IMGS">
-					<image :src="baseImgUrl + item.IMGS" mode=""></image>
+					<image :src="baseImgUrl + item.IMGS" mode="" @click="previewImage(baseImgUrl + item.IMGS)"></image>
 				</view>
 			</view>
 		</view>
@@ -55,6 +55,9 @@
 			this.getInitDetail()
 		},
 		methods: {
+			previewImage(urls) {
+				uni.previewImage({ urls: [urls] });
+			},
 			showContent(REPLY, CONTENT) {
 				if (REPLY) {
 					if (REPLY == 'null') return CONTENT || ''

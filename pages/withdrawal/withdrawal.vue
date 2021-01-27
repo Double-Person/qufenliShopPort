@@ -257,8 +257,8 @@
 					success: function(loginRes) {
 						uni.getUserInfo({
 							provider: 'weixin',
-							success: function(infoRes) {
-								that.openid = infoRes.userInfo.openId
+							success: function(infoRes) { 
+								that.openid = infoRes.userInfo.openId;
 							}
 						});
 					}
