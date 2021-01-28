@@ -107,6 +107,8 @@
 					homeInfo({ shop_id: res.data }).then(res1 => {			
 						this.shopInfoObj = res1.returnMsg
 						uni.setStorageSync('shopInfo', res1.returnMsg)
+						// 交易密码
+						uni.setStorageSync('shopPAYPASS', res1.returnMsg.PAYPASS)
 					})
 					// '015915f9770f40b69e35674663f0d001'
 					// 判断商家是否绑定银行卡信息  

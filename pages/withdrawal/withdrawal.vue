@@ -47,18 +47,15 @@
 						提现到
 					</view>
 					<view class="info-text">
-
 						<text>{{ cardNum == '' && '请选择' || cardNum == bindList.Ali && '支付宝' || cardNum == 'wx' && '微信' }}</text>
-						<!-- 招商银行（8707） -->
-						<!-- {{list[0].BANK}} ({{ (list[0].CARDNO).length > 4 ? (list[0].CARDNO).slice((list[0].CARDNO).length-4, (list[0].CARDNO).length) : list[0].CARDNO }}) -->
 					</view>
 				</view>
-				<view class="icon" @click="showCardList">
+				<view class="icon">
 					<image class="img" src="/static/images/more.png" mode=""></image>
 				</view>
 
 			</view>
-			<view class="" v-show="isShowChangeCard" class="change-card-list">
+			<view class="" class="change-card-list">
 				<view class="list">
 					<view class="fl-center-between item" @click="changeCardId('wx', 'wechat')" v-if="bindList.Wx">
 						<view>微信 <text style="margin-left: 30rpx;"></text></view>
@@ -83,10 +80,24 @@
 		</view>
 
 
+		<uni-popup ref="popup" type="dialog">
+			<view class="dialog">
+				<input type="password" v-model="TRADRPASS" placeholder="请输入交易密码"/>
+				<view class="bottom">
+					<view class="is-agree" @click="checkTradrPass(false)">取消</view>
+					
+					<view class="is-agree" @click="checkTradrPass(true)">确定</view>
+				</view>
+			</view>
+		</uni-popup>
+
 	</view>
 </template>
 
 <script>
+	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue'
+	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue'
 	// header
 	import commonHeader from "@/components/common-header/common-header";
 	import {
@@ -99,13 +110,16 @@
 	export default {
 		components: {
 			commonHeader,
+			uniPopup,
+			uniPopupMessage,
+			uniPopupDialog
 		},
 		data() {
 			return {
+				TRADRPASS: '',
 				type: '',
 				baseImgUrl: baseImgUrl,
 				userInfo: {},
-				isShowChangeCard: false,
 				list: [],
 				bindList: {},
 				money: null,
@@ -140,7 +154,6 @@
 			changeCardId(card, type) {
 				this.type = type;
 				this.cardNum = card
-				this.isShowChangeCard = false
 				// #ifdef APP-PLUS
 				if (type == 'wechat') {
 					this.getOpenIdByWchat();
@@ -148,9 +161,7 @@
 				// #endif
 
 			},
-			showCardList() {
-				this.isShowChangeCard = !this.isShowChangeCard
-			},
+		
 			userInfolick() {
 				uni.navigateTo({
 					url: '/pages/shopManage/shopManage'
@@ -169,7 +180,7 @@
 						icon: 'none'
 					})
 				}
-				let shopId = uni.getStorageSync('shopId');
+				
 
 				this.money = Number(Number(this.money).toFixed(2))
 				if (this.money < 1) {
@@ -186,10 +197,30 @@
 						this.getOpenIdByWchat()
 						return false
 					}
-
-
 				}
+				
+				// 判断交易密码
+				this.$refs.popup.open()
+				
+				
 
+			},
+			checkTradrPass(boo) {
+				if(!boo) {
+					this.$refs.popup.close();
+					return false;
+				}
+					
+				let PAYPASS = uni.getStorageSync('shopPAYPASS');
+				if(PAYPASS != this.TRADRPASS) {
+					this.TRADRPASS = '';
+					return uni.showToast({
+						title:"密码错误",
+						icon: 'none'
+					})
+				}
+			
+				let shopId = uni.getStorageSync('shopId');
 				let obj = {
 					id: shopId, // 参数userinfo_id  用户id
 					types: 1, // 0用户、1商家
@@ -203,7 +234,6 @@
 				} else if (this.type == 'ali') {
 					this.aliWithdrawal(obj)
 				}
-
 			},
 			// 微信提现
 			weChatWithdrawal(obj) {
@@ -219,8 +249,8 @@
 							icon: 'none'
 						})
 					}
-
-
+				}).finally(() => {
+					this.$refs.popup.close();
 				})
 			},
 
@@ -247,6 +277,8 @@
 							url: '/pages/personal/personal'
 						})
 					}, 1000)
+				}).finally(() => {
+					this.$refs.popup.close();
 				})
 			},
 			// 获取微信openId
@@ -255,10 +287,14 @@
 				uni.login({
 					provider: 'weixin',
 					success: function(loginRes) {
+						console.log(loginRes)
 						uni.getUserInfo({
 							provider: 'weixin',
-							success: function(infoRes) { 
+							success: (infoRes) => { 
+								// "openId": "oRrdQt7RgF5r0dq8WReEMqNJRpf4",  hx
+								//ofTYkxBM2Jh0KluonnXzNpLLxYuA'
 								that.openid = infoRes.userInfo.openId;
+								
 							}
 						});
 					}
@@ -270,6 +306,27 @@
 </script>
 
 <style lang="less" scoped>
+	.dialog{
+		width: 500rpx;
+		background: #fff;
+		border-radius: 10rpx;
+		padding: 50rpx;
+		input{
+			height: 50rpx;
+			margin: 0 auto;
+			background: #eee;
+		}
+		.bottom{
+			display: flex;
+			justify-content: space-around;
+			margin-top: 50rpx;
+			.is-agree{
+				border-radius: 10rpx;
+				border: 2rpx solid #999;
+				padding: 5rpx 15rpx;
+			}
+		}
+	}
 	.content {
 		width: 690rpx;
 		margin: 0 auto;
