@@ -67,7 +67,7 @@
 						<text></text>
 						<view>
 							共计{{item.counts}}件商品
-							<text>合计 ￥<text>{{item.ACTUALPAY}}</text></text>
+							<text>合计 ￥<text>{{item.PAYABLE}}</text></text>
 						</view>
 					</view>
 				</view>

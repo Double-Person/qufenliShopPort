@@ -116,6 +116,7 @@
 		},
 		data() {
 			return {
+				disabel: false, // tixian
 				TRADRPASS: '',
 				type: '',
 				baseImgUrl: baseImgUrl,
@@ -152,10 +153,11 @@
 			},
 			// 选择提现的卡
 			changeCardId(card, type) {
+				
 				this.type = type;
 				this.cardNum = card
 				// #ifdef APP-PLUS
-				if (type == 'wechat') {
+				if(type == 'wechat' && this.openid =='') {
 					this.getOpenIdByWchat();
 				}
 				// #endif
@@ -210,6 +212,7 @@
 					this.$refs.popup.close();
 					return false;
 				}
+				
 					
 				let PAYPASS = uni.getStorageSync('shopPAYPASS');
 				if(PAYPASS != this.TRADRPASS) {
@@ -219,6 +222,11 @@
 						icon: 'none'
 					})
 				}
+				
+				if(this.disabel) {
+					return false;
+				}
+				this.disabel = true;
 			
 				let shopId = uni.getStorageSync('shopId');
 				let obj = {
@@ -250,6 +258,7 @@
 						})
 					}
 				}).finally(() => {
+					this.disabel = false;
 					this.$refs.popup.close();
 				})
 			},
@@ -278,6 +287,7 @@
 						})
 					}, 1000)
 				}).finally(() => {
+					this.disabel = false;
 					this.$refs.popup.close();
 				})
 			},
