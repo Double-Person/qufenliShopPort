@@ -236,6 +236,7 @@
 					money: Number(this.money), // amount  金额  
 					openid: this.openid
 				}
+				
 				// 微信提现
 				if (this.type == 'wechat') {
 					this.weChatWithdrawal(obj)
@@ -253,13 +254,21 @@
 						})
 					} else {
 						uni.showToast({
-							title: res.errMsg,
+							title: res.returnMsg || '提现失败',
 							icon: 'none'
 						})
 					}
+					
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '/pages/index/index'
+						})
+					}, 1000)
 				}).finally(() => {
-					this.disabel = false;
+					this.TRADRPASS = '';
 					this.$refs.popup.close();
+					// this.disabel = false;
+					
 				})
 			},
 
@@ -283,12 +292,13 @@
 
 					setTimeout(() => {
 						uni.navigateTo({
-							url: '/pages/personal/personal'
+							url: '/pages/index/index'
 						})
 					}, 1000)
 				}).finally(() => {
-					this.disabel = false;
+					this.TRADRPASS = '';
 					this.$refs.popup.close();
+					// this.disabel = false;
 				})
 			},
 			// 获取微信openId
