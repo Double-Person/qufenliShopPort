@@ -80,14 +80,14 @@
 				const params = {
 					...this.form
 				}
-				// #ifdef H5
-				params.phone = JSON.parse(info).phone
-				// #endif
-				// #ifndef H5
-				params.phone = info.phone
-				// #endif
+				
+				try{
+					params.phone = JSON.parse(info).phone
+				}catch(e){
+					params.phone = info.phone
+				}
+				
 				const res = await changeDealPwd(params)
-				console.log(res)
 				if(res.msgType == -1) {
 					uni.showToast({
 						title: res.errMsg || res.returnMsg,

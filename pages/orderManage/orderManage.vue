@@ -71,7 +71,8 @@
 							<text></text>
 							<view>
 								共{{item.number}}种商品 总金额
-								<text class="shopMoney">￥{{computedMoney(item.goodlist)}}</text>
+								<!-- computedMoney(item.goodlist) -->
+								<text class="shopMoney">￥{{ item.price }}</text>
 							</view>
 						</view>
 
@@ -153,7 +154,7 @@
 				for (let good of list) {
 					num += good.PRICE * good.COUTNS
 				}
-				return num
+				return num.toFixed(2)
 			},
 			// take  ORDERSUMMARY_ID 确认发货
 			confirmDelivery(ORDERSUMMARY_ID) {
