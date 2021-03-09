@@ -126,7 +126,7 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/qfl" : {
-                    "target" : "https://yflh.hkzhtech.com/qufl",
+                    "target" : "https://qfl.qfl168.cn/qufl",
                     "changeOrigin" : true, // 允许跨域
                     "secure" : true, // 开启HTTPS
                     "pathRewrite" : {
@@ -134,7 +134,7 @@
                     }
                 },
                 "/uploadFileApi" : {
-                    "target" : "https://yflh.hkzhtech.com/qufl",
+                    "target" : "https://qfl.qfl168.cn/qufl",
                     "changeOrigin" : true, // 允许跨域
                     "secure" : true, // 开启HTTPS
                     "pathRewrite" : {

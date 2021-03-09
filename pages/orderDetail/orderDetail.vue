@@ -105,7 +105,9 @@
 		methods: {
 			getOrder() {
 				uni.request({
-					url: "https://yflh.hkzhtech.com/qufl/api/merchant/ordersummarydetail",
+					// url: "https://yflh.hkzhtech.com/qufl/api/merchant/ordersummarydetail",
+					url: "https://qfl.qfl168.cn/qufl/api/merchant/ordersummarydetail",
+					
 					method: 'GET',
 					data: {
 						ORDERSUMMARY_ID: this.ORDERSUMMARY_ID

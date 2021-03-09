@@ -78,6 +78,7 @@
 		shopBank,
 		baseImgUrl
 	} from '@/common/apis.js';
+	import { INDEX_KEY, CONVERSION_KEY } from "@/common/baseUrlConfig.js"
 	export default {
 		data() {
 			return {
@@ -90,10 +91,7 @@
 			}
 		},
 		mounted() {
-			uni.showLoading({
-				title: '加载中',
-				mask: true
-			})
+			uni.showLoading({ title: '加载中', mask: true })
 			// 获取当前时间
 			uni.getStorage({
 				key: 'shopId',
@@ -158,7 +156,7 @@
 							url: "https://restapi.amap.com/v3/geocode/regeo?parameters",
 							method: 'GET',
 							data: {
-								key: 'f0d8604522a34fea7af419d353f98e8f',
+								key: INDEX_KEY, //'f0d8604522a34fea7af419d353f98e8f',
 								location: `${res.longitude}, ${res.latitude}`
 							},
 							success: (data) => {
@@ -194,16 +192,6 @@
 				uni.navigateTo({  // bindList
 					url: "../withdrawal/withdrawal?bindList=" + JSON.stringify(this.bindList)
 				})
-				// if(this.bindList.Ali || this.bindList.Wx  ) {
-				// 	uni.navigateTo({  // bindList
-				// 		url: "../withdrawal/withdrawal?bindList=" + JSON.stringify(this.bindList)
-				// 	})
-				// }else{
-				// 	uni.navigateTo({
-				// 		url: "../myCard/myCard"
-				// 	})
-				// }
-				
 			},
 			//   金纬度转位置
 			conversionPoint(res) {
@@ -211,14 +199,16 @@
 					url: "https://restapi.amap.com/v3/geocode/regeo?parameters",
 					method: 'GET',
 					data: {
-						key: 'f0d8604522a34fea7af419d353f98e8f',
+						key: INDEX_KEY, //  'f0d8604522a34fea7af419d353f98e8f',
 						location: `${res.longitude}, ${res.latitude}`
 					},
 					success: (data) => {
+						console.log(data)
 						this.newCity = data.data.regeocode.addressComponent.city + data.data.regeocode.addressComponent.district;
 						this.showCity = data.data.regeocode.addressComponent.district
 					},
 					fail(err) {
+						console.log(err)
 						uni.showToast({
 							title: "定位失败",
 							icon: 'none'
@@ -242,6 +232,12 @@
 			// 手动设置城市
 			setCity(data) {
 				this.newCity = data.data && data.data.slice(1).join('')
+				console.log(this.newCity)
+				console.log(data.data)
+				if(data.data && data.data.length) {
+					this.showCity = data.data[2]
+				}
+				
 				// 存入全局变量
 				getApp().globalData.city = data.data && data.data.slice(1);
 			},
