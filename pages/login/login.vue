@@ -126,7 +126,7 @@
 					password: this.pwd
 				}
 				login(this.saveObj).then(res => {
-	
+					console.log(res)
 					if (res.msgType == 0) {
 						uni.setStorage({
 							key: 'shopId',

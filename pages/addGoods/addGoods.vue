@@ -172,7 +172,8 @@ export default {
 			this.type = 'add';
 			this.headeTitle = '添加商品'
 		}
-		await this.getItem()
+		// await this.getItem()
+		await this.$forceUpdate()
 		// 
 	},
 
@@ -276,6 +277,7 @@ export default {
 					this.imgList[index].imgUrl = item.IMG
 					this.imgList[index].GOODSIMGS_ID = item.GOODSIMGS_ID	
 				} )		
+				this.getItem()
 			}).finally(() => uni.hideLoading())
 		},
 		// 输入内容
@@ -283,11 +285,18 @@ export default {
 			this.inputVlue = e.detail.value;
 		},
 		// 获取分类列表
-		async getItem () {
-			const { returnMsg, msgType } = await itemListArr({ shop_id: this.shopId })
-			msgType == 0 && (this.itemList = returnMsg)
-			let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
-			this.text = CATEGORY_NAME && CATEGORY_NAME.CATEGORY_NAME || '';
+		getItem () {
+			itemListArr({ shop_id: this.shopId }).then(res => {
+				const { returnMsg, msgType } = res;
+				if(msgType == 0) {
+					this.itemList = returnMsg;
+					let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
+					this.text = CATEGORY_NAME && CATEGORY_NAME.CATEGORY_NAME || '';
+				}
+				
+			})
+			
+			
 		},
 		// 添加分类
 		async addItems () {
