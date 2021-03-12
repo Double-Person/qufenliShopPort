@@ -38,7 +38,7 @@
 
 			<view class="fl-center-between withdrawal-amount">
 				<text class="symbol">¥</text>
-				<input type="number" class="input" v-model.number="money" placeholder="输入提现金额" />
+				<input type="number" class="input" v-model.number="money" @blur="moneyBlur" placeholder="输入整数提现金额" />
 				<text class="all" @click="balanceAll()">全部</text>
 			</view>
 			<view class="fl-center-between from" v-if="bindList.Wx || bindList.Ali">
@@ -174,6 +174,16 @@
 				this.money = this.kbalance
 			},
 
+			moneyBlur() {
+				if(this.money !== parseInt(this.money)) {
+					// this.money = parseInt(this.money)
+					return uni.showToast({
+						title: '请输入整数',
+						icon: 'none'
+					})
+				}
+			},
+			
 			// 提现
 			getWithdrawal() {
 				if (this.kbalance <= 0) {
@@ -188,6 +198,10 @@
 				if (this.money < 1) {
 					// this.money = null
 					return uni.showToast({ title: '提现金额必须大于1元', icon: 'none' })
+				}
+				if(this.money !== parseInt(this.money)) {
+					// this.money = parseInt(this.money)
+					return uni.showToast({ title: '请输入整数', icon: 'none' })
 				}
 
 				if (!this.cardNum) {

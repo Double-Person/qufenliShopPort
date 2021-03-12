@@ -43,11 +43,15 @@
 						<view class="content-item" v-for="(item,i) in imgList" :key="i" @click="addItem(i)">
 							<!-- :class="item.imgHide ? 'imgHide' : ''" -->
 							<view class="item-text" v-if="!item.imgUrl">
+								
 								<text class="iconfont icon-tubiaolunkuo-"></text>
 								<view>添加图片</view>
 							</view>
 							<!-- :class="item.imgHide ? '' : 'imgHide'"  @click="addItem(i)" -->
-							<view class="item-img" v-if="item.imgUrl" ><image :src="baseImgUrl + item.imgUrl" mode=""></image></view>
+							<view class="item-img" v-if="item.imgUrl" >
+								<text class="del-img" @click.stop="delImg(i)">X</text>
+								<image :src="baseImgUrl + item.imgUrl" mode=""></image>
+							</view>
 						</view>
 					</view>
 					<view class="btn" v-if="data">
@@ -117,6 +121,7 @@ export default {
 	},
 	data () {
 		return {
+
 			PUSHHP: '',
 			STATES: '',
 			baseImgUrl: baseImgUrl,
@@ -171,6 +176,7 @@ export default {
 		}else {
 			this.type = 'add';
 			this.headeTitle = '添加商品'
+			this.getItem()
 		}
 		// await this.getItem()
 		await this.$forceUpdate()
@@ -179,9 +185,22 @@ export default {
 
 
 	methods: {
+		// 删除图片
+		delImg(index) {
+			this.imgList[index].imgUrl='';
+			// this.imgList = this.imgList.filter((item, indey) => indey == index)
+		},
 		// 添加修改商品
 		addGoods() {
-			this.hideMask=true
+			this.hideMask=true;
+			
+			let imgList = this.imgList.filter(item => item.imgUrl)
+			if(imgList.length === 0) {
+				return uni.showToast({
+					title:"请至少上传一张图片",
+					icon: 'none'
+				})
+			}
 			uni.showLoading({
 				title: '加载中',
 				mask: true
@@ -207,6 +226,7 @@ export default {
 				activity:'优惠',
 				...img
 			};
+			
 	
 			
 			if(this.type == 'add') {
@@ -225,6 +245,10 @@ export default {
 			
 		
 			if(this.type == 'edit') {
+				
+				
+			
+				
 				obj.goods_id = this.GOODS_ID
 				// goodsimgs_id1  GOODSIMGS_ID
 				uni.request({
@@ -290,6 +314,7 @@ export default {
 				const { returnMsg, msgType } = res;
 				if(msgType == 0) {
 					this.itemList = returnMsg;
+					console.log('===', this.itemList)
 					let [CATEGORY_NAME] = this.itemList.filter(item => item.SHOPCATEGORY_ID == this.params.category_id);
 					this.text = CATEGORY_NAME && CATEGORY_NAME.CATEGORY_NAME || '';
 				}
@@ -537,12 +562,14 @@ export default {
 					font-size: 24rpx;
 					color: #999;
 					.item-text {
+						
 						overflow: hidden;
 						display: flex;
 						flex-direction: column;
 						align-items: center;
 						justify-content: center;
 						padding-top: 20rpx;
+						
 						.iconfont {
 							font-size: 60rpx;
 						}
@@ -551,8 +578,23 @@ export default {
 						}
 					}
 					.item-img {
+						position: relative;
 						width: 100%;
 						height: 100%;
+						.del-img{
+							position: absolute;
+							top: 0;
+							right: 0;
+							z-index: 10;
+							font-size: 30rpx;
+							color: black;
+							display: inline-block;
+							width: 40rpx;
+							height: 40rpx;
+							background-color: #eee;
+							text-align: center;
+							border-radius: 50%;
+						}
 						image {
 							width: 100%;
 							height: 100%;
